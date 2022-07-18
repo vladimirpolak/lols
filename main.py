@@ -1,12 +1,10 @@
 import requests
 import argparse
-from typing import List
 from pathlib import Path
 from downloader.downloader import Downloader
 from exceptions import ExtractionError
 import logging
 from scrapers import get_scraper_classes
-import pprint
 
 # logging.debug('This message should go to the log file')
 # logging.info('So should this')
