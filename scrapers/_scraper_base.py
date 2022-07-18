@@ -1,5 +1,4 @@
-from downloader.downloader import Downloader
-from downloader.types import Item
+from downloader.downloader import Downloader, Item
 from typing import List, Union
 import logging
 import re
