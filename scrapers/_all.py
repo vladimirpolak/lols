@@ -4,3 +4,4 @@ from .jpgchurch import JPGChurchExtractor, JPGChurchImageExtractor
 from .pixeldrain import PixelDrainAlbumExtractor
 from .gofile import GoFileFolderExtractor
 from .anonfiles import AnonfilesExtractor
+from .pixl import PixlAlbumExtractor
