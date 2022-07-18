@@ -13,10 +13,10 @@ import json
 # PATTERN_DOMAIN_TYPE
 # eg. PATTERN_CYBERDROP_ALBUM
 # eg. PATTERN_BUNKR_IMAGE
-PATTERN_PIXL_ALBUM = r"(?:https?://)?pixl\.is/album/[\w\d-.]+"
+PATTERN_PIXL_ALBUM = r"(?:https?://)?pixl\.is/album/[\.\w\d-]+"
 
 
-class PixlAlbumExtractor:
+class PixlAlbumExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_PIXL_ALBUM)  # Regex pattern for url validation
     PROTOCOL = "https"  # http/s
     DOMAIN = "pixl.is"
