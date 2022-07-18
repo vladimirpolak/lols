@@ -4,7 +4,7 @@ from exceptions import ExtractionError
 from utils import split_filename_ext
 import re
 
-PATTERN_ANONFILES = r"(?:https?://)anonfiles\.com/[\w\d]+/[\w\d-]+_[a-zA-Z\d]+"
+PATTERN_ANONFILES = r"(?:https?://)?anonfiles\.com/[\w\d]+/[\w\d-]+_[a-zA-Z\d]+"
 PATTERN_ANONFILES_DLTAG = r'"download-url"(?s).*?href="(.*?)">'
 
 
