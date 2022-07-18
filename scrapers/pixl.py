@@ -13,16 +13,18 @@ import json
 # PATTERN_DOMAIN_TYPE
 # eg. PATTERN_CYBERDROP_ALBUM
 # eg. PATTERN_BUNKR_IMAGE
-PATTERN_PIXL_ALBUM = r""
+PATTERN_PIXL_ALBUM = r"(?:https?://)?pixl\.is/album/[\w\d-.]+"
 
 
 class PixlAlbumExtractor:
     VALID_URL_RE = re.compile(PATTERN_PIXL_ALBUM)  # Regex pattern for url validation
     PROTOCOL = "https"  # http/s
     DOMAIN = "pixl.is"
-    DESC = "Pixl Image Storage"
+    DESC = "Pixl Image Hosting"
     # CONTENT_TYPE = None  # ITEM/ALBUM/THREAD  None if unknown
-    SAMPLE_URLS = []
+    SAMPLE_URLS = [
+        "https://pixl.is/album/my-1st-album.KISg3",
+    ]
 
     def _extract_data(self, url):
         # html = self._request_page(
