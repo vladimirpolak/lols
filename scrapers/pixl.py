@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type_, img_extensions
 from exceptions import ExtractionError, ScraperInitError
 from config import Manager as config
 from utils import split_filename_ext
@@ -14,6 +14,7 @@ import json
 # eg. PATTERN_CYBERDROP_ALBUM
 # eg. PATTERN_BUNKR_IMAGE
 PATTERN_PIXL_ALBUM = r"(?:https?://)?pixl\.is/album/[\.\w\d-]+"
+PATTERN_PIXL_IMAGE = rf"(?:https?://)?i\.pixl\.is/.*?(?:.md)({'|'.join(img_extensions)})"
 
 
 class PixlAlbumExtractor(ExtractorBase):
