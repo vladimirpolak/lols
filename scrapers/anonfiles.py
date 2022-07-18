@@ -15,8 +15,8 @@ class AnonfilesExtractor(ExtractorBase):
     DESC = "AnonFiles File Storage"
     CONTENT_TYPE = "ITEM"  # ITEM/ALBUM/THREAD  None if unknown
     SAMPLE_URLS = [
-        "https://anonfiles.com/V5gdWcy8y3/2gncGl6HwCzfH9Dg_mp4",  # Video
-        "https://anonfiles.com/H3h4W5y3y3/200222787_195947142418120_7120636900489110320_n_jpg",  # Image
+        "https://anonfiles.com/r7ldQ8r2wd/2021-12-17-15-34-25_NCARHYdP-1_mp4",
+        "https://anonfiles.com/H3h4W5y3y3/200222787_195947142418120_7120636900489110320_n_jpg",
         "https://anonfiles.com/B3h0W9ydyb/z143_l_jpg",
         "https://anonfiles.com/J5heW6y8ya/l8jqf882kzp11_png",
         "https://anonfiles.com/F6h0W0y2yd/EubtFQLVEAEsLAj_jpg"
