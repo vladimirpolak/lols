@@ -105,6 +105,8 @@ class Downloader(HeadersMixin):
                         ) -> requests.Request:
         if headers:
             headers = ChainMap(self.general_headers, headers)
+        else:
+            headers = self.general_headers
 
         return requests.Request(
             method=method,
