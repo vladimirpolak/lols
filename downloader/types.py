@@ -30,6 +30,15 @@ archive_extensions = [
     ".7z"
 ]
 
+audio_extensions = [
+    ".mp3",
+    ".wav",
+    ".m4a",
+    ".flac",
+    ".wma",
+    ".aac"
+]
+
 
 def determine_content_type_(filename: str) -> str:
     filename = filename.lower()
@@ -40,4 +49,6 @@ def determine_content_type_(filename: str) -> str:
         return "video"
     elif any([filename.endswith(ext) for ext in archive_extensions]):
         return "archive"
+    elif any([filename.endswith(ext) for ext in audio_extensions]):
+        return "audio"
     raise ContentTypeError(f"Unknown extension '{filename}'!")
