@@ -9,3 +9,4 @@ from .imgbox import IMGBoxImageExtractor
 from .imagetwist import ImageTwistImageExtractor
 from .planetsuzy import PlanetSuzyCrawler
 from .pixhost import PixHostTHExtractor
+from .imagebam import ImageBamExtractor
