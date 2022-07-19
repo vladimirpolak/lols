@@ -1,11 +1,8 @@
-from ._scraper_base import ExtractorBase, CrawlerBase
+from ._scraper_base import ExtractorBase
 from downloader.types import determine_content_type_, img_extensions
-from exceptions import ExtractionError, ScraperInitError
-from config import Manager as config
+from exceptions import ExtractionError
 from utils import split_filename_ext
-import logging
 import re
-import json
 
 PATTERN_IMAGETWIST_INDIRECT_LINK = r"((?:https://)?imagetwist\.com/" \
                      rf"[a-z\d]+/[-\w\d]+(?:{'|'.join(img_extensions)}))"
