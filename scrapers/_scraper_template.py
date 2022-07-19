@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type_, img_extensions, vid_extensions
 from exceptions import ExtractionError, ScraperInitError
 from config import Manager as config
 from utils import split_filename_ext
@@ -24,16 +24,25 @@ class DomainNameExtractor:
     # CONTENT_TYPE = None  # ITEM/ALBUM/THREAD  None if unknown
     SAMPLE_URLS = []
 
-    def _extract_data(self, url):
-        # response = self._request_page(
-        #     url=url,
-        # )
+    # Extractor method
+    # def _extract_data(self, url):
+    #     response = self._request_page(
+    #         url=url,
+    #     )
+    #
+    #     self.add_item(
+    #         content_type=content_type,
+    #         filename=filename,
+    #         extension=extension,
+    #         source=source,
+    #         album_title=album_title
+    #     )
 
-        # self.add_item(
-        #     content_type=content_type,
-        #     filename=filename,
-        #     extension=extension,
-        #     source=source,
-        #     album_title=album_title
-        # )
-        pass
+    # Extractor method only
+    # @classmethod
+    # def _extract_from_html(cls, html):
+    #     return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
+
+    # Crawler method only
+    # def _crawl_link(self, url) -> html[str]:
+    #     pass
