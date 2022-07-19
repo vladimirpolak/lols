@@ -7,3 +7,4 @@ from .anonfiles import AnonfilesExtractor
 from .pixl import PixlAlbumExtractor
 from .imgbox import IMGBoxImageExtractor
 from .imagetwist import ImageTwistImageExtractor
+from .planetsuzy import PlanetSuzyCrawler
