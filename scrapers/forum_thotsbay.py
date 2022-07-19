@@ -103,9 +103,12 @@ class ForumThotsbayAuth:
 
         headers = {
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-             "content-type": "application/x-www-form-urlencoded",
-             "content-length": str(len(query_string)),
-             "origin": self.base_url
+            "accept-encoding": "gzip, deflate",
+            "content-type": "application/x-www-form-urlencoded",
+            "content-length": str(len(query_string)),
+            "cache-control": "max-age=0",
+            "origin": self.base_url,
+            "referer": self.base_url
         }
 
         req = self._downloader._create_request(
@@ -115,11 +118,13 @@ class ForumThotsbayAuth:
             headers=headers
         )
         response = self._send_request_object(req)
-        print(f"Response cookies: {dict(response.cookies)}")
+        print(f"Response status code: {response.status_code}")
+        print(f"Response headers: {dict(response.headers)}")
 
         cookies = dict(self._downloader._session.cookies)
         print(f"Session cookies: {cookies}")
 
+        exit()
         xf_token = cookies["xf_csrf"]
         session_id = cookies["xf_session"]
         user_id = cookies["xf_user"]
