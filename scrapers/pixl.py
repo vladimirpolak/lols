@@ -14,7 +14,7 @@ class PixlAlbumExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_PIXL_ALBUM)
     PROTOCOL = "https"
     DOMAIN = "pixl.is"
-    DESC = "Pixl Image Storage"
+    DESC = "Pixl Image Storage Album"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
         "https://pixl.is/album/lena12.sb3Az"
