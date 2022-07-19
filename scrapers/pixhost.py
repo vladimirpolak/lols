@@ -10,7 +10,7 @@ PATTERN_PIXHOST_THUMBNAIL = rf"(https://t(\d+)\.pixhost\.to/thumbs(/\d+/[-\d\w]+
 
 
 class PixHostTHExtractor(ExtractorBase):
-    VALID_URL_RE = re.compile(PATTERN_PIXHOST_THUMBNAIL)  # Regex pattern for url validation
+    VALID_URL_RE = re.compile(PATTERN_PIXHOST_THUMBNAIL)
     PROTOCOL = "https"
     DOMAIN = "pixhost.to"
     DESC = "PixHost Image Hosting (Extract from thumbnail)"
