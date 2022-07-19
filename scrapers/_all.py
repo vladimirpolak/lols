@@ -6,3 +6,4 @@ from .gofile import GoFileFolderExtractor
 from .anonfiles import AnonfilesExtractor
 from .pixl import PixlAlbumExtractor
 from .imgbox import IMGBoxImageExtractor
+from .imagetwist import ImageTwistImageExtractor
