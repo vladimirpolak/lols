@@ -108,7 +108,10 @@ class CrawlerBase(ScraperBase):
     """
     NEXT_PAGE = None
     SCRAPER_TYPE = "CRAWLER"
-    pass
+
+    def __init__(self, downloader=None):
+        self._downloader = downloader
+        self.initialize()
 
     def extract_data(self, url: str) -> str:
         return self._crawl_link(url)
