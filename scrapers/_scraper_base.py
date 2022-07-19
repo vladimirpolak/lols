@@ -85,7 +85,9 @@ class ExtractorBase(ScraperBase):
     def extract_data(self, url: str) -> List[Item]:
         self.ALL_ITEMS = []
         self._extract_data(url)
-        logging.debug(f"NUMBER OF DATA: {len(self.ALL_ITEMS)}")
+
+        if len(self.ALL_ITEMS) > 1:
+            logging.debug(f"NUMBER OF DATA: {len(self.ALL_ITEMS)}")
         return self.ALL_ITEMS
 
     def _extract_data(self, url: str):
