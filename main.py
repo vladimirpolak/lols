@@ -71,7 +71,7 @@ class LoLs:
                             all_items.extend(s.extract_data(link_))
                         except Exception as e:
                             raise ExtractionError(f"{e}\n{scraper_}\nError extracting data from link: {link_}")
-        print(len(all_items))
+        logging.debug(f"Scraped total of {len(all_items)} items.")
         # download all_items[Item]
 
 
