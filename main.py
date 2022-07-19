@@ -50,8 +50,7 @@ class LoLs:
     def scrape_thread(self, url, scraper):
         print(scraper.DESC)
 
-        s = scraper()
-        s.set_downloader(self.downloader)
+        s = scraper(self.downloader)
         html = s.extract_data(url)
         all_items = []
 
