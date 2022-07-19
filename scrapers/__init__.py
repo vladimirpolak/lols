@@ -3,7 +3,7 @@ from ._all import *
 _ALL_CLASSES = [
     klass
     for name, klass in globals().items()
-    if (name.endswith('Extractor')   # and name != 'GenericIE'
+    if (name.endswith('Extractor')
         or name.endswith('Crawler'))
 ]
 
