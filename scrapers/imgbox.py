@@ -8,8 +8,8 @@ PATTERN_IMGBOX_IMAGE_TH = rf"((?:https?://)?thumbs\d+\.imgbox\.com/[a-z\d]+/[a-z
 
 class IMGBoxImageExtractor(ExtractorBase):
     NEXT_PAGE = None
-    VALID_URL_RE = re.compile(PATTERN_IMGBOX_IMAGE_TH)  # Regex pattern for url validation
-    PROTOCOL = "https"  # http/s
+    VALID_URL_RE = re.compile(PATTERN_IMGBOX_IMAGE_TH)
+    PROTOCOL = "https"
     DOMAIN = "imgbox.com"
     DESC = "ImgBox Extract From Thumbnail"
     CONTENT_TYPE = "ITEM"
