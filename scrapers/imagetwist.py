@@ -6,7 +6,7 @@ import re
 
 PATTERN_IMAGETWIST_INDIRECT_LINK = r"((?:https://)?imagetwist\.com/" \
                      rf"[a-z\d]+/[-\w\d]+(?:{'|'.join(img_extensions)}))"
-PATTERN_IMAGETWIST_DIRECT_LINK = r"(?:https://)?i\d+\.imagetwist\.com/i/" \
+PATTERN_IMAGETWIST_DIRECT_LINK = r"(?:https://)?(?:i|img)\d+\.imagetwist\.com/i/" \
                                  r"\d+/" \
                                  rf"[-\w\d]+(?:{'|'.join(img_extensions)})/" \
                                  rf"[-\w\d]+(?:{'|'.join(img_extensions)})"
@@ -49,3 +49,7 @@ class ImageTwistImageExtractor(ExtractorBase):
         if results:
             return results.pop()
         return None
+
+    @classmethod
+    def _extract_from_html(cls, html):
+        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
