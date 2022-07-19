@@ -66,7 +66,7 @@ class ScraperBase:
 
     @property
     def base_url(self):
-        return f"{self.PROTOCOL}://{self.DOMAIN}"
+        return f"{self.PROTOCOL}://{self.DOMAIN}/"
 
     def extract_data(self, url: str):
         pass
@@ -94,7 +94,8 @@ class ExtractorBase(ScraperBase):
 
     @classmethod
     def _extract_from_html(cls, html):
-        return [data[0] for data in re.findall(cls.VALID_URL_RE, html)]
+        """This method is implemented in the subclass"""
+        pass
 
 
 class CrawlerBase(ScraperBase):
