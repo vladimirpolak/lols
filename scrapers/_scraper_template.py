@@ -25,7 +25,7 @@ class DomainNameExtractor:
     SAMPLE_URLS = []
 
     def _extract_data(self, url):
-        # html = self._request_page(
+        # response = self._request_page(
         #     url=url,
         # )
 
