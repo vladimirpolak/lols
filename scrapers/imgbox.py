@@ -37,3 +37,7 @@ class IMGBoxImageExtractor(ExtractorBase):
             filename=filename,
             extension=extension
         )
+
+    @classmethod
+    def _extract_from_html(cls, html):
+        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
