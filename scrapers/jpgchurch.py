@@ -11,7 +11,7 @@ PATTERN_JPEGCHURCH_NEXT_PAGE_TAG = r'<a\sdata-pagination="next"\s' \
     r'href="' \
     r'(https://jpg\.church/a/{album_id}/\?page=\d+?&seek=(?:\d+-?)+\+(?:\d+(?:%3A)?)+\.[a-zA-Z\d]+)' \
     r'"\s*>'
-PATTERN_JPEGCHURCH_IMAGE = rf'((?:https?://)?simp\d+\.jpg\.church/[\w-]+?(?:.md)(?:{"|".join(img_extensions)}))'
+PATTERN_JPEGCHURCH_IMAGE = rf'((?:https?://)?simp\d+\.jpg\.church/[-/\w\d]+?(?:.md)(?:{"|".join(img_extensions)}))'
 
 
 class JPGChurchExtractor(ExtractorBase):
@@ -38,7 +38,7 @@ class JPGChurchExtractor(ExtractorBase):
         next_page = self._next_page(response_html, album_id)
 
         while next_page:
-            response_html = self._request_page(next_page).html
+            response_html = self._request_page(next_page).text
             all_pages_html = all_pages_html + response_html
             next_page = self._next_page(response_html, album_id)
 
@@ -96,9 +96,9 @@ class JPGChurchImageExtractor(ExtractorBase):
     SAMPLE_URLS = [
         "https://simp2.jpg.church/0400d6f89e848a5df88.md.jpg",
         "https://simp2.jpg.church/03704583200a3b3d50c.md.jpg",
-        "https://simp2.jpg.church/0349188c6b429792f07.md.jpg",
-        "https://simp2.jpg.church/0213577b1918446a182.md.jpg",
-        "https://simp2.jpg.church/01741db4f1d687981ab.md.jpg",
+        "https://simp1.jpg.church/images/2022/03/18/1440x1920_9cb3d752b6543c031a6aa86cc79c4b78eb96374b640a439e.md.jpg",
+        "https://simp1.jpg.church/images/7a16e98693fbe2d1f.md.jpg",
+        "https://simp3.jpg.church/images/12f56ad0441addd725.md.jpg",
     ]
 
     def _extract_data(self, url):
@@ -116,9 +116,9 @@ class JPGChurchImageExtractor(ExtractorBase):
 
     @classmethod
     def _extract_from_html(cls, html):
-        pattern = re.compile(
-            rf'<img src="({PATTERN_JPEGCHURCH_IMAGE})" alt=".*?" width="\d+" height="\d+">'
-        )
-        data = [data[0] for data in re.findall(pattern, html)]
+        # pattern = re.compile(
+        #     rf'<img src="({PATTERN_JPEGCHURCH_IMAGE})" alt=".*?" width="\d+" height="\d+">'
+        # )
+        data = [data[0] for data in set(re.findall(PATTERN_JPEGCHURCH_IMAGE, html))]
         return data
 
