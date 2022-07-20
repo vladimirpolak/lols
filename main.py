@@ -47,7 +47,7 @@ class LoLs:
             # else:
             #     raise ExtractionError("FOUND NO MATCHING EXTRACTOR.")
 
-    def scrape_thread(self, url, scraper):
+    def scrape_thread(self, url, scraper, scrape_links_found: bool = False):
         print(scraper.DESC)
 
         s = scraper(self.downloader)
@@ -63,13 +63,16 @@ class LoLs:
                 except Exception as e:
                     raise ExtractionError(f"{e}\nError extracting links with {scraper_}.")
                 if links:
-                    s = scraper_()
-                    s.set_downloader(self.downloader)
-                    for link_ in links:
-                        try:
-                            all_items.extend(s.extract_data(link_))
-                        except Exception as e:
-                            raise ExtractionError(f"{e}\n{scraper_}\nError extracting data from link: {link_}")
+                    logging.debug(f"{scraper_.__name__} extracted {len(links)} urls. DATA: {links}")
+
+                    if scrape_links_found:
+                        s = scraper_()
+                        s.set_downloader(self.downloader)
+                        for link_ in links:
+                            try:
+                                all_items.extend(s.extract_data(link_))
+                            except Exception as e:
+                                raise ExtractionError(f"{e}\n{scraper_}\nError extracting data from link: {link_}")
         logging.debug(f"Scraped total of {len(all_items)} items.")
         # download all_items[Item]
 
