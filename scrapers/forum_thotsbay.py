@@ -27,6 +27,7 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
 
     def initialize(self):
         self.authorize()
+        exit()
 
     # Extractor method
     # def _extract_data(self, url):

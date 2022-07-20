@@ -4,34 +4,65 @@ from exceptions import ScraperInitError
 import logging
 import re
 
+XfToken = str
+XfSession = str
+XfUser = str
+
 
 class ForumThotsbayAuth:
     def authorize(self):
         auth_data = config.load_config(self.DOMAIN)
 
+        # If there isnt an auth file
+        # create new file with username, password fields to fill in
         if not auth_data:
-            # Create new file with username, password fields to fill in
             self._save_auth(
                 username="",
                 password="",
             )
             raise ScraperInitError(f"New config file for {self.DOMAIN} was created, fill in the login details!")
+
+        # With existing file
         else:
             self.username = auth_data["username"]
             self.password = auth_data["password"]
+
+            # Parse existing cookies
             cookies = auth_data["cookies"]
+            xf_token = cookies["xf_csrf"]
+            session_id = cookies["xf_session"]
+            user_id = cookies["xf_user"]
 
-            #if not cookies:
-            self._new_login()
+            # If some/all cookie values are missing
+            if not (xf_token and session_id and user_id):
+                # If there is no login information, raise an error
+                if not (self.username and self.password):
+                    raise ScraperInitError(f"You need to provide login information for {self.DOMAIN}!")
+                # Create new login session with existing login information
+                else:
+                    self._new_login()
 
-        print(auth_data)
-        exit()
-        self._new_login()
+            # Load up existing cookies into current session
+            else:
+                logging.info(f"Using saved auth cookies for {self.DOMAIN}: {cookies}")
+                self._downloader.update_cookies(
+                    cookies=cookies,
+                    domain=self.DOMAIN
+                )
 
     def _new_login(self):
         index_page_token = self._index_page()
         pre_login_token = self._pre_login_page(index_page_token)
-        self._login_page(pre_login_token)
+        xf_token, session_id, user_id = self._login_page(pre_login_token)
+
+        self._save_auth(
+            username=self.username,
+            password=self.password,
+            xf_token=xf_token,
+            session_id=session_id,
+            user_id=user_id
+        )
+        return xf_token, session_id, user_id
 
     def _index_page(self):
         """Access index page and extract 'xf' token."""
@@ -81,7 +112,7 @@ class ForumThotsbayAuth:
                 pass
         raise ScraperInitError("Failed to extract 'xf_token' from pre-login page.")
 
-    def _login_page(self, pre_login_token):
+    def _login_page(self, pre_login_token) -> (XfToken, XfSession, XfUser):
         """Login with user credentials and obtain 'xf_user' and 'xf_session' tokens."""
         login_payload = {
             "login": self.username,
@@ -123,17 +154,11 @@ class ForumThotsbayAuth:
 
         logging.info(
             f"Created new login session."
-            f"\nCSRF Token: {xf_token}"
-            f"\nSession id: {session_id}"
-            f"\nUser id: {user_id}"
+            f"CSRF Token: {xf_token}"
+            f"Session id: {session_id}"
+            f"User id: {user_id}"
         )
-        self._save_auth(
-            username=self.username,
-            password=self.password,
-            xf_token=xf_token,
-            session_id=session_id,
-            user_id=user_id
-        )
+        return xf_token, session_id, user_id
 
     def _save_auth(self,
                    username: str,
