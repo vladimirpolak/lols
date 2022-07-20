@@ -9,7 +9,7 @@ import re
 import json
 
 # Regex Patterns
-PATTERN_THOTSBAYFORUM_THREAD = r"(?:https://)?forum\.thotsbay\.com/threads/([-\w\d\.]+)/"
+PATTERN_THOTSBAYFORUM_THREAD = r"(?:https://)?forum\.thotsbay\.com/threads/([-\w\d\.]+)/?"
 PATTERN_THOTSBAYFORUM_THREAD_NEXTPAGE = r'<a\s+' \
                                         r'href="(/threads/{album_id}/page-\d+)"\s+' \
                                         r'class="[-\w\d\s]*pageNav-jump--next">'
@@ -25,11 +25,14 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
     DESC = "Thotsbay Forum Thread"
     CONTENT_TYPE = "THREAD"
     SAMPLE_URLS = [
-        "https://forum.thotsbay.com/threads/nataliexking-bbyluckie.12408/#post-337758",
+        "https://forum.thotsbay.com/threads/nataliexking-bbyluckie.12408/",
         "https://forum.thotsbay.com/threads/abby-rao-abbyrao.10221/",
         "https://forum.thotsbay.com/threads/genesis-mia-lopez.24/",
         "https://forum.thotsbay.com/threads/angelie-dolly.13727/",
-        "https://forum.thotsbay.com/threads/riley-reid.9379/"
+        "https://forum.thotsbay.com/threads/riley-reid.9379/",
+        "https://forum.thotsbay.com/threads/ladyxzero.14241/",
+        "https://forum.thotsbay.com/threads/ines-helene.11402/",
+        "https://forum.thotsbay.com/threads/lupeandmicha.11155"
     ]
 
     def initialize(self):
