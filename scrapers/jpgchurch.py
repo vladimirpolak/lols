@@ -119,6 +119,6 @@ class JPGChurchImageExtractor(ExtractorBase):
         # pattern = re.compile(
         #     rf'<img src="({PATTERN_JPEGCHURCH_IMAGE})" alt=".*?" width="\d+" height="\d+">'
         # )
-        data = [data[0] for data in set(re.findall(PATTERN_JPEGCHURCH_IMAGE, html))]
+        data = [data for data in set(re.findall(PATTERN_JPEGCHURCH_IMAGE, html))]
         return data
 
