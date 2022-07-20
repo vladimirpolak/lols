@@ -103,12 +103,19 @@ class ForumThotsbayAuth:
 
         headers = {
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-            "accept-encoding": "gzip, deflate",
             "content-type": "application/x-www-form-urlencoded",
             "content-length": str(len(query_string)),
-            "cache-control": "max-age=0",
             "origin": self.base_url,
-            "referer": self.base_url
+            "referer": self.base_url,
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="96", "Google Chrome";v="96"',
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": '"Windows"',
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "same-origin",
+            "sec-fetch-site": "same-origin",
+            "sec-gps": '1',
         }
 
         req = self._downloader._create_request(
