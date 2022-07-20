@@ -106,16 +106,7 @@ class ForumThotsbayAuth:
             "content-type": "application/x-www-form-urlencoded",
             "content-length": str(len(query_string)),
             "origin": self.base_url,
-            "referer": self.base_url,
-            "cache-control": "no-cache",
-            "pragma": "no-cache",
-            "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="96", "Google Chrome";v="96"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": '"Windows"',
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "same-origin",
-            "sec-fetch-site": "same-origin",
-            "sec-gps": '1',
+            "referer": self.base_url
         }
 
         req = self._downloader._create_request(
@@ -125,18 +116,21 @@ class ForumThotsbayAuth:
             headers=headers
         )
         response = self._send_request_object(req)
-        print(f"Response status code: {response.status_code}")
-        print(f"Response headers: {dict(response.headers)}")
+        logging.debug(f"Login response status code: {response.status_code}")
 
         cookies = dict(self._downloader._session.cookies)
-        print(f"Session cookies: {cookies}")
+        logging.debug(f"Session cookies: {cookies}")
 
-        exit()
-        xf_token = cookies["xf_csrf"]
-        session_id = cookies["xf_session"]
-        user_id = cookies["xf_user"]
+        try:
+            xf_token = cookies["xf_csrf"]
+            session_id = cookies["xf_session"]
+            user_id = cookies["xf_user"]
+        except KeyError:
+            raise ScraperInitError(
+                f"Failed to get login cookies, check if the login information is correct."
+            )
 
-        logging.debug(
+        logging.info(
             f"Created new login session."
             f"\nCSRF Token: {xf_token}"
             f"\nSession id: {session_id}"
