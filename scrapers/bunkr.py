@@ -102,6 +102,10 @@ class BunkrAlbumExtractor(ExtractorBase):
                 album_title=album_title
             )
 
+    @classmethod
+    def _extract_from_html(cls, html):
+        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
+
 
 class BunkrVideoExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_BUNKR_VIDEO)

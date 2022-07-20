@@ -71,6 +71,10 @@ class CyberdropAlbumExtractor(ExtractorBase):
             raise ExtractionError(f"{url}\nFailed to extract album title.")
         return match[0]
 
+    @classmethod
+    def _extract_from_html(cls, html):
+        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
+
 
 class CyberdropImageExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_CYBERDROP_IMAGE)
@@ -98,3 +102,7 @@ class CyberdropImageExtractor(ExtractorBase):
             extension=extension,
             source=url,
         )
+
+    @classmethod
+    def _extract_from_html(cls, html):
+        return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
