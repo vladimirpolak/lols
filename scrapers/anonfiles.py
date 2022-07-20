@@ -4,16 +4,17 @@ from exceptions import ExtractionError
 from utils import split_filename_ext
 import re
 
+# Regex Patterns
 PATTERN_ANONFILES = r"(?:https?://)?anonfiles\.com/[\w\d]+/[\w\d-]+_[a-zA-Z\d]+"
 PATTERN_ANONFILES_DLTAG = r'"download-url"(?s).*?href="(.*?)">'
 
 
 class AnonfilesExtractor(ExtractorBase):
-    VALID_URL_RE = re.compile(PATTERN_ANONFILES)  # Regex pattern for url validation
-    PROTOCOL = "https"  # http/s
+    VALID_URL_RE = re.compile(PATTERN_ANONFILES)
+    PROTOCOL = "https"
     DOMAIN = "anonfiles.com"
     DESC = "AnonFiles File Storage"
-    CONTENT_TYPE = "ITEM"  # ITEM/ALBUM/THREAD  None if unknown
+    CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
         "https://anonfiles.com/r7ldQ8r2wd/2021-12-17-15-34-25_NCARHYdP-1_mp4",
         "https://anonfiles.com/H3h4W5y3y3/200222787_195947142418120_7120636900489110320_n_jpg",

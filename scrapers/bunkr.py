@@ -6,8 +6,10 @@ import logging
 import re
 import json
 
+# Constant URLs
 STREAM_URL = "https://media-files.bunkr.is"
 
+# Regex Patterns
 PATTERN_BUNKR_ALBUM = r"((?:https?://)?bunkr\.is/a/\w+)"
 PATTERN_BUNKR_ALBUM_DATA_SCRIPT = r'<script id="__NEXT_DATA__" type="application/json">(\{.*?})</script>'
 PATTERN_BUNKR_VIDEO = rf"((?:https?://)?stream\.bunkr\.is/v/[\w-]+?(?:{'|'.join(vid_extensions)}))"

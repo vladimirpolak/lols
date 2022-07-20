@@ -1,8 +1,8 @@
 from ._scraper_base import CrawlerBase
-from exceptions import ExtractionError
 from typing import Union
 import re
 
+# Regex Patterns
 PATTERN_PLANETSUZY_THREAD = r"((?:https?://)?(?:www\.)?planetsuzy\.org/(t\d+-[-\w\d]+(?:\.html)?))"
 PATTERN_PLANETSUZY_THREAD_NEXTPAGE = r'<a\s' \
                                      r'rel="next"\s' \

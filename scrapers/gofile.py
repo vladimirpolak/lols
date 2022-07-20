@@ -6,7 +6,21 @@ from .gofile_auth import GoFileAuth
 import logging
 import re
 
+# Constant URLs
+GOFILE_CONTENT_URL = "https://api.gofile.io/getContent"
+
+# Regex Patterns
 PATTERN_GOFILE_ALBUM = r"((?:https?://)?gofile\.io/d/\w+)"
+
+
+def gf_query_params(album_id, token):
+    """Query parameters for GoFile 'getContent' URL."""
+    query_params = {
+        "contentId": album_id,
+        "token": token,
+        "websiteToken": "12345"
+    }
+    return query_params
 
 
 class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
@@ -25,7 +39,7 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
 
     def initialize(self):
         # Authorize here
-        self.login()
+        self.authorize()
 
     def _extract_data(self, url):
         """Recursively scrapes the album if it contains any subfolders."""

@@ -4,6 +4,7 @@ from exceptions import ExtractionError
 from utils import split_filename_ext
 import re
 
+# Regex Patterns
 PATTERN_IMAGETWIST_INDIRECT_LINK = r"((?:https://)?imagetwist\.com/" \
                      rf"[a-z\d]+/[-\w\d]+(?:{'|'.join(img_extensions)}))"
 PATTERN_IMAGETWIST_DIRECT_LINK = r"(?:https://)?(?:i|img)\d+\.imagetwist\.com/i/" \

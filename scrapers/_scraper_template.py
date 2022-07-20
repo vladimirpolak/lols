@@ -7,12 +7,13 @@ import logging
 import re
 import json
 
-# All constant URLs here
+# Constant URLs
 
-# All regex patterns here
-# PATTERN_DOMAIN_TYPE
-# eg. PATTERN_CYBERDROP_ALBUM
-# eg. PATTERN_BUNKR_IMAGE
+# Regex Patterns
+# -All regex patterns here
+# -PATTERN_DOMAIN_TYPE
+# -eg. PATTERN_CYBERDROP_ALBUM = r""
+# -eg. PATTERN_BUNKR_IMAGE = r""
 
 
 class DomainNameExtractor:

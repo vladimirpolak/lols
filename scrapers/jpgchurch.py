@@ -5,6 +5,7 @@ from utils import split_filename_ext
 import logging
 import re
 
+# Regex Patterns
 PATTERN_JPEGCHURCH_ALBUM = r"(?:https?://)?jpg\.church/a/[a-zA-Z\d-]+?\.[a-zA-Z]+"
 PATTERN_JPEGCHURCH_NEXT_PAGE_TAG = r'<a\sdata-pagination="next"\s' \
     r'href="' \

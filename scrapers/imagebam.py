@@ -1,12 +1,10 @@
-from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_, img_extensions, vid_extensions
-from exceptions import ExtractionError, ScraperInitError
-from config import Manager as config
+from ._scraper_base import ExtractorBase
+from downloader.types import determine_content_type_, img_extensions
+from exceptions import ExtractionError
 from utils import split_filename_ext
-import logging
 import re
-import json
 
+# Regex Patterns
 PATTERN_IMAGEBAM_INDIRECT_LINK = r"((?:https?://)?(?:www\.)?imagebam\.com/image/[a-z\d]+)"
 PATTERN_IMAGEBAM_DIRECT_LINK = rf"(https://images\d+\.imagebam\.com[a-z\d/]+(?:{'|'.join(img_extensions)}))"
 

@@ -3,6 +3,7 @@ from downloader.types import determine_content_type_, img_extensions
 from utils import split_filename_ext
 import re
 
+# Regex Patterns
 PATTERN_PIXL_ALBUM = r"((?:https?://)?pixl\.is/album/[-\d\w\.]+)"
 PATTERN_PIXL_ALBUM_NAME = r'<a[\s\S]+data-text="album-name"[\s\S]+href="https://pixl.is/album/[-\d\w\.]+">(.*?)</a>'
 PATTERN_PIXL_NEXT_PAGE = r'<a data-pagination="next"\s' \

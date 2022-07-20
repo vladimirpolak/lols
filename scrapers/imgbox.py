@@ -3,6 +3,7 @@ from downloader.types import determine_content_type_, img_extensions
 from utils import split_filename_ext
 import re
 
+# Regex Patterns
 PATTERN_IMGBOX_IMAGE_TH = rf"((?:https?://)?thumbs\d+\.imgbox\.com/[a-z\d]+/[a-z\d]+/[\d\w]+_t(?:{'|'.join(img_extensions)}))"
 
 

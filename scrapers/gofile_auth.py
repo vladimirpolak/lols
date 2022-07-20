@@ -4,14 +4,13 @@ from datetime import datetime
 import logging
 
 GOFILE_TOKEN_REQ_URL = "https://api.gofile.io/createAccount"
-GOFILE_CONTENT_URL = "https://api.gofile.io/getContent"
 
 
 class GoFileAuth:
     """GoFile Authorization mixin."""
     ACCESS_TOKEN = ""
 
-    def login(self):
+    def authorize(self):
         auth_data = config.load_config(self.DOMAIN)
 
         if not auth_data:
@@ -62,13 +61,3 @@ class GoFileAuth:
         """Invalid token if current is older than 24 hours."""
         difference = datetime.now() - date
         return difference.days == 0
-
-
-def gf_query_params(album_id, token):
-    """Query parameters for GoFile 'getContent' URL."""
-    query_params = {
-        "contentId": album_id,
-        "token": token,
-        "websiteToken": "12345"
-    }
-    return query_params
