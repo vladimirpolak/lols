@@ -75,6 +75,7 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
         elif json["status"] == "error-notFound":
             # Exception: GoFile ERROR: {'status': 'error-notFound', 'data': {}}
             logging.debug(f"GoFile Error, file not found. {url}")
+            return
         elif json["status"] == "error-passwordRequired":
             logging.debug(f"PASSWORD REQUIRED FOR: {url}")
         else:
