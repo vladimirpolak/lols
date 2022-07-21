@@ -1,5 +1,5 @@
 import requests
-import argparse
+from options import parser
 from pathlib import Path
 from downloader.downloader import Downloader
 from exceptions import ExtractionError
@@ -16,13 +16,13 @@ class LoLs:
     def __init__(self,
                  link: str = None,
                  load_from_file: str = None,
-                 debug=False
+                 **kwargs
                  ):
         self.input_link = link
         self.load_from_file = load_from_file
         self.session = requests.Session()
-        self.downloader = Downloader()
-        self.downloader.set_session(self.session)
+        self.downloader = Downloader(self.session)
+        self.options = kwargs
 
     def main(self):
         if self.input_link:
@@ -38,21 +38,26 @@ class LoLs:
                 print(scraper_.DESC)
                 s = scraper_(self.downloader)
                 data = s.extract_data(url)
-                print(data)
 
                 # Download 'data'
+                for item in data:
+                    self.downloader.download_item(
+                        item=item,
+                        separate_content=self.options["separate"],
+                        save_urls=self.options["save_urls"]
+                    )
 
             elif scraper_.is_suitable(url) and scraper_.SCRAPER_TYPE == "CRAWLER":
-                self.scrape_thread(url, scraper_)
+                self.use_crawler(url, scraper_, scrape_links_found=True)
             # else:
             #     raise ExtractionError("FOUND NO MATCHING EXTRACTOR.")
 
-    def scrape_thread(self, url, scraper, scrape_links_found: bool = False):
-        print(scraper.DESC)
+    def use_crawler(self, url, crawler, scrape_links_found: bool = False):
+        print(crawler.DESC)
 
-        s = scraper(self.downloader)
-        html = s.extract_data(url)
-        all_items = []
+        c = crawler(self.downloader)
+        html = c.extract_data(url)
+        data = []
 
         for scraper_ in get_scraper_classes():
             if scraper_.SCRAPER_TYPE == "EXTRACTOR":
@@ -66,35 +71,32 @@ class LoLs:
                     logging.debug(f"{scraper_.__name__} extracted {len(links)} urls. DATA: {links}")
 
                     if scrape_links_found:
-                        s = scraper_()
-                        s.set_downloader(self.downloader)
+                        s = scraper_(self.downloader)
                         for link_ in links:
                             try:
-                                all_items.extend(s.extract_data(link_))
+                                data.extend(s.extract_data(link_))
                             except Exception as e:
                                 raise ExtractionError(f"{e}\n{scraper_}\nError extracting data from link: {link_}")
-        logging.debug(f"Scraped total of {len(all_items)} items.")
-        # download all_items[Item]
+
+        logging.debug(f"Scraped total of {len(data)} items.")
+
+        # Download 'data'
+        for item in data:
+            self.downloader.download_item(
+                item=item,
+                separate_content=self.options["separate"],
+                save_urls=self.options["save_urls"]
+            )
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "url",
-        help="URL to scrape.",
-        nargs='?',
-        type=str
-    )
-    parser.add_argument(
-        '-a', '--batch-file',
-        dest='batchfile', metavar='FILE',
-        help="File containing URLs to download ('-' for stdin), one URL per line. "
-             "Lines starting with '#', ';' or ']' are considered as comments and ignored."
-    )
+
     args = parser.parse_args()
 
     input_url = args.url
     batchfile = Path(args.batchfile) if args.batchfile else None
+    separate_content = False if args.separate else True
+    save_urls = args.save_urls
 
     if not (input_url or batchfile):
         raise Exception("You need to provide some URL!")
@@ -109,11 +111,16 @@ if __name__ == '__main__':
         datefmt='%d/%m/%Y %I:%M:%S',
         filemode='w'
     )
-    options = {}
-    if input_url:
-        options.update({
-            "link": input_url
-        })
+    # options = {}
+    # if input_url:
+    #     options.update({
+    #         "link": input_url
+    #     })
 
-    lols = LoLs(**options)
+    lols = LoLs(
+        link=input_url,
+        load_from_file=batchfile,
+        separate=separate_content,
+        save_urls=save_urls
+    )
     lols.main()

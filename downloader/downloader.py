@@ -1,7 +1,9 @@
 import requests
 from pathlib import Path
+import retry
 from .headers import HeadersMixin
 from collections import ChainMap
+import shutil
 import logging
 
 
@@ -36,11 +38,32 @@ class Item:
 
 
 class Downloader(HeadersMixin):
-    _session: requests.Session
+    OUTPUT_DIR = "Output"
+    IMAGES_DIR_NAME = "Images"
+    VIDEOS_DIR_NAME = "Videos"
+    ARCHIVES_DIR_NAME = "Archives"
+    AUDIO_DIR_NAME = "Audio"
+
+    def __init__(self,
+                 session: requests.Session
+                 ):
+        self._session = session
+
+    @property
+    def output_path(self):
+        return self._create_path(self.OUTPUT_DIR)
+
+    def _create_path(self, dirname_or_absolutepath: str):
+        path = Path(dirname_or_absolutepath)
+        if path.is_absolute():
+            return path
+        else:
+            return Path().cwd() / dirname_or_absolutepath
 
     def set_session(self, session: requests.Session):
         self._session = session
 
+    @retry.retry(requests.exceptions.RequestException, tries=3, delay=3)
     def get_page(self,
                  url_or_request,
                  headers: dict = None,
@@ -69,7 +92,8 @@ class Downloader(HeadersMixin):
                   headers: dict = None,
                   data: dict = None,
                   params: dict = None,
-                  cookies: dict = None
+                  cookies: dict = None,
+                  stream: bool = False
                   ) -> requests.Response:
         request = {"url": url}
         if not headers:
@@ -84,16 +108,20 @@ class Downloader(HeadersMixin):
             request["params"] = params
         if cookies:
             request["cookies"] = cookies
+        if stream:
+            request["stream"] = stream
 
-        try:
-            r = self._session.get(**request)
-        except requests.exceptions.RequestException as e:
-            logging.error(e, url)
-            raise e
-        else:
-            if r.status_code >= 300:
-                logging.error(f"STATUS CODE: {r.status_code} FOR PAGE: {url}")
-            return r
+        response = self._session.get(**request)
+        return response
+        # try:
+        #     r = self._session.get(**request)
+        # except requests.exceptions.RequestException as e:
+        #     logging.error(e, url)
+        #     raise e
+        # else:
+        #     if r.status_code >= 300:
+        #         logging.error(f"STATUS CODE: {r.status_code} FOR PAGE: {url}")
+        #     return r
 
     def _create_request(self,
                         method: str,
@@ -117,17 +145,52 @@ class Downloader(HeadersMixin):
             cookies=cookies
         )
 
-    def download_file(self):
-        pass
+    @retry.retry(requests.exceptions.RequestException, tries=3, delay=5)
+    def download_item(self,
+                      item: Item,
+                      separate_content: bool,
+                      save_urls: bool,
+                      album_name: str = None
+                      ):
+        album_dir = album_name or item.album_title or input(
+            f"Enter the name for album directory: "
+        )
+        album_path = self.output_path / album_dir
+
+        # Set download path
+        if separate_content:
+            if item.content_type == "image":
+                dl_dir_path = album_path / self.IMAGES_DIR_NAME
+            elif item.content_type == "video":
+                dl_dir_path = album_path / self.VIDEOS_DIR_NAME
+            elif item.content_type == "archive":
+                dl_dir_path = album_path / self.ARCHIVES_DIR_NAME
+            elif item.content_type == "audio":
+                dl_dir_path = album_path / self.AUDIO_DIR_NAME
+        else:
+            dl_dir_path = album_path
+
+        if not dl_dir_path.exists():
+            dl_dir_path.mkdir(parents=True)
+
+        file_path = dl_dir_path / (item.filename + item.extension)
+
+        if file_path.exists():
+            logging.debug(f"Filename already exists: {item}")
+
+        # Make request
+        response = self._get_page(url=item.source, stream=True)
+
+        if 200 <= response.status_code < 300:
+            with open(file_path, 'wb') as f:
+                response.raw.decode_content = True
+                shutil.copyfileobj(response.raw, f)
+
+        if save_urls:
+            with open(album_path / "urls.txt", "a") as f:
+                f.write(item.source)
+                f.write("\n")
 
     def update_cookies(self, cookies: dict, domain: str):
         for k, v in cookies.items():
             self._session.cookies.set(k, v, domain=domain)
-
-    def create_output_directory(self, output_folder_path: Path):
-        """Creates main Output directory along with target model directory."""
-        if not output_folder_path.exists():
-            output_folder_path.mkdir()
-
-
-
