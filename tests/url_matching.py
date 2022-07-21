@@ -5,8 +5,12 @@ class UrlMatchingTest:
     @classmethod
     def test(cls):
         scraper_classes = get_scraper_classes()
-        for s in scraper_classes:
-            print(f"\n{s.__name__}")
-            for url in s.SAMPLE_URLS:
-                if not s.is_suitable(url):
+        for scraper in scraper_classes:
+            print(f"\n{scraper.__name__}")
+            for url in scraper.SAMPLE_URLS:
+                if not scraper.is_suitable(url):
                     print(f"FAILED TO MATCH: {url}")
+
+
+if __name__ == '__main__':
+    UrlMatchingTest.test()
