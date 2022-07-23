@@ -22,6 +22,12 @@ class GoFileAuth:
 
         if not self.token_is_valid(date_created):
             self._create_login()
+            return self.ACCESS_TOKEN
+
+        self._downloader.update_cookies(
+            cookies={"accountToken": self.ACCESS_TOKEN},
+            domain=self.DOMAIN
+        )
         return self.ACCESS_TOKEN
 
     def _create_login(self):
