@@ -11,7 +11,7 @@ API_LINK = "https://pixeldrain.com/api"
 API_FILE_LINK = "https://pixeldrain.com/api/file/"
 
 # Regex Patterns
-PATTERN_PIXELDRAIN_ALBUM = r"((?:https?://)?pixeldrain\.com/l/\w+)"
+PATTERN_PIXELDRAIN_ALBUM = r"((?:https?://)?pixeldrain\.com/(?:l|u)/\w+)"
 PATTERN_PIXELDRAIN_ALBUM_DATA = r"window\.viewer_data = ({.*});"
 
 
@@ -41,7 +41,12 @@ class PixelDrainAlbumExtractor(ExtractorBase):
             )
         album_id = data["id"]
 
-        for item in data["files"]:
+        try:
+            files = data["files"]
+        except KeyError:
+            files = [data]
+
+        for item in files:
             file_w_extension = item["name"]
             filename, extension = split_filename_ext(file_w_extension)
             source = API_FILE_LINK + item["id"]
