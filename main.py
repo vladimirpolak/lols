@@ -57,6 +57,7 @@ class LoLs:
 
         c = crawler(self.downloader)
         html = c.extract_data(url)
+        model_name = c.MODEL_NAME
         data = []
 
         for scraper_ in get_scraper_classes():
@@ -85,7 +86,8 @@ class LoLs:
             self.downloader.download_item(
                 item=item,
                 separate_content=self.options["separate"],
-                save_urls=self.options["save_urls"]
+                save_urls=self.options["save_urls"],
+                album_name=model_name
             )
 
 
