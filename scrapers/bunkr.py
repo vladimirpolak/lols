@@ -12,7 +12,9 @@ STREAM_URL = "https://media-files.bunkr.is"
 # Regex Patterns
 PATTERN_BUNKR_ALBUM = r"((?:https?://)?bunkr\.is/a/\w+)"
 PATTERN_BUNKR_ALBUM_DATA_SCRIPT = r'<script id="__NEXT_DATA__" type="application/json">(\{.*?})</script>'
-PATTERN_BUNKR_VIDEO = rf"((?:https?://)?stream\.bunkr\.is/v/[\w-]+?(?:{'|'.join(vid_extensions)}))"
+PATTERN_BUNKR_VIDEO = rf"((?:https?://)?stream\.bunkr\.is/v/[-\w\d]+?(?:{'|'.join(vid_extensions)}))"
+# https://cdn3.bunkr.is/2021-07-03-3024x4032_c87b68ca72e0b5296829cf1a9e187b2c-Km9gaCRc.jpg
+PATTERN_BUNKR_IMAGE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\d\w]+(?:{'|'.join(img_extensions)}))"
 
 
 class BunkrAlbumExtractor(ExtractorBase):
@@ -135,3 +137,34 @@ class BunkrVideoExtractor(ExtractorBase):
             extension=extension,
             source=source,
         )
+
+
+class BunkrImageExtractor(ExtractorBase):
+    VALID_URL_RE = re.compile(PATTERN_BUNKR_IMAGE)
+    PROTOCOL = "https"
+    DOMAIN = "bunkr.is"
+    DESC = "Bunkr.is Image direct link"
+    CONTENT_TYPE = "ITEM"
+    SAMPLE_URLS = [
+        "https://cdn3.bunkr.is/2021-07-03-3024x4032_c87b68ca72e0b5296829cf1a9e187b2c-Km9gaCRc.jpg",
+        "https://cdn3.bunkr.is/2021-07-03-3840x2880_9841c7b4aa6d1f96196660545973efa9-Kf5UfqsE.jpg",
+        "https://cdn4.bunkr.is/2021-12-01-3024x4032_479bdb93acdb799bf81da5195ef0abf6-dFl47m7b.jpg",
+        "https://cdn4.bunkr.is/2021-12-01-3023x4011_5f36416846cde7afd8b0f20f0835cb43-bFhLNQx2.jpg",
+        "https://cdn3.bunkr.is/2022-02-03-3024x4032_55b5b85872dd4b7e76f988f4a4a3e70c-AIAQP0ju.jpg"
+    ]
+
+    def _extract_data(self, url):
+        file_w_extension = url.split("/")[-1]
+        filename, extension = split_filename_ext(file_w_extension)
+        content_type = determine_content_type_(extension)
+
+        self.add_item(
+            content_type=content_type,
+            filename=filename,
+            extension=extension,
+            source=url,
+        )
+
+    @classmethod
+    def _extract_from_html(cls, html):
+        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]

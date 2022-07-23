@@ -1,4 +1,4 @@
-from .bunkr import BunkrAlbumExtractor, BunkrVideoExtractor
+from .bunkr import BunkrAlbumExtractor, BunkrVideoExtractor, BunkrImageExtractor
 from .cyberdrop import CyberdropAlbumExtractor, CyberdropImageExtractor
 from .jpgchurch import JPGChurchExtractor, JPGChurchImageExtractor
 from .pixeldrain import PixelDrainAlbumExtractor
