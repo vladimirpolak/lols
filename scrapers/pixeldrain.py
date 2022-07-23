@@ -11,7 +11,7 @@ API_LINK = "https://pixeldrain.com/api"
 API_FILE_LINK = "https://pixeldrain.com/api/file/"
 
 # Regex Patterns
-PATTERN_PIXELDRAIN_ALBUM = r"((https?://)?pixeldrain\.com/l/\w+)"
+PATTERN_PIXELDRAIN_ALBUM = r"((?:https?://)?pixeldrain\.com/l/\w+)"
 PATTERN_PIXELDRAIN_ALBUM_DATA = r"window\.viewer_data = ({.*});"
 
 
