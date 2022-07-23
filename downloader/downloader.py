@@ -110,7 +110,6 @@ class Downloader(HeadersMixin):
             request["cookies"] = cookies
         if stream:
             request["stream"] = stream
-
         response = self._session.get(**request)
         return response
         # try:

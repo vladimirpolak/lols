@@ -12,8 +12,7 @@ STREAM_URL = "https://media-files.bunkr.is"
 # Regex Patterns
 PATTERN_BUNKR_ALBUM = r"((?:https?://)?bunkr\.is/a/\w+)"
 PATTERN_BUNKR_ALBUM_DATA_SCRIPT = r'<script id="__NEXT_DATA__" type="application/json">(\{.*?})</script>'
-PATTERN_BUNKR_VIDEO = rf"((?:https?://)?stream\.bunkr\.is/v/[-\w\d]+?(?:{'|'.join(vid_extensions)}))"
-# https://cdn3.bunkr.is/2021-07-03-3024x4032_c87b68ca72e0b5296829cf1a9e187b2c-Km9gaCRc.jpg
+PATTERN_BUNKR_VIDEO = rf"((?:https?://)?(?:stream|cdn)\.bunkr\.is/(?:v/)?[-\w\d]+?(?:{'|'.join(vid_extensions)}))"
 PATTERN_BUNKR_IMAGE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\d\w]+(?:{'|'.join(img_extensions)}))"
 
 
@@ -90,6 +89,8 @@ class BunkrAlbumExtractor(ExtractorBase):
                 source = f"{item['i']}/{file_w_extension}"
             elif content_type == "video":
                 source = f"{STREAM_URL}/{file_w_extension}"
+            elif content_type == "audio":
+                source = f"{item['cdn']}/{file_w_extension}"
             else:
                 raise NotImplementedError(
                     f"Error parsing data for bunkr.\n"
@@ -120,7 +121,7 @@ class BunkrVideoExtractor(ExtractorBase):
         "https://stream.bunkr.is/v/ea_vid_12-rlwMZzT1.mov",
         "https://stream.bunkr.is/v/lai_vid_3-3Ymk80tH.mp4",
         "https://stream.bunkr.is/v/rr_vid_12-3HiQTJtY.mp4",
-        "https://stream.bunkr.is/v/ck_vid_9-m2OAY8pu.mp4"
+        "https://cdn.bunkr.is/0h1owpgtrqdncpvflf8ey_source-XltlzTqe.mp4"
     ]
 
     def _extract_data(self, url: str):
