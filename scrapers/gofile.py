@@ -3,6 +3,7 @@ from downloader.types import determine_content_type_
 from exceptions import ExtractionError
 from utils import split_filename_ext
 from .gofile_auth import GoFileAuth
+from hashlib import sha256
 import logging
 import re
 
@@ -13,13 +14,16 @@ GOFILE_CONTENT_URL = "https://api.gofile.io/getContent"
 PATTERN_GOFILE_ALBUM = r"((?:https?://)?gofile\.io/d/\w+)"
 
 
-def gf_query_params(album_id, token):
+def gf_query_params(album_id, token, password: str = None):
     """Query parameters for GoFile 'getContent' URL."""
     query_params = {
         "contentId": album_id,
         "token": token,
         "websiteToken": "12345"
     }
+    if password:
+        query_params["password"] = sha256(password.encode()).hexdigest()
+        query_params["cache"] = "true"
     return query_params
 
 
@@ -41,13 +45,13 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
         # Authorize here
         self.authorize()
 
-    def _extract_data(self, url):
+    def _extract_data(self, url, password: str = None):
         """Recursively scrapes the album if it contains any subfolders."""
         # Album ID from url
         album_id = url.split("/")[-1]
 
         # Generate query parameters
-        params = gf_query_params(album_id, self.ACCESS_TOKEN)
+        params = gf_query_params(album_id, self.ACCESS_TOKEN, password)
 
         # Additional headers
         gofile_headers = {
@@ -78,6 +82,8 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
             return
         elif json["status"] == "error-passwordRequired":
             logging.debug(f"PASSWORD REQUIRED FOR: {url}")
+            self._extract_data(url=url, password=input(f"Enter password for '{url}': "))
+            return
         else:
             raise ExtractionError(f"GoFile ERROR: {json}")
 
@@ -96,23 +102,6 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
                 self._extract_data(url=folder_url)
 
             elif file_type == "file":
-                # {
-                #     'id': 'd1ddff5d-01eb-4aff-a7d2-0851f04742a6',
-                #     'type': 'file',
-                #     'name': 'Liya Silver on Twitter Stuck in elevator with my girlfriend .mp4',
-                #     'parentFolder': '680abd8a-5b0f-4bfb-be1f-c8fac71d2c9f',
-                #     'createTime': 1637068145,
-                #     'size': 4233682,
-                #     'downloadCount': 2039,
-                #     'md5': '3d5b5cd96631af7a4cf5795f6e82bd14',
-                #     'mimetype': 'video/mp4',
-                #     'viruses': [
-                #
-                #     ],
-                #     'serverChoosen': 'store3',
-                #     'directLink': 'https://store3.gofile.io/download/direct/fname.mp4',
-                #     'link': 'https://store3.gofile.io/download/fname.mp4'
-                # }
                 source = item_info["link"]
                 file_w_extension = item_info["name"]
                 filename, extension = split_filename_ext(file_w_extension)
