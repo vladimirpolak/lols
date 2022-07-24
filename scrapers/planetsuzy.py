@@ -37,7 +37,7 @@ class PlanetSuzyCrawler(CrawlerBase):
         return all_html
 
     def _get_page_html(self, url) -> (Html, NextPageUrl):
-        response = self._request_page(
+        response = self.request(
             url=url,
         )
 

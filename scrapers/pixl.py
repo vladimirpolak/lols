@@ -22,11 +22,11 @@ class PixlAlbumExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url):
-        pixl_album_id = url.split("/")[-1]
+        self.pixl_album_id = url.split("/")[-1]
         all_html = ""
 
         while url:
-            html, url = self._get_album_page(url, pixl_album_id)
+            html, url = self._get_album_page(url)
             all_html = all_html + html
 
         album_name = self._extract_album_name(all_html)
@@ -45,14 +45,14 @@ class PixlAlbumExtractor(ExtractorBase):
                 album_title=album_name
             )
 
-    def _get_album_page(self, url, album_id):
-        response = self._request_page(
+    def _get_album_page(self, url):
+        response = self.request(
             url=url,
         )
         html = response.text
 
         # Get next page url
-        pattern = re.compile(PATTERN_PIXL_NEXT_PAGE.format(album_id=album_id))
+        pattern = re.compile(PATTERN_PIXL_NEXT_PAGE.format(album_id=self.pixl_album_id))
         result = pattern.findall(html)
         if result:
             next_page = result[0]

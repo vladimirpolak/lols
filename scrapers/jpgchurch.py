@@ -29,18 +29,13 @@ class JPGChurchExtractor(ExtractorBase):
 
     def _extract_data(self, url: str):
         # Album name from url
-        album_id = url.split("/")[-1]
+        self.jpegchurch_album_id = url.split("/")[-1]
 
         all_pages_html = ""
 
-        response_html = self._request_page(url).text
-        all_pages_html = all_pages_html + response_html
-        next_page = self._next_page(response_html, album_id)
-
-        while next_page:
-            response_html = self._request_page(next_page).text
-            all_pages_html = all_pages_html + response_html
-            next_page = self._next_page(response_html, album_id)
+        while url:
+            html, url = self._get_album_page(url)
+            all_pages_html = all_pages_html + html
 
         try:
             urls = self._extract_content_links(all_pages_html)
@@ -62,16 +57,24 @@ class JPGChurchExtractor(ExtractorBase):
                 content_type=content_type,
                 filename=filename,
                 extension=extension,
-                album_title=album_id
+                album_title=self.jpegchurch_album_id
             )
+
+    def _get_album_page(self, url):
+        response = self.request(url)
+        html = response.text
+
+        next_page = self._next_page(html)
+
+        return html, next_page
 
     def _extract_content_links(self, html):
         """Extract image links from the album html."""
         return set(re.findall(PATTERN_JPEGCHURCH_IMAGE, html, re.I))
 
-    def _next_page(self, html, album_id):
+    def _next_page(self, html):
         """Extract next page url."""
-        pattern = re.compile(PATTERN_JPEGCHURCH_NEXT_PAGE_TAG.format(album_id=album_id))
+        pattern = re.compile(PATTERN_JPEGCHURCH_NEXT_PAGE_TAG.format(album_id=self.jpegchurch_album_id))
         try:
             match = pattern.search(html)
             next_page = match.group(1)

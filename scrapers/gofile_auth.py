@@ -46,16 +46,16 @@ class GoFileAuth:
         logging.debug("Requesting GoFile access token.")
 
         # Create guest account URL
-        req = self._downloader._create_request(method='GET', url=GOFILE_TOKEN_REQ_URL)
-        response = self._send_request_object(req)
+        response = self.request(
+            method='GET',
+            url=GOFILE_TOKEN_REQ_URL
+        )
 
         if response.status_code == 200:
-
             json = response.json()
             if json["status"] == "ok":
                 # Extract access token
                 token = json["data"]["token"]
-
                 logging.debug(f"New GoFile token: {token}")
                 return token
             raise ScraperInitError(f"Failed to retrieve access token from data: {json}")

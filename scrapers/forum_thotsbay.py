@@ -53,7 +53,7 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
         return all_html
 
     def _get_html_nextpage(self, url) -> (Html, NextPage):
-        response = self._request_page(
+        response = self.request(
             url=url,
         )
         html = response.text

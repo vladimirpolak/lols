@@ -25,7 +25,7 @@ class ImageTwistImageExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url):
-        response = self._request_page(
+        response = self.request(
             url=url,
         )
         html = response.text

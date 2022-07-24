@@ -56,19 +56,19 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
         }
 
         # Request a page
-        r = self._request_page(
+        response = self.request(
             url=GOFILE_CONTENT_URL,
             headers=gofile_headers,
             params=params
         )
 
-        if not r.status_code == 200:
+        if not response.status_code == 200:
             raise ExtractionError(
                 f"Failed to retrieve gallery data.\n"
-                f"Response status code: {r.status_code}"
+                f"Response status code: {response.status_code}"
             )
 
-        json = r.json()
+        json = response.json()
 
         if json["status"] == "ok":
             pass

@@ -66,7 +66,7 @@ class ForumThotsbayAuth:
 
     def _index_page(self):
         """Access index page and extract 'xf' token."""
-        response = self._request_page(
+        response = self.request(
             url=self.base_url
         )
         html = response.text
@@ -94,7 +94,7 @@ class ForumThotsbayAuth:
             "_xfResponseType": "json"
         }
 
-        response = self._request_page(
+        response = self.request(
             url=self.base_url + "login/",
             headers=headers,
             params=pre_login_params
@@ -131,13 +131,12 @@ class ForumThotsbayAuth:
             "referer": self.base_url
         }
 
-        req = self._downloader._create_request(
+        response = self.request(
             method='POST',
             url=self.base_url + "login/login/",
             data=login_payload,
             headers=headers
         )
-        response = self._send_request_object(req)
         logging.debug(f"Login response status code: {response.status_code}")
 
         cookies = dict(self._downloader._session.cookies)
