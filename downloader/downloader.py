@@ -3,6 +3,7 @@ from pathlib import Path
 import retry
 from .headers import HeadersMixin
 from collections import ChainMap
+from urllib3.exceptions import ProtocolError
 import shutil
 import logging
 
@@ -49,37 +50,38 @@ class Downloader(HeadersMixin):
                  ):
         self._session = session
 
-    @property
-    def output_path(self):
-        return self._create_path(self.OUTPUT_DIR)
-
-    def _create_path(self, dirname_or_absolutepath: str):
-        path = Path(dirname_or_absolutepath)
-        if path.is_absolute():
-            return path
-        else:
-            return Path().cwd() / dirname_or_absolutepath
-
     def set_session(self, session: requests.Session):
         self._session = session
 
+    def send_request(self, url, method, **kwargs) -> requests.Response:
+        prepped_req = self._prepare_request(
+            url=url,
+            method=method,
+            **kwargs
+        )
+        response = self._send_request(prepped_req, **kwargs)
+        return response
+
+    def _prepare_request(self, method: str, url: str, **kwargs) -> requests.PreparedRequest:
+        headers = kwargs.pop("headers", dict())
+        headers.update(self.general_headers)
+
+        req = requests.Request(
+            method=method,
+            url=url,
+            headers=headers,
+            data=kwargs.pop("data", None),
+            params=kwargs.pop("params", None),
+            cookies=kwargs.pop("cookies", None)
+        )
+        return self._session.prepare_request(req)
+
     @retry.retry(requests.exceptions.RequestException, tries=3, delay=3)
-    def get_page(self,
-                 url_or_request,
-                 headers: dict = None,
-                 data: dict = None,
-                 params: dict = None,
-                 cookies: dict = None
-                 ) -> requests.Response:
-        if isinstance(url_or_request, str):
-            return self._get_page(url_or_request, headers, data, params, cookies)
-        elif isinstance(url_or_request, requests.Request):
-            return self.send_request(url_or_request)
-
-    def send_request(self, req: requests.Request) -> requests.Response:
-        prepped = self._session.prepare_request(req)
-
-        resp = self._session.send(prepped)
+    def _send_request(self, prepared_request, **kwargs) -> requests.Response:
+        resp = self._session.send(
+            request=prepared_request,
+            **kwargs
+        )
                       # stream=stream,
                       # verify=verify,
                       # proxies=proxies,
@@ -87,64 +89,10 @@ class Downloader(HeadersMixin):
                       # timeout=timeout
         return resp
 
-    def _get_page(self,
-                  url: str,
-                  headers: dict = None,
-                  data: dict = None,
-                  params: dict = None,
-                  cookies: dict = None,
-                  stream: bool = False
-                  ) -> requests.Response:
-        request = {"url": url}
-        if not headers:
-            headers = self.general_headers
-        else:
-            headers = ChainMap(headers, self.general_headers)
-        request["headers"] = headers
-
-        if data:
-            request["data"] = data
-        if params:
-            request["params"] = params
-        if cookies:
-            request["cookies"] = cookies
-        if stream:
-            request["stream"] = stream
-        response = self._session.get(**request)
-        return response
-        # try:
-        #     r = self._session.get(**request)
-        # except requests.exceptions.RequestException as e:
-        #     logging.error(e, url)
-        #     raise e
-        # else:
-        #     if r.status_code >= 300:
-        #         logging.error(f"STATUS CODE: {r.status_code} FOR PAGE: {url}")
-        #     return r
-
-    def _create_request(self,
-                        method: str,
-                        url: str,
-                        headers: dict = None,
-                        data: dict = None,
-                        params: dict = None,
-                        cookies=None
-                        ) -> requests.Request:
-        if headers:
-            headers = ChainMap(self.general_headers, headers)
-        else:
-            headers = self.general_headers
-
-        return requests.Request(
-            method=method,
-            url=url,
-            headers=headers,
-            data=data,
-            params=params,
-            cookies=cookies
-        )
-
-    @retry.retry(requests.exceptions.RequestException, tries=3, delay=5)
+    @retry.retry(
+        (requests.exceptions.RequestException, ProtocolError),
+        tries=3,
+        delay=5)
     def download_item(self,
                       item: Item,
                       separate_content: bool,
@@ -178,7 +126,11 @@ class Downloader(HeadersMixin):
             logging.debug(f"Filename already exists: {item}")
 
         # Make request
-        response = self._get_page(url=item.source, stream=True)
+        response = self.send_request(
+            method='GET',
+            url=item.source,
+            stream=True
+        )
 
         if 200 <= response.status_code < 300:
             with open(file_path, 'wb') as f:
@@ -189,6 +141,17 @@ class Downloader(HeadersMixin):
             with open(album_path / "urls.txt", "a") as f:
                 f.write(item.source)
                 f.write("\n")
+
+    @property
+    def output_path(self):
+        return self._create_path(self.OUTPUT_DIR)
+
+    def _create_path(self, dirname_or_absolutepath: str):
+        path = Path(dirname_or_absolutepath)
+        if path.is_absolute():
+            return path
+        else:
+            return Path().cwd() / dirname_or_absolutepath
 
     def update_cookies(self, cookies: dict, domain: str):
         for k, v in cookies.items():

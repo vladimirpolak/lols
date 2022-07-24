@@ -34,17 +34,8 @@ class ScraperBase:
     def set_downloader(self, downloader):
         self._downloader = downloader
 
-    def _request_page(self, url, headers: dict = None, data: dict = None, params: dict = None, cookies: dict = None):
-        return self._downloader.get_page(
-            url_or_request=url,
-            headers=headers,
-            data=data,
-            params=params,
-            cookies=cookies
-        )
-
-    def _send_request_object(self, req):
-        return self._downloader.get_page(req)
+    def request(self, url: str, method: str = 'GET', **kwargs):
+        return self._downloader.send_request(url, method, **kwargs)
 
     def add_item(self,
                  content_type: str,
