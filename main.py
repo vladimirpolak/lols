@@ -38,19 +38,19 @@ class LoLs:
                 print(scraper_.DESC)
                 s = scraper_(self.downloader)
                 data = s.extract_data(url)
+                output_dir_name = input("Enter name for output directory: ")
 
                 # Download 'data'
                 for item in data:
                     self.downloader.download_item(
                         item=item,
                         separate_content=self.options["separate"],
-                        save_urls=self.options["save_urls"]
+                        save_urls=self.options["save_urls"],
+                        album_name=output_dir_name
                     )
 
             elif scraper_.is_suitable(url) and scraper_.SCRAPER_TYPE == "CRAWLER":
                 self.use_crawler(url, scraper_, scrape_links_found=True)
-            # else:
-            #     raise ExtractionError("FOUND NO MATCHING EXTRACTOR.")
 
     def use_crawler(self, url, crawler, scrape_links_found: bool = False):
         print(crawler.DESC)
@@ -62,8 +62,6 @@ class LoLs:
 
         for scraper_ in get_scraper_classes():
             if scraper_.SCRAPER_TYPE == "EXTRACTOR":
-
-                # print(scraper_.DESC)
                 try:
                     links = scraper_._extract_from_html(html)
                 except Exception as e:
