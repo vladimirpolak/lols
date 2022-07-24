@@ -74,45 +74,43 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
 
         json = response.json()
 
+        album_data = []
         if json["status"] == "ok":
-            pass
+            album_data = json["data"]["contents"]
         elif json["status"] == "error-notFound":
             # Exception: GoFile ERROR: {'status': 'error-notFound', 'data': {}}
             logging.debug(f"GoFile Error, file not found. {url}")
-            return
         elif json["status"] == "error-passwordRequired":
             logging.debug(f"PASSWORD REQUIRED FOR: {url}")
             self._extract_data(url=url, password=input(f"Enter password for '{url}': "))
-            return
         else:
             raise ExtractionError(f"GoFile ERROR: {json}")
 
-        album_data = json["data"]["contents"]
+        if album_data:
+            # Album content extraction
+            for item_id, item_info in album_data.items():
+                file_type = item_info["type"]
 
-        # Album content extraction
-        for item_id, item_info in album_data.items():
-            file_type = item_info["type"]
+                # If current album contains another folder:
+                if file_type == "folder":
+                    folder_code = item_info["code"]
+                    folder_url = f"https://gofile.io/d/{folder_code}"
 
-            # If current album contains another folder:
-            if file_type == "folder":
-                folder_code = item_info["code"]
-                folder_url = f"https://gofile.io/d/{folder_code}"
+                    # Extract subfolder (Recursive manner)
+                    self._extract_data(url=folder_url)
 
-                # Extract subfolder (Recursive manner)
-                self._extract_data(url=folder_url)
+                elif file_type == "file":
+                    source = item_info["link"]
+                    file_w_extension = item_info["name"]
+                    filename, extension = split_filename_ext(file_w_extension)
+                    content_type = determine_content_type_(extension)
 
-            elif file_type == "file":
-                source = item_info["link"]
-                file_w_extension = item_info["name"]
-                filename, extension = split_filename_ext(file_w_extension)
-                content_type = determine_content_type_(extension)
-
-                self.add_item(
-                    source=source,
-                    filename=filename,
-                    extension=extension,
-                    content_type=content_type
-                )
+                    self.add_item(
+                        source=source,
+                        filename=filename,
+                        extension=extension,
+                        content_type=content_type
+                    )
 
     @classmethod
     def _extract_from_html(cls, html):
