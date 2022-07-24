@@ -103,9 +103,6 @@ if __name__ == '__main__':
     if not (input_url or batchfile):
         raise Exception("You need to provide some URL!")
 
-    # Check if path to file is absolute
-    # batchfile.is_absolute()
-
     logging.basicConfig(
         filename='lols.log',
         level=logging.DEBUG,
@@ -113,11 +110,6 @@ if __name__ == '__main__':
         datefmt='%d/%m/%Y %I:%M:%S',
         filemode='w'
     )
-    # options = {}
-    # if input_url:
-    #     options.update({
-    #         "link": input_url
-    #     })
 
     lols = LoLs(
         link=input_url,
