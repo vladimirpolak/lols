@@ -80,7 +80,7 @@ class Downloader(HeadersMixin):
     def _send_request(self, prepared_request, **kwargs) -> requests.Response:
         resp = self._session.send(
             request=prepared_request,
-            **kwargs
+            stream=kwargs.pop("stream", None)
         )
                       # stream=stream,
                       # verify=verify,
