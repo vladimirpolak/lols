@@ -10,8 +10,8 @@ class ScraperBase:
     PROTOCOL: str  # http/s
     DOMAIN: str  # domain.com
     DESC: str  # scraper description
-    SCRAPER_TYPE: str
-    SAMPLE_URLS: list
+    SCRAPER_TYPE: str  # scraper type EXTRACTOR/CRAWLER
+    SAMPLE_URLS: list  # list of example urls
     _downloader: Downloader
 
     def initialize(self):

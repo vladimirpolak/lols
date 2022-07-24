@@ -105,5 +105,5 @@ class CyberdropImageExtractor(ExtractorBase):
 
     @classmethod
     def _extract_from_html(cls, html):
-        pass
-        # return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
+        return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
+

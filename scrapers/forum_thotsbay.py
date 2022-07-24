@@ -1,12 +1,9 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_, img_extensions, vid_extensions
-from exceptions import ExtractionError, ScraperInitError
+from downloader.types import determine_content_type_
+from exceptions import ExtractionError
 from .forum_thotsbay_auth import ForumThotsbayAuth
-from utils import split_filename_ext
 from typing import Union
-import logging
 import re
-import json
 
 # Regex Patterns
 PATTERN_THOTSBAYFORUM_THREAD = r"(?:https://)?forum\.thotsbay\.com/threads/([-\w\d\.]+)/?"
