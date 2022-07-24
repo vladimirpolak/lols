@@ -74,7 +74,7 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
 
         json = response.json()
 
-        album_data = []
+        album_data = {}
         if json["status"] == "ok":
             album_data = json["data"]["contents"]
         elif json["status"] == "error-notFound":
