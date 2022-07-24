@@ -34,7 +34,12 @@ def load_file(path: str) -> list:
     """Opens the provided file as list of lines."""
     try:
         with open(path, "r") as file:
-            output = [line.strip() for line in file.readlines() if not line.startswith("#")]
+            output = [
+                line.strip()
+                for line in file.readlines()
+                if not (line.startswith("#")
+                        or line.startswith("//"))
+            ]
     except FileNotFoundError:
         raise Exception("Provided file doesn't exist!")
     else:

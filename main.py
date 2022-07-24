@@ -3,6 +3,7 @@ from options import parser
 from pathlib import Path
 from downloader.downloader import Downloader
 from exceptions import ExtractionError
+from utils import load_file
 import logging
 from scrapers import get_scraper_classes
 
@@ -28,7 +29,9 @@ class LoLs:
         if self.input_link:
             self.scrape(self.input_link)
         elif self.load_from_file:
-            pass
+            urls = load_file(self.load_from_file)
+            for url in urls:
+                self.scrape(url)
 
     def scrape(self, url):
         """Function that scraper a single link."""
