@@ -16,6 +16,11 @@ PATTERN_BUNKR_VIDEO = rf"((?:https?://)(?:stream|cdn(\d)*)\.bunkr\.is/(?:v/)?[-\
 PATTERN_BUNKR_IMAGE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\d\w]+(?:{'|'.join(img_extensions)}))"
 
 
+def extract_server_number(url: str) -> int:
+    pattern = re.compile(r"(?:cdn|stream|i|media-files)(\d)*\.bunkr\.is")
+    return pattern.findall(url)[0]
+
+
 class BunkrAlbumExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_BUNKR_ALBUM)
     PROTOCOL = "https"
@@ -88,7 +93,8 @@ class BunkrAlbumExtractor(ExtractorBase):
             if content_type == "image":
                 source = f"{item['i']}/{file_w_extension}"
             elif content_type == "video":
-                source = f"{STREAM_URL}/{file_w_extension}"
+                server_num = extract_server_number(item['cdn'])
+                source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
             elif content_type == "audio":
                 source = f"{item['cdn']}/{file_w_extension}"
             else:
@@ -126,7 +132,7 @@ class BunkrVideoExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url: str):
-        server_num = self.VALID_URL_RE.findall(url)[0][1]
+        server_num = extract_server_number(url)
 
         file_w_extension = url.split("/")[-1]
         filename, extension = split_filename_ext(file_w_extension)
