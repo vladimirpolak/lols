@@ -7,12 +7,12 @@ import re
 import json
 
 # Constant URLs
-STREAM_URL = "https://media-files.bunkr.is"
+STREAM_URL = "https://media-files{server_num}.bunkr.is"
 
 # Regex Patterns
 PATTERN_BUNKR_ALBUM = r"((?:https?://)?bunkr\.is/a/\w+)"
 PATTERN_BUNKR_ALBUM_DATA_SCRIPT = r'<script id="__NEXT_DATA__" type="application/json">(\{.*?})</script>'
-PATTERN_BUNKR_VIDEO = rf"((?:https?://)?(?:stream|cdn\d*)\.bunkr\.is/(?:v/)?[-\w\d]+?(?:{'|'.join(vid_extensions)}))"
+PATTERN_BUNKR_VIDEO = rf"((?:https?://)(?:stream|cdn(\d)*)\.bunkr\.is/(?:v/)?[-\w\d]+?(?:{'|'.join(vid_extensions)}))"
 PATTERN_BUNKR_IMAGE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\d\w]+(?:{'|'.join(img_extensions)}))"
 
 
@@ -121,16 +121,19 @@ class BunkrVideoExtractor(ExtractorBase):
         "https://stream.bunkr.is/v/ea_vid_12-rlwMZzT1.mov",
         "https://stream.bunkr.is/v/lai_vid_3-3Ymk80tH.mp4",
         "https://stream.bunkr.is/v/rr_vid_12-3HiQTJtY.mp4",
-        "https://cdn.bunkr.is/0h1owpgtrqdncpvflf8ey_source-XltlzTqe.mp4"
+        "https://cdn.bunkr.is/0h1owpgtrqdncpvflf8ey_source-XltlzTqe.mp4",
+        "https://cdn3.bunkr.is/IMG_1141-6RvpacEH.MOV"
     ]
 
     def _extract_data(self, url: str):
+        server_num = self.VALID_URL_RE.findall(url)[0][1]
+
         file_w_extension = url.split("/")[-1]
         filename, extension = split_filename_ext(file_w_extension)
 
         content_type = determine_content_type_(extension)
 
-        source = f"{STREAM_URL}/{file_w_extension}"
+        source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
 
         self.add_item(
             content_type=content_type,
@@ -138,6 +141,10 @@ class BunkrVideoExtractor(ExtractorBase):
             extension=extension,
             source=source,
         )
+
+    @classmethod
+    def _extract_from_html(cls, html):
+        return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
 
 
 class BunkrImageExtractor(ExtractorBase):
