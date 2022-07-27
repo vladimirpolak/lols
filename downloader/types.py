@@ -11,6 +11,7 @@ img_extensions = [
     ".svg",
     ".svgz"
 ]
+img_extensions = img_extensions + [ext.upper() for ext in img_extensions]
 
 vid_extensions = [
     ".mp4",
@@ -22,6 +23,7 @@ vid_extensions = [
     ".flv",
     ".mkv"
 ]
+vid_extensions = vid_extensions + [ext.upper() for ext in vid_extensions]
 
 archive_extensions = [
     ".zip",
@@ -29,6 +31,8 @@ archive_extensions = [
     ".rar",
     ".7z"
 ]
+archive_extensions = archive_extensions + [ext.upper() for ext in archive_extensions]
+
 
 audio_extensions = [
     ".mp3",
@@ -38,6 +42,7 @@ audio_extensions = [
     ".wma",
     ".aac"
 ]
+audio_extensions = audio_extensions + [ext.upper() for ext in audio_extensions]
 
 
 def determine_content_type_(filename: str) -> str:
