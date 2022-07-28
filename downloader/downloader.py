@@ -1,8 +1,9 @@
+import time
 import requests
 from pathlib import Path
 import retry
 from .headers import HeadersMixin
-from collections import ChainMap
+from tqdm.auto import tqdm
 from urllib3.exceptions import ProtocolError
 import shutil
 import logging
@@ -78,16 +79,19 @@ class Downloader(HeadersMixin):
 
     @retry.retry(requests.exceptions.RequestException, tries=3, delay=3)
     def _send_request(self, prepared_request, **kwargs) -> requests.Response:
-        resp = self._session.send(
+        res = self._session.send(
             request=prepared_request,
             stream=kwargs.pop("stream", None)
         )
+        if res.status_code == 429:
+            time.sleep(10)
+            raise requests.exceptions.RequestException
                       # stream=stream,
                       # verify=verify,
                       # proxies=proxies,
                       # cert=cert,
                       # timeout=timeout
-        return resp
+        return res
 
     @retry.retry(
         (requests.exceptions.RequestException, ProtocolError),
@@ -125,17 +129,19 @@ class Downloader(HeadersMixin):
         if file_path.exists():
             logging.debug(f"Filename already exists: {item}")
 
+        print(f"Downloading: {item.source}\n")
         # Make request
         response = self.send_request(
             method='GET',
             url=item.source,
             stream=True
         )
+        total_size = int(response.headers.get('Content-Length'))
+        response.raw.decode_content = True
 
-        if 200 <= response.status_code < 300:
+        with tqdm.wrapattr(response.raw, "read", total=total_size, desc="") as raw:
             with open(file_path, 'wb') as f:
-                response.raw.decode_content = True
-                shutil.copyfileobj(response.raw, f)
+                shutil.copyfileobj(raw, f)
 
         if save_urls:
             with open(album_path / "urls.txt", "a") as f:
