@@ -24,12 +24,9 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
     CONTENT_TYPE = "THREAD"
     MODEL_NAME = ""
     SAMPLE_URLS = [
-        "https://forum.thotsbay.com/threads/nataliexking-bbyluckie.12408/",
         "https://forum.thotsbay.com/threads/abby-rao-abbyrao.10221/",
         "https://forum.thotsbay.com/threads/genesis-mia-lopez.24/",
         "https://forum.thotsbay.com/threads/angelie-dolly.13727/",
-        "https://forum.thotsbay.com/threads/riley-reid.9379/",
-        "https://forum.thotsbay.com/threads/ladyxzero.14241/",
         "https://forum.thotsbay.com/threads/ines-helene.11402/",
         "https://forum.thotsbay.com/threads/lupeandmicha.11155"
     ]
@@ -43,11 +40,14 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
         except IndexError:
             ExtractionError(f"Failed to extract album id from url: {url}")
 
-        all_html = ""
+        output = dict()
+
         while url:
-            html, url = self._get_html_nextpage(url)
-            all_html = all_html + html
-        return all_html
+            html, next_page = self._get_html_nextpage(url)
+            output[url] = html
+            url = next_page
+
+        return output
 
     def _get_html_nextpage(self, url) -> (Html, NextPage):
         response = self.request(

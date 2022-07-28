@@ -29,12 +29,13 @@ class PlanetSuzyCrawler(CrawlerBase):
     def _crawl_link(self, url):
         # Used for creating next page url
         self.thread_path = self.VALID_URL_RE.match(url).group(2)
-        all_html = ""
 
+        output = dict()
         while url:
-            page_html, url = self._get_page_html(url)
-            all_html = all_html + page_html
-        return all_html
+            html, next_page = self._get_html_nextpage(url)
+            output[url] = html
+            url = next_page
+        return output
 
     def _get_page_html(self, url) -> (Html, NextPageUrl):
         response = self.request(
