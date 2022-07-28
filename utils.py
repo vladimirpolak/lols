@@ -1,5 +1,6 @@
 from typing import List
 from pathlib import Path
+import os
 
 
 def split_filename_ext(file) -> tuple:
@@ -44,3 +45,7 @@ def load_file(path: str) -> list:
         raise Exception("Provided file doesn't exist!")
     else:
         return output
+
+
+def cls():
+    os.system('cls' if os.name == 'nt' else 'clear')
