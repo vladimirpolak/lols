@@ -2,6 +2,7 @@ from ._scraper_base import ExtractorBase
 from downloader.types import determine_content_type_, img_extensions, vid_extensions
 from exceptions import ExtractionError
 from utils import split_filename_ext
+from typing import Union
 import logging
 import re
 import json
@@ -12,7 +13,7 @@ STREAM_URL = "https://media-files{server_num}.bunkr.is"
 # Regex Patterns
 PATTERN_BUNKR_ALBUM = r"((?:https?://)?bunkr\.is/a/\w+)"
 PATTERN_BUNKR_ALBUM_DATA_SCRIPT = r'<script id="__NEXT_DATA__" type="application/json">(\{.*?})</script>'
-PATTERN_BUNKR_VIDEO = rf"((?:https?://)(?:stream|cdn(\d)*)\.bunkr\.is/(?:v/)?[-\w\d]+?(?:{'|'.join(vid_extensions)}))"
+PATTERN_BUNKR_VIDEO = rf"((?:https?://)(?:stream|media-files(\d)*|cdn(\d)*)\.bunkr\.is/(?:v/)?[-\w\d]+?(?:{'|'.join(vid_extensions)}))"
 PATTERN_BUNKR_IMAGE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\d\w]+(?:{'|'.join(img_extensions)}))"
 
 
@@ -132,14 +133,27 @@ class BunkrVideoExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url: str):
-        server_num = extract_server_number(url)
+        if "stream.bunkr.is" in url:
+            response = self.request(url)
+            html = response.text
+            source = self._extract_direct_link(html)
+            if not source:
+                print(response.headers)
+                raise ExtractionError(
+                    f"Failed to extract direct url of file at {url}!"
+                )
+            filename, extension = split_filename_ext(source.split("/")[-1])
+            content_type = determine_content_type_(extension)
 
-        file_w_extension = url.split("/")[-1]
-        filename, extension = split_filename_ext(file_w_extension)
+        else:
+            server_num = extract_server_number(url)
 
-        content_type = determine_content_type_(extension)
+            file_w_extension = url.split("/")[-1]
+            filename, extension = split_filename_ext(file_w_extension)
 
-        source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
+            content_type = determine_content_type_(extension)
+
+            source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
 
         self.add_item(
             content_type=content_type,
@@ -147,6 +161,35 @@ class BunkrVideoExtractor(ExtractorBase):
             extension=extension,
             source=source,
         )
+
+    def _extract_direct_link(self, html) -> Union[str, None]:
+        # Extract the script that fetches album data in json format
+        pattern = re.compile(PATTERN_BUNKR_ALBUM_DATA_SCRIPT)
+        data_tag = re.search(pattern, html)
+
+        if not data_tag:
+            logging.debug(
+                f"Failed to extract data.\n"
+                f"Didn't find html script tag containing data."
+            )
+            return None
+
+        # Load into json
+        json_ = json.loads(data_tag.group(1))
+        is_fallback = json_["isFallback"]
+
+        if json_ and is_fallback:
+            logging.debug(
+                f"Failed to extract album data.\n"
+                f"Data: {json_}\n"
+                f"!'isFallback': True!"
+            )
+            return None
+
+        item_info = json_["props"]["pageProps"]["file"]
+        filename = item_info["name"]
+        url_base = item_info["mediafiles"]
+        return f"{url_base}/{filename}"
 
     @classmethod
     def _extract_from_html(cls, html):
