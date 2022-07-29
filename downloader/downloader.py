@@ -136,6 +136,10 @@ class Downloader(HeadersMixin):
             url=item.source,
             stream=True
         )
+
+        if self.is_invalid(response):
+            return
+
         total_size = int(response.headers.get('Content-Length'))
         response.raw.decode_content = True
 
@@ -147,6 +151,11 @@ class Downloader(HeadersMixin):
             with open(album_path / "urls.txt", "a") as f:
                 f.write(item.source)
                 f.write("\n")
+
+    @classmethod
+    def is_invalid(cls, response: requests.Response) -> bool:
+        if response.status_code >= 400:
+            return True
 
     @property
     def output_path(self):
