@@ -2,8 +2,9 @@ import requests
 from options import parser
 from pathlib import Path
 from downloader.downloader import Downloader
-from exceptions import ExtractionError
-from utils import load_file
+from utils import load_file, cls
+from downloader.downloader import Item
+from typing import List
 import logging
 from scrapers import get_scraper_classes
 
@@ -35,61 +36,63 @@ class LoLs:
 
     def scrape(self, url):
         """Function that scraper a single link."""
-
         for scraper_ in get_scraper_classes():
-            if scraper_.is_suitable(url) and scraper_.SCRAPER_TYPE == "EXTRACTOR":
-                print(scraper_.DESC)
-                s = scraper_(self.downloader)
-                data = s.extract_data(url)
-                output_dir_name = input("Enter name for output directory: ")
+            if scraper_.is_suitable(url):
+                print(f"Chosen scraper: {scraper_.DESC}")
+                if scraper_.SCRAPER_TYPE == "EXTRACTOR":
+                    self.extractor_method(url, scraper_)
+                elif scraper_.SCRAPER_TYPE == "CRAWLER":
+                    self.crawler_method(url, scraper_)
+                return
 
-                # Download 'data'
-                for item in data:
-                    self.downloader.download_item(
-                        item=item,
-                        separate_content=self.options["separate"],
-                        save_urls=self.options["save_urls"],
-                        album_name=output_dir_name
-                    )
+    def extractor_method(self, url, extractor):
+        e = extractor(self.downloader)
+        data = e.extract_data(url)
+        output_dir_name = input("Enter name for output directory: ")
 
-            elif scraper_.is_suitable(url) and scraper_.SCRAPER_TYPE == "CRAWLER":
-                self.use_crawler(url, scraper_, scrape_links_found=True)
+        self.download(items=data, dir_name=output_dir_name)
 
-    def use_crawler(self, url, crawler, scrape_links_found: bool = False):
-        print(crawler.DESC)
-
+    def crawler_method(self, url, crawler, scrape_extracted_links: bool = True):
         c = crawler(self.downloader)
-        html = c.extract_data(url)
+
+        crawled_html = c.extract_data(url)
+
         model_name = c.MODEL_NAME
         data = []
 
         for scraper_ in get_scraper_classes():
             if scraper_.SCRAPER_TYPE == "EXTRACTOR":
-                try:
-                    links = scraper_._extract_from_html(html)
-                except Exception as e:
-                    raise ExtractionError(f"{e}\nError extracting links with {scraper_}.")
+                links = []
+                for url, html in crawled_html.items():
+                    scraper_output = scraper_._extract_from_html(html)
+                    if scraper_output:
+                        links.extend(scraper_output)
                 if links:
-                    logging.debug(f"{scraper_.__name__} extracted {len(links)} urls. DATA: {links}")
+                    logging.debug(f"{scraper_.__name__} extracted {len(links)} urls."
+                                  f"DATA: {links}")
 
-                    if scrape_links_found:
+                    if scrape_extracted_links:
                         s = scraper_(self.downloader)
                         for link_ in links:
-                            try:
-                                data.extend(s.extract_data(link_))
-                            except Exception as e:
-                                raise ExtractionError(f"{e}\n{scraper_}\nError extracting data from link: {link_}")
+                            data.extend(s.extract_data(link_))
 
         logging.debug(f"Scraped total of {len(data)} items.")
+        self.download(items=data, dir_name=model_name)
 
-        # Download 'data'
-        for item in data:
+    def download(self, items: List[Item], dir_name: str):
+        step = 1
+        for item in items:
+            # Clear console
+            cls()
+            print(f"Item no. {step}/{len(items)}")
+
             self.downloader.download_item(
                 item=item,
                 separate_content=self.options["separate"],
                 save_urls=self.options["save_urls"],
-                album_name=model_name
+                album_name=dir_name
             )
+            step += 1
 
 
 if __name__ == '__main__':
