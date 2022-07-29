@@ -52,7 +52,7 @@ class ScraperBase:
             source=source,
             album_title=album_title
         )
-        logging.debug(f"Adding Item: {new_item}")
+        logging.debug(f"{self.__class__.__name__} ADDED {new_item}")
         self.ALL_ITEMS.append(new_item)
 
     @property
@@ -78,7 +78,7 @@ class ExtractorBase(ScraperBase):
         self._extract_data(url)
 
         if len(self.ALL_ITEMS) > 1:
-            logging.debug(f"NUMBER OF DATA: {len(self.ALL_ITEMS)}")
+            logging.info(f"{self.__class__.__name__} EXTRACTED {len(self.ALL_ITEMS)} ITEMS")
         return self.ALL_ITEMS
 
     def _extract_data(self, url: str):
