@@ -121,7 +121,7 @@ if __name__ == '__main__':
         raise Exception("You need to provide some URL!")
 
     logging.basicConfig(
-        filename='lols.log',
+        handlers=[logging.FileHandler('lols.log', 'w', 'utf-8')],
         level=logging.DEBUG,
         format='%(asctime)s %(message)s',
         datefmt='%d/%m/%Y %I:%M:%S',
