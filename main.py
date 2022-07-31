@@ -2,7 +2,7 @@ import requests
 from options import parser
 from pathlib import Path
 from downloader.downloader import Downloader
-from utils import load_file, cls
+from utils import load_file, cls, print_data, dump_curr_session
 from downloader.downloader import Item
 from typing import List
 import logging
