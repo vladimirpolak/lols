@@ -4,7 +4,7 @@ from downloader.types import vid_extensions, img_extensions
 import re
 
 # Regex Patterns
-PATTERN_CYBERDROP_ALBUM = r"((?:https?://)?cyberdrop\.(?:to|me)/a/\w+)"
+PATTERN_CYBERDROP_ALBUM = r"((?:https?://)?cyberdrop\.(?:to|me|cc)/a/\w+)"
 PATTERN_CYBERDROP_IMAGE = rf"((?:https?://)?fs-\d+?\.cyberdrop\.(?:to|me|cc)/(.+?)({'|'.join(img_extensions)}))"
 PATTERN_CYBERDROP_VIDEO = rf"((?:https?://)?fs-\d+?\.cyberdrop\.(?:to|me|cc)/(.+?)({'|'.join(vid_extensions)}))"
 
