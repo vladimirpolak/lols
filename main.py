@@ -48,6 +48,9 @@ class LoLs:
     def extractor_method(self, url, extractor):
         e = extractor(self.downloader)
         data = e.extract_data(url)
+
+        print_data(data)
+
         output_dir_name = input("Enter name for output directory: ")
 
         self.download(items=data, dir_name=output_dir_name)
@@ -77,6 +80,8 @@ class LoLs:
                             data.extend(s.extract_data(link_))
 
         logging.debug(f"Scraped total of {len(data)} items.")
+        print_data(data)
+
         self.download(items=data, dir_name=model_name)
 
     def download(self, items: List[Item], dir_name: str):
@@ -125,7 +130,6 @@ if __name__ == '__main__':
         level=logging.DEBUG,
         format='%(asctime)s %(message)s',
         datefmt='%d/%m/%Y %I:%M:%S',
-        filemode='w'
     )
 
     lols = LoLs(
