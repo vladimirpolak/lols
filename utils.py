@@ -1,5 +1,8 @@
 from typing import List
 from pathlib import Path
+from collections import defaultdict
+from downloader.downloader import Item
+import json
 import os
 
 
@@ -11,7 +14,7 @@ def split_filename_ext(file) -> tuple:
     :return: Tuple[str(filename), str(extension)]
     """
     filename = ".".join(file.split(".")[:-1])
-    extension = f".{file.split('.')[-1]}"
+    extension = "." + file.split('.')[-1]
 
     return filename, extension
 
