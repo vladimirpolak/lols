@@ -128,6 +128,7 @@ class Downloader(HeadersMixin):
 
         if file_path.exists():
             logging.debug(f"Filename already exists: {item}")
+            return
 
         print(f"Downloading: {item.source}\n")
         # Make request
@@ -140,17 +141,23 @@ class Downloader(HeadersMixin):
         if self.is_invalid(response):
             return
 
-        total_size = int(response.headers.get('Content-Length'))
-        response.raw.decode_content = True
+        try:
+            total_size = int(response.headers.get('Content-Length'))
+        except TypeError:
+            logging.debug(
+                f"ERROR when extracting 'content-length from {item.source} response."
+            )
+        else:
+            response.raw.decode_content = True
 
-        with tqdm.wrapattr(response.raw, "read", total=total_size, desc="") as raw:
-            with open(file_path, 'wb') as f:
-                shutil.copyfileobj(raw, f)
+            with tqdm.wrapattr(response.raw, "read", total=total_size, desc="") as raw:
+                with open(file_path, 'wb') as f:
+                    shutil.copyfileobj(raw, f)
 
-        if save_urls:
-            with open(album_path / "urls.txt", "a") as f:
-                f.write(item.source)
-                f.write("\n")
+            if save_urls:
+                with open(album_path / "urls.txt", "a") as f:
+                    f.write(item.source)
+                    f.write("\n")
 
     @classmethod
     def is_invalid(cls, response: requests.Response) -> bool:
