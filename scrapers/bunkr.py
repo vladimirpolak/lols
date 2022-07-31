@@ -1,8 +1,9 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_, img_extensions, vid_extensions
+from downloader.types import determine_content_type_, img_extensions, vid_extensions, archive_extensions
 from exceptions import ExtractionError
 from utils import split_filename_ext
 from typing import Union
+import yarl
 import logging
 import re
 import json
@@ -15,6 +16,7 @@ PATTERN_BUNKR_ALBUM = r"((?:https?://)?bunkr\.is/a/\w+)"
 PATTERN_BUNKR_ALBUM_DATA_SCRIPT = r'<script id="__NEXT_DATA__" type="application/json">(\{.*?})</script>'
 PATTERN_BUNKR_VIDEO = rf"((?:https?://)(?:stream|media-files(\d)*|cdn(\d)*)\.bunkr\.is/(?:v/)?[-\w\d]+?(?:{'|'.join(vid_extensions)}))"
 PATTERN_BUNKR_IMAGE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\d\w]+(?:{'|'.join(img_extensions)}))"
+PATTERN_BUNKR_ARCHIVE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\d\w]+(?:{'|'.join(archive_extensions)}))"
 
 
 def extract_server_number(url: str) -> int:
@@ -37,8 +39,9 @@ class BunkrAlbumExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url):
+        self.url = url
         response = self.request(
-            url=url,
+            url=self.url,
             headers={
                 "Host": "bunkr.is"
             }
@@ -50,34 +53,25 @@ class BunkrAlbumExtractor(ExtractorBase):
         data_tag = re.search(pattern, html)
 
         if not data_tag:
-            raise ExtractionError(
-                f"{url}\n"
-                f"Failed to extract data.\n"
-                f"Didn't find html script tag containing data."
+            logging.debug(
+                f"ERROR Didn't find data tag on page {self.url}."
             )
 
         # Load into json
         json_ = json.loads(data_tag.group(1))
         is_fallback = json_["isFallback"]
+        page_props = json_["props"]["pageProps"]
 
         if json_ and is_fallback:
-            raise ExtractionError(
-                f"{url}\n"
-                f"Failed to extract album data.\n"
-                f"Data: {json_}\n"
-                f"!'isFallback': True!"
-            )
-
-        album_data = json_["props"]["pageProps"]
+            page_props = self._fallback_method(json_)
 
         try:
-            title = album_data['album']['name']
-            files = album_data['files']
+            title = page_props['album']['name']
+            files = page_props['files']
         except KeyError as e:
             raise ExtractionError(
-                f"title = album_data['album']['name']\nfiles = album_data['files']\n"
                 f"Failed extracting '{e}'\n"
-                f"Data: {album_data}"
+                f"Data: {page_props}"
             )
 
         logging.info(
@@ -98,6 +92,8 @@ class BunkrAlbumExtractor(ExtractorBase):
                 source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
             elif content_type == "audio":
                 source = f"{item['cdn']}/{file_w_extension}"
+            elif content_type == "archive":
+                source = f"{item['cdn']}/{file_w_extension}"
             else:
                 raise NotImplementedError(
                     f"Error parsing data for bunkr.\n"
@@ -111,6 +107,15 @@ class BunkrAlbumExtractor(ExtractorBase):
                 source=source,
                 album_title=album_title
             )
+
+    def _fallback_method(self, json):
+        url = yarl.URL(self.url)
+        fetch_url = "https://" + url.host + "/_next/data/" + json['buildId'] + url.path + '.json'
+        response = self.request(fetch_url)
+        if response.status_code != 200:
+            logging.debug(f"ERROR Failed to extract page data from {self.url}.")
+        json_ = response.json()
+        return json_["pageProps"]
 
     @classmethod
     def _extract_from_html(cls, html):
@@ -133,22 +138,19 @@ class BunkrVideoExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url: str):
-        if "stream.bunkr.is" in url:
-            response = self.request(url)
+        self.url = url
+        if "stream.bunkr.is" in self.url:
+            response = self.request(self.url)
             html = response.text
             source = self._extract_direct_link(html)
-            if not source:
-                print(response.headers)
-                raise ExtractionError(
-                    f"Failed to extract direct url of file at {url}!"
-                )
+
             filename, extension = split_filename_ext(source.split("/")[-1])
             content_type = determine_content_type_(extension)
 
         else:
-            server_num = extract_server_number(url)
+            server_num = extract_server_number(self.url)
 
-            file_w_extension = url.split("/")[-1]
+            file_w_extension = self.url.split("/")[-1]
             filename, extension = split_filename_ext(file_w_extension)
 
             content_type = determine_content_type_(extension)
@@ -177,19 +179,24 @@ class BunkrVideoExtractor(ExtractorBase):
         # Load into json
         json_ = json.loads(data_tag.group(1))
         is_fallback = json_["isFallback"]
+        page_props = json_["props"]["pageProps"]
 
         if json_ and is_fallback:
-            logging.debug(
-                f"Failed to extract album data.\n"
-                f"Data: {json_}\n"
-                f"!'isFallback': True!"
-            )
-            return None
+            page_props = self._fallback_method(json_)
 
-        item_info = json_["props"]["pageProps"]["file"]
+        item_info = page_props["file"]
         filename = item_info["name"]
         url_base = item_info["mediafiles"]
         return f"{url_base}/{filename}"
+
+    def _fallback_method(self, json: dict):
+        url = yarl.URL(self.url)
+        fetch_url = "https://" + url.host + "/_next/data/" + json['buildId'] + url.path + '.json'
+        response = self.request(fetch_url)
+        if response.status_code != 200:
+            logging.debug(f"ERROR Failed to extract data from {self.url}.")
+        json_ = response.json()
+        return json_["pageProps"]
 
     @classmethod
     def _extract_from_html(cls, html):
@@ -225,3 +232,26 @@ class BunkrImageExtractor(ExtractorBase):
     @classmethod
     def _extract_from_html(cls, html):
         return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
+
+
+class BunkrArchiveExtractor(ExtractorBase):
+    VALID_URL_RE = re.compile(PATTERN_BUNKR_IMAGE)
+    PROTOCOL = "https"
+    DOMAIN = "bunkr.is"
+    DESC = "Bunkr.is Archive direct link"
+    CONTENT_TYPE = "ITEM"
+    SAMPLE_URLS = [
+        "https://cdn.bunkr.is/in-paris-NFp4EcUK.zip"
+    ]
+
+    def _extract_data(self, url):
+        file_w_extension = url.split("/")[-1]
+        filename, extension = split_filename_ext(file_w_extension)
+        content_type = determine_content_type_(extension)
+
+        self.add_item(
+            content_type=content_type,
+            filename=filename,
+            extension=extension,
+            source=url,
+        )
