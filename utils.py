@@ -52,3 +52,23 @@ def load_file(path: str) -> list:
 
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+
+def print_data(data: List[Item]):
+    data_count = defaultdict(int)
+    for item in data:
+        data_count[item.content_type] += 1
+
+    print("\n")
+    for content_type, count in data_count.items():
+        print(f"Number of {content_type}s scraped: {count}")
+    print("\n")
+
+
+def dump_curr_session(cookies: dict, items_to_download: List[Item]):
+    output = dict()
+    output["cookies"] = cookies
+    output["items"] = [item.__dict__ for item in items_to_download]
+
+    with open("terminated_session.json", "w") as outfile:
+        json.dump(output, outfile, indent=4)
