@@ -2,6 +2,7 @@ from ._scraper_base import ExtractorBase
 from downloader.types import determine_content_type_
 from exceptions import ExtractionError
 from utils import split_filename_ext
+import logging
 import re
 
 # Regex Patterns
@@ -36,7 +37,8 @@ class AnonfilesExtractor(ExtractorBase):
             elif isinstance(result, list):
                 source = result[0]
         else:
-            raise ExtractionError(f"Failed to download URL from: {url}")
+            logging.debug(f"Failed to download URL from: {url}")
+            return
 
         file = source.split("/")[-1]
         filename, extension = split_filename_ext(file)
