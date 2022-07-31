@@ -80,19 +80,32 @@ class LoLs:
         self.download(items=data, dir_name=model_name)
 
     def download(self, items: List[Item], dir_name: str):
-        step = 1
-        for item in items:
-            # Clear console
+        while items:
+            item = items.pop(0)
             cls()
-            print(f"Item no. {step}/{len(items)}")
+            print(f"Remaining {len(items)} items.")
 
-            self.downloader.download_item(
-                item=item,
-                separate_content=self.options["separate"],
-                save_urls=self.options["save_urls"],
-                album_name=dir_name
-            )
-            step += 1
+            try:
+                self.downloader.download_item(
+                    item=item,
+                    separate_content=self.options["separate"],
+                    save_urls=self.options["save_urls"],
+                    album_name=dir_name
+                )
+            except Exception as e:
+                print(e)
+                print(item)
+                dump_curr_session(
+                    cookies=dict(self.session.cookies),
+                    items_to_download=items
+                )
+                exit()
+            except KeyboardInterrupt:
+                dump_curr_session(
+                    cookies=dict(self.session.cookies),
+                    items_to_download=items
+                )
+                exit()
 
 
 if __name__ == '__main__':
