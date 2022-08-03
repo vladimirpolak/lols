@@ -31,6 +31,9 @@ class LoLs:
         self.options = kwargs
 
     def main(self):
+        """
+        Picks the logic based on the user input either a single url or a text file containing multiple urls.
+        """
         if self.input_link:
             self.scrape(self.input_link)
         elif self.load_from_file:
@@ -38,8 +41,19 @@ class LoLs:
             for url in urls:
                 self.scrape(url)
 
-    def scrape(self, url):
-        """Function that scraper a single link."""
+    def scrape(self, url: str):
+        """
+        Function that picks the scraper that is capable of extracting from the given url.
+        Urls that lead to either a single item or album of items on one site is handled by Extractor type of scraper.
+        Urls that lead to a thread/album that can contain multiple of items and external urls
+        is handled by Crawler type of scraper.
+
+        Crawler scrapes the HTML of the thread (usually spanning through multiple pages) that is then run against
+        Extractors that extract their type of url from the html if it contains any, then they extract the content
+        from the extracted urls.
+
+        :param url: str
+        """
         for scraper_ in get_scraper_classes():
             if scraper_.is_suitable(url):
                 print(f"Chosen scraper: {scraper_.DESC}")
@@ -54,8 +68,11 @@ class LoLs:
                          extractor: Extractor):
         # Initiate extractor
         e = extractor(self.downloader)
+
+        # Extract data
         data = e.extract_data(url)
 
+        # Displays the amount/type of scraped data
         print_data(data)
 
         output_dir_name = input("Enter name for output directory: ")
@@ -69,27 +86,35 @@ class LoLs:
         # Initiate crawler
         c = crawler(self.downloader)
 
+        # Crawl the target thread for html
         crawled_html = c.extract_data(url)
 
-        model_name = c.MODEL_NAME
-        data = []
+        # Thread name (Used to name an output directory)
+        model_name = c.THREAD_NAME
 
+        # Run the crawled html against Extractor classes
+        data = []
         for scraper_ in get_scraper_classes():
             if scraper_.SCRAPER_TYPE == "EXTRACTOR":
                 links = []
+
+                # Loops through crawled pages
                 for url, html in crawled_html.items():
+                    # Searches for valid urls here
                     scraper_output = scraper_._extract_from_html(html)
                     if scraper_output:
                         links.extend(scraper_output)
+
+                # If any valid links were scraped it extracts data from them
                 if links:
                     logging.debug(f"{scraper_.__name__} extracted {len(links)} urls."
                                   f"DATA: {links}")
-
                     if scrape_extracted_links:
                         s = scraper_(self.downloader)
                         for link_ in links:
                             data.extend(s.extract_data(link_))
 
+        # Displays the amount/type of scraped data
         logging.debug(f"Scraped total of {len(data)} items.")
         print_data(data)
 
