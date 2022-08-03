@@ -22,7 +22,6 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
     DOMAIN = "forum.thotsbay.com"
     DESC = "Thotsbay Forum Thread"
     CONTENT_TYPE = "THREAD"
-    MODEL_NAME = ""
     SAMPLE_URLS = [
         "https://forum.thotsbay.com/threads/abby-rao-abbyrao.10221/",
         "https://forum.thotsbay.com/threads/genesis-mia-lopez.24/",
@@ -56,8 +55,8 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
         html = response.text
         if self.username not in html:
             raise ExtractionError(f"Not authorized! (Most likely login session is expired.)")
-        if not self.MODEL_NAME:
-            self.MODEL_NAME = self._extract_model_name(html)
+        if not self.THREAD_NAME:
+            self.THREAD_NAME = self._extract_model_name(html)
         next_page = self._extract_nextpage(html)
 
         return html, next_page

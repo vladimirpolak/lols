@@ -99,6 +99,7 @@ class CrawlerBase(ScraperBase):
     """
     NEXT_PAGE = None
     SCRAPER_TYPE = "CRAWLER"
+    THREAD_NAME = ""
 
     def __init__(self, downloader=None):
         self._downloader = downloader

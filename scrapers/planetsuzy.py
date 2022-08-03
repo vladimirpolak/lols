@@ -19,7 +19,6 @@ class PlanetSuzyCrawler(CrawlerBase):
     DOMAIN = "planetsuzy.org"
     DESC = "PlanetSuzy Forum Thread"
     CONTENT_TYPE = "THREAD"
-    MODEL_NAME = ""
     SAMPLE_URLS = [
         "http://planetsuzy.org/t967900-daisy-keech.html",
         "http://www.planetsuzy.org/t977950-niece-waidhofer.html",
@@ -43,8 +42,8 @@ class PlanetSuzyCrawler(CrawlerBase):
         )
 
         html = response.text
-        if not self.MODEL_NAME:
-            self.MODEL_NAME = self._extract_model_name(html)
+        if not self.THREAD_NAME:
+            self.THREAD_NAME = self._extract_model_name(html)
         next_page_url = self._get_next_page(html)
 
         return html, next_page_url
