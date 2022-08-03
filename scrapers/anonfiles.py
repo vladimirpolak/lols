@@ -1,6 +1,5 @@
 from ._scraper_base import ExtractorBase
 from downloader.types import determine_content_type_
-from exceptions import ExtractionError
 from utils import split_filename_ext
 import logging
 import re
@@ -25,24 +24,32 @@ class AnonfilesExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url):
+        # Get the page
         response = self.request(
             url=url,
         )
         html = response.text
+
+        # Find the 'download-url' html tag containing direct url for target file
         result = re.findall(PATTERN_ANONFILES_DLTAG, html)
 
         if result:
+            # If the result is a string its the url
             if isinstance(result, str):
                 source = result
-            elif isinstance(result, list):
+            else:
+                # If the result is a list get the first item
                 source = result[0]
         else:
             logging.debug(f"Failed to download URL from: {url}")
             return
 
+        # Parse the data
         file = source.split("/")[-1]
         filename, extension = split_filename_ext(file)
         content_type = determine_content_type_(extension)
+
+        # Add item to output
         self.add_item(
             content_type=content_type,
             filename=filename,
