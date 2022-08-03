@@ -59,10 +59,10 @@ def print_data(data: List[Item]):
     for item in data:
         data_count[item.content_type] += 1
 
-    print("\n")
+    print("-" * 50)
     for content_type, count in data_count.items():
         print(f"Number of {content_type}s scraped: {count}")
-    print("\n")
+    print("-" * 50)
 
 
 def dump_curr_session(cookies: dict, items_to_download: List[Item]):
