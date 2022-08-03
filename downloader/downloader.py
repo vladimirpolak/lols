@@ -64,8 +64,8 @@ class Downloader(HeadersMixin):
         return response
 
     def _prepare_request(self, method: str, url: str, **kwargs) -> requests.PreparedRequest:
-        headers = kwargs.pop("headers", dict())
-        headers.update(self.general_headers)
+        headers = self.general_headers
+        headers.update(kwargs.pop("headers", dict()))
 
         req = requests.Request(
             method=method,
