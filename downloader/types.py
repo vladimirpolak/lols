@@ -21,7 +21,8 @@ vid_extensions = [
     ".avi",
     ".wmv",
     ".flv",
-    ".mkv"
+    ".mkv",
+    ".ts"
 ]
 vid_extensions = vid_extensions + [ext.upper() for ext in vid_extensions]
 
