@@ -3,7 +3,7 @@ from options import parser
 from pathlib import Path
 from downloader.downloader import Downloader
 from scrapers._scraper_base import ExtractorBase, CrawlerBase
-from utils import load_file, cls, print_data, dump_curr_session
+from utils import load_file, clear_output, print_data, dump_curr_session
 from downloader.downloader import Item
 from typing import List, TypeVar
 import logging
@@ -122,9 +122,8 @@ class LoLs:
 
     def download(self, items: List[Item], dir_name: str):
         while items:
-            item = items.pop(0)
-            cls()
             print(f"Remaining {len(items)} items.")
+            item = items.pop(0)
 
             try:
                 self.downloader.download_item(
@@ -133,6 +132,8 @@ class LoLs:
                     save_urls=self.options["save_urls"],
                     album_name=dir_name
                 )
+                if items:
+                    clear_output(lines_to_clear=4)
             except Exception as e:
                 print(e)
                 print(item)

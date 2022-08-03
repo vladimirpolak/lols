@@ -50,8 +50,12 @@ def load_file(path: str) -> list:
         return output
 
 
-def cls():
-    os.system('cls' if os.name == 'nt' else 'clear')
+def clear_output(lines_to_clear: int = 1):
+    for _ in range(lines_to_clear):
+        LINE_UP = '\033[1A'
+        LINE_CLEAR = '\x1b[2K'
+        print(LINE_UP, end=LINE_CLEAR)
+    # os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def print_data(data: List[Item]):
