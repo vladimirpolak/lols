@@ -60,9 +60,10 @@ class BunkrAlbumExtractor(ExtractorBase):
         # Load into json
         json_ = json.loads(data_tag.group(1))
         is_fallback = json_["isFallback"]
-        page_props = json_["props"]["pageProps"]
 
-        if json_ and is_fallback:
+        if json_ and not is_fallback:
+            page_props = json_["props"]["pageProps"]
+        else:
             page_props = self._fallback_method(json_)
 
         try:
