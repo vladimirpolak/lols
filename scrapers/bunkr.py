@@ -142,6 +142,8 @@ class BunkrVideoExtractor(ExtractorBase):
         if "stream.bunkr.is" in self.url:
             response = self.request(self.url)
             html = response.text
+            if "<title>404: This page could not be found</title>" in html:
+                return
             source = self._extract_direct_link(html)
 
             filename, extension = split_filename_ext(source.split("/")[-1])
