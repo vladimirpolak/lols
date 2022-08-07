@@ -5,8 +5,8 @@ import json
 
 
 class Manager:
-    @classmethod
-    def load_config(cls, domain_name) -> dict:
+    @staticmethod
+    def load_config(domain_name) -> dict:
         path = Path().cwd() / "config" / f"{domain_name}.json"
 
         if not path.exists():
@@ -17,8 +17,8 @@ class Manager:
 
         return data
 
-    @classmethod
-    def save_config(cls, domain_name, data: dict):
+    @staticmethod
+    def save_config(domain_name, data: dict):
         path = Path().cwd() / "config" / f"{domain_name}.json"
 
         data["created_at"] = datetime.now().isoformat()
