@@ -71,7 +71,7 @@ class ForumThotsbayAuth:
         )
         html = response.text
 
-        pattern = re.compile('data-csrf="(.*?)" ')
+        pattern = re.compile('data-csrf="(.*?)"')
         try:
             results = pattern.findall(html)
             token = results[0]
