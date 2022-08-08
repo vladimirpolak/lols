@@ -137,6 +137,7 @@ class Downloader(HeadersMixin):
             url=item.source,
             stream=True
         )
+        response.raw.decode_content = True
 
         if self.is_invalid(response):
             return
@@ -144,12 +145,15 @@ class Downloader(HeadersMixin):
         try:
             total_size = int(response.headers.get('Content-Length'))
         except TypeError:
-            logging.debug(
-                f"ERROR when extracting 'content-length from {item.source} response."
+            logging.error(
+                f"Error when extracting 'content-length from {item.source} response."
             )
-        else:
-            response.raw.decode_content = True
 
+            # Download without progress bar
+            with open(file_path, 'wb') as f:
+                response.raw.decode_content = True
+                shutil.copyfileobj(response.raw, f)
+        else:
             with tqdm.wrapattr(response.raw, "read", total=total_size, desc="") as raw:
                 with open(file_path, 'wb') as f:
                     shutil.copyfileobj(raw, f)
