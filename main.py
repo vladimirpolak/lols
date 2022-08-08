@@ -148,6 +148,7 @@ class LoLs:
                     items_to_download=items
                 )
                 exit()
+        print(f"\nOutput directory: {dir_name}")
 
 
 if __name__ == '__main__':
@@ -165,7 +166,7 @@ if __name__ == '__main__':
     logging.basicConfig(
         handlers=[logging.FileHandler('lols.log', 'w', 'utf-8')],
         level=logging.DEBUG,
-        format='%(asctime)s %(message)s',
+        format='%(levelname)s %(asctime)s %(message)s',
         datefmt='%d/%m/%Y %I:%M:%S',
     )
 
