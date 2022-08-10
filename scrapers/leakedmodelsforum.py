@@ -13,6 +13,7 @@ PATTERN_LEAKEDMODELSFORUM_THREAD_NEXTPAGE = r'<a\s+' \
                                         r'class="[-\w\d\s]*pageNav-jump--next">'
 PATTERN_LEAKEDMODELSFORUM_IMAGE = r"(?:(?:https://)?leakedmodels\.com)?/(forum/attachments/([-\d\w]+)-([a-zA-Z]+)\.\d+/?)"
 PATTERN_LEAKEDMODELSFORUM_VIDEO = rf"(?:https://)?cdn\.leakedmodels\.com/forum/data/video/\d+/[-\d\w]+(?:{'|'.join(vid_extensions)})"
+PATTERN_LEAKEDMODELSFORUM_THREADTITLE = r'<h1 class="p-title-value"(?:.)*</span>([-\d\w\s]+)</h1>'
 
 Html = str
 NextPage = str
@@ -40,8 +41,6 @@ class LeakedmodelsForumCrawler(CrawlerBase, LeakedmodelsForumAuth):
             self.album_id = self.VALID_URL_RE.findall(url)[0]
         except IndexError:
             ExtractionError(f"Failed to extract album id from url: {url}")
-        else:
-            print(self.album_id)
 
         output = dict()
 
@@ -60,7 +59,8 @@ class LeakedmodelsForumCrawler(CrawlerBase, LeakedmodelsForumAuth):
         if self.username not in html:
             raise ExtractionError(f"Not authorized! (Most likely login session is expired.)")
         if not self.THREAD_NAME:
-            self.THREAD_NAME = self._extract_model_name(html)
+            self.THREAD_NAME = self._extract_threadname(html)
+            print(self.THREAD_NAME)
         next_page = self._extract_nextpage(html)
 
         return html, next_page
@@ -76,18 +76,13 @@ class LeakedmodelsForumCrawler(CrawlerBase, LeakedmodelsForumAuth):
                 return self.base_url + url_path[1:]
         return None
 
-    def _extract_model_name(self, html):
-        patterns = (
-            re.compile(r"https://(?:www)?\.instagram\.com/([-\d\w.]+)/?"),
-            re.compile(r"https://(?:www)?onlyfans\.com/([-\d\w.]+)/?"),
-            re.compile(r"https://(?:www)?fansly\.com/([-\d\w.]+)/?")
-        )
-        for p in patterns:
-            results = p.findall(html)
-            if results and (len(results) > 1):
-                return results[1]
-            elif results and(len(results) == 1):
-                return results[0]
+    def _extract_threadname(self, html):
+        p = re.compile(PATTERN_LEAKEDMODELSFORUM_THREADTITLE)
+        results = p.findall(html)
+        if results and (len(results) > 1):
+            return results[1]
+        elif results and(len(results) == 1):
+            return results[0]
 
 
 class LeakedmodelsForumImageExtractor(ExtractorBase, LeakedmodelsForumAuth):
