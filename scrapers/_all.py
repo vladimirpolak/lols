@@ -23,3 +23,4 @@ from .skygallery import SkygalleryExtractor
 from .leakedmodelsforum import (LeakedmodelsForumCrawler,
                                 LeakedmodelsForumImageExtractor,
                                 LeakedmodelsForumVideoExtractor)
+from .imagehaha import ImagehahaExtractor
