@@ -1,10 +1,10 @@
 import requests
 from options import parser
 from pathlib import Path
-from downloader.downloader import Downloader
+from downloader import Downloader
 from scrapers._scraper_base import ExtractorBase, CrawlerBase
 from utils import load_file, clear_output, print_data, dump_curr_session
-from downloader.downloader import Item
+from downloader.models import Item
 from typing import List, TypeVar
 import logging
 from scrapers import get_scraper_classes

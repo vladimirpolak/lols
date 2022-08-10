@@ -1,7 +1,7 @@
 from typing import List
 from pathlib import Path
 from collections import defaultdict
-from downloader.downloader import Item
+from downloader import Item
 import json
 import os
 

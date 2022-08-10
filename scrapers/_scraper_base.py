@@ -1,4 +1,5 @@
-from downloader.downloader import Downloader, Item
+from downloader import Downloader, Item
+from abc import abstractmethod
 from typing import List, Union
 import logging
 import re
@@ -59,6 +60,7 @@ class ScraperBase:
     def base_url(self):
         return f"{self.PROTOCOL}://{self.DOMAIN}/"
 
+    @abstractmethod
     def extract_data(self, url: str):
         pass
 
@@ -81,6 +83,7 @@ class ExtractorBase(ScraperBase):
             logging.info(f"{self.__class__.__name__} EXTRACTED {len(self.ALL_ITEMS)} ITEMS")
         return self.ALL_ITEMS
 
+    @abstractmethod
     def _extract_data(self, url: str):
         """This method is implemented in the subclass"""
         pass
@@ -108,6 +111,7 @@ class CrawlerBase(ScraperBase):
     def extract_data(self, url: str) -> str:
         return self._crawl_link(url)
 
+    @abstractmethod
     def _crawl_link(self, url: str) -> str:
         """This method is implemented in the subclass"""
         pass
