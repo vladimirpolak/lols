@@ -2,10 +2,10 @@ import requests
 from options import parser
 from pathlib import Path
 from downloader import Downloader
-from scrapers._scraper_base import ExtractorBase, CrawlerBase
+from scrapers._scraper_base import ExtractorBase, CrawlerBase, ScraperBase
 from utils import load_file, clear_output, print_data, dump_curr_session
 from downloader.models import Item
-from typing import List, TypeVar
+from typing import Union, List, TypeVar
 import logging
 from scrapers import get_scraper_classes
 
@@ -26,8 +26,8 @@ class LoLs:
                  ):
         self.input_link = link
         self.load_from_file = load_from_file
-        self.session = requests.Session()
-        self.downloader = Downloader(self.session)
+        self.session = kwargs.pop("session", None) or requests.Session()
+        self.downloader = kwargs.pop("downloader", None) or Downloader(self.session)
         self.options = kwargs
 
     def main(self):
@@ -36,6 +36,7 @@ class LoLs:
         """
         if self.input_link:
             self.scrape(self.input_link)
+
         elif self.load_from_file:
             urls = load_file(self.load_from_file)
             for url in urls:
@@ -43,7 +44,6 @@ class LoLs:
 
     def scrape(self, url: str):
         """
-        Function that picks the scraper that is capable of extracting from the given url.
         Urls that lead to either a single item or album of items on one site is handled by Extractor type of scraper.
         Urls that lead to a thread/album that can contain multiple of items and external urls
         is handled by Crawler type of scraper.
@@ -103,8 +103,8 @@ class LoLs:
 
         # Run the crawled html against Extractor classes
         data = []
-        for scraper_ in get_scraper_classes():
-            if scraper_.SCRAPER_TYPE == "EXTRACTOR":
+        for scraper in get_scraper_classes():
+            if scraper.SCRAPER_TYPE == "EXTRACTOR":
                 links = []
 
                 # Loops through crawled pages
@@ -116,10 +116,10 @@ class LoLs:
 
                 # If any valid links were scraped it extracts data from them
                 if links:
-                    logging.debug(f"{scraper_.__name__} extracted {len(links)} urls."
+                    logging.debug(f"{scraper.__name__} extracted {len(links)} urls."
                                   f"DATA: {links}")
                     if scrape_extracted_links:
-                        s = scraper_(self.downloader)
+                        s = scraper(self.downloader)
                         for link_ in links:
                             data.extend(s.extract_data(link_))
 
