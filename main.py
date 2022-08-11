@@ -54,14 +54,23 @@ class LoLs:
 
         :param url: str
         """
-        for scraper_ in get_scraper_classes():
-            if scraper_.is_suitable(url):
-                print(f"Chosen scraper: {scraper_.DESC}")
-                if scraper_.SCRAPER_TYPE == "EXTRACTOR":
-                    self.extractor_method(url, scraper_)
-                elif scraper_.SCRAPER_TYPE == "CRAWLER":
-                    self.crawler_method(url, scraper_)
-                return
+        scraper = self._assign_scraper(url)
+
+        if not scraper:
+            return
+
+        print(f"Chosen scraper: {scraper.DESC}")
+        if issubclass(scraper, ExtractorBase):
+            self.extractor_method(url, scraper)
+        elif issubclass(scraper, CrawlerBase):
+            self.crawler_method(url, scraper)
+
+    @staticmethod
+    def _assign_scraper(url: str) -> Union[ExtractorBase, CrawlerBase]:
+        """Function that picks the scraper that is capable of extracting from the given url."""
+        for s in get_scraper_classes():
+            if s.is_suitable(url):
+                return s
 
     def extractor_method(self,
                          url: str,
