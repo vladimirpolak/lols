@@ -119,7 +119,7 @@ class BunkrAlbumExtractor(ExtractorBase):
         return json_["pageProps"]
 
     @classmethod
-    def _extract_from_html(cls, html):
+    def extract_from_html(cls, html):
         return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
 
 
@@ -202,7 +202,7 @@ class BunkrVideoExtractor(ExtractorBase):
         return json_["pageProps"]
 
     @classmethod
-    def _extract_from_html(cls, html):
+    def extract_from_html(cls, html):
         return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
 
 
@@ -233,7 +233,7 @@ class BunkrImageExtractor(ExtractorBase):
         )
 
     @classmethod
-    def _extract_from_html(cls, html):
+    def extract_from_html(cls, html):
         return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
 
 

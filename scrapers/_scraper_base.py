@@ -89,7 +89,7 @@ class ExtractorBase(ScraperBase):
         pass
 
     @classmethod
-    def _extract_from_html(cls, html):
+    def extract_from_html(cls, html):
         """This method is implemented in the subclass"""
         pass
 

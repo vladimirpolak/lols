@@ -72,7 +72,7 @@ class CyberdropAlbumExtractor(ExtractorBase):
         return match[0]
 
     @classmethod
-    def _extract_from_html(cls, html):
+    def extract_from_html(cls, html):
         # return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
         pass
 
@@ -105,7 +105,7 @@ class CyberdropImageExtractor(ExtractorBase):
         )
 
     @classmethod
-    def _extract_from_html(cls, html):
+    def extract_from_html(cls, html):
         pass
         # return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
 

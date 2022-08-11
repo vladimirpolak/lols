@@ -1,11 +1,8 @@
-from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_, img_extensions, vid_extensions
-from exceptions import ExtractionError, ScraperInitError
-from config import Manager as config
+from ._scraper_base import ExtractorBase
+from downloader.types import determine_content_type_
 from utils import split_filename_ext
 import logging
 import re
-import json
 
 SIASKY_DOMAIN = "https://siasky.net/"
 
@@ -54,6 +51,6 @@ class SkygalleryExtractor(ExtractorBase):
             )
 
     @classmethod
-    def _extract_from_html(cls, html):
+    def extract_from_html(cls, html):
         return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
 

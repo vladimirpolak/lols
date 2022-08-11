@@ -73,6 +73,6 @@ class PixelDrainAlbumExtractor(ExtractorBase):
         return data["api_response"]
 
     @classmethod
-    def _extract_from_html(cls, html):
+    def extract_from_html(cls, html):
         return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
 
