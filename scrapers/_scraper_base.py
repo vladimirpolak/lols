@@ -1,5 +1,6 @@
 from downloader import Downloader, Item
 from abc import abstractmethod
+from exceptions import ExtractionError, ContentTypeError
 from typing import List, Union
 import logging
 import re
@@ -77,7 +78,10 @@ class ExtractorBase(ScraperBase):
 
     def extract_data(self, url: str) -> List[Item]:
         self.ALL_ITEMS = []
-        self._extract_data(url)
+        try:
+            self._extract_data(url)
+        except (ExtractionError, ContentTypeError) as e:
+            logging.error(e)
 
         if len(self.ALL_ITEMS) > 1:
             logging.info(f"{self.__class__.__name__} EXTRACTED {len(self.ALL_ITEMS)} ITEMS")
