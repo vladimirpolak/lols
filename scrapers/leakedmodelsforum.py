@@ -19,6 +19,11 @@ Html = str
 NextPage = str
 
 
+def is_leakedmodels_domain(html) -> bool:
+    p = re.compile(r'<meta\s+property="og:url"\s+content="(https://leakedmodels\.com/forum/threads/)')
+    return bool(p.findall(html))
+
+
 class LeakedmodelsForumCrawler(CrawlerBase, LeakedmodelsForumAuth):
     VALID_URL_RE = re.compile(PATTERN_LEAKEDMODELSFORUM_THREAD)
     PROTOCOL = "https"
@@ -127,7 +132,10 @@ class LeakedmodelsForumImageExtractor(ExtractorBase, LeakedmodelsForumAuth):
 
     @classmethod
     def extract_from_html(cls, html):
-        return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
+        results = []
+        if is_leakedmodels_domain(html):
+            results.extend([data[0] for data in set(re.findall(cls.VALID_URL_RE, html))])
+        return results
 
 
 class LeakedmodelsForumVideoExtractor(ExtractorBase, LeakedmodelsForumAuth):

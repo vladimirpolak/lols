@@ -7,11 +7,16 @@ import re
 
 # Regex Patterns
 PATTERN_NUDOSTARFORUM_THREAD = r"(?:https://)?nudostar\.com/forum/threads/([-\w\d\.]+)/?"
-PATTERN_NUDOSTARFORUM_IMAGE = r"((?:https://)?nudostar\.com/forum/attachments/([-\d\w]+)-([a-zA-Z]+)\.\d+/)"
+PATTERN_NUDOSTARFORUM_IMAGE = r"(?:(?:https://)?nudostar\.com)?/(forum/attachments/([-\d\w]+)-([a-zA-Z]+)\.\d+/)"
 PATTERN_NUDOSTARFORUM_THREAD_NEXTPAGE = r'rel="next"\s*href="(.*?)"'
 
 Html = str
 NextPage = str
+
+
+def is_nudostar_domain(html) -> bool:
+    p = re.compile(r'<meta\s+property="og:url"\s+content="(https://nudostar\.com/forum/threads/)')
+    return bool(p.findall(html))
 
 
 class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
@@ -99,14 +104,15 @@ class ForumNudostarImageExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url):
-        filename, extension = self._nudostar_process_filename(url)
+        source = self.base_url + url
+        filename, extension = self._nudostar_process_filename(source)
         content_type = determine_content_type_(extension)
 
         self.add_item(
             content_type=content_type,
             filename=filename,
             extension=extension,
-            source=url,
+            source=source,
         )
 
     def _nudostar_process_filename(self, url):
@@ -121,5 +127,8 @@ class ForumNudostarImageExtractor(ExtractorBase):
 
     @classmethod
     def extract_from_html(cls, html):
-        return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
+        results = []
+        if is_nudostar_domain(html):
+            results.extend([data[0] for data in set(re.findall(cls.VALID_URL_RE, html))])
+        return results
 
