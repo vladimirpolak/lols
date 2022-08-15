@@ -52,16 +52,11 @@ class Downloader(HeadersMixin):
     def _send_request(self, prepared_request, **kwargs) -> requests.Response:
         res = self._session.send(
             request=prepared_request,
-            stream=kwargs.pop("stream", None)
+            stream=True if kwargs.pop("stream", None) else None
         )
         if res.status_code == 429:
             time.sleep(10)
             raise requests.exceptions.RequestException
-                      # stream=stream,
-                      # verify=verify,
-                      # proxies=proxies,
-                      # cert=cert,
-                      # timeout=timeout
         return res
 
     @retry.retry(

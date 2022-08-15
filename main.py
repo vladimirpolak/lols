@@ -144,15 +144,16 @@ class LoLs:
                 )
                 if items:
                     clear_output(lines_to_clear=4)
-            except Exception as e:
-                print(e)
-                print(item)
+            except KeyboardInterrupt:
+                items.append(item)
                 dump_curr_session(
                     cookies=dict(self.session.cookies),
                     items_to_download=items
                 )
                 exit()
-            except KeyboardInterrupt:
+            except Exception as e:
+                print(e)
+                print(item)
                 dump_curr_session(
                     cookies=dict(self.session.cookies),
                     items_to_download=items
