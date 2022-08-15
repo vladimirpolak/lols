@@ -24,3 +24,5 @@ from .leakedmodelsforum import (LeakedmodelsForumCrawler,
                                 LeakedmodelsForumImageExtractor,
                                 LeakedmodelsForumVideoExtractor)
 from .imagehaha import ImagehahaExtractor
+from .hexupload import HexuploadVideoExtractor
+from .streamlare import StreamlareVideoExtractor
