@@ -3,6 +3,7 @@ from pathlib import Path
 from collections import defaultdict
 from downloader import Item
 import json
+import base64
 import os
 
 
@@ -76,3 +77,7 @@ def dump_curr_session(cookies: dict, items_to_download: List[Item]):
 
     with open("terminated_session.json", "w") as outfile:
         json.dump(output, outfile, indent=4)
+
+
+def decode_base64(input_str: str):
+    return base64.b64decode(input_str).decode()
