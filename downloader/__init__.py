@@ -67,7 +67,8 @@ class Downloader(HeadersMixin):
     @retry.retry(
         (requests.exceptions.RequestException, ProtocolError),
         tries=3,
-        delay=5)
+        delay=5
+    )
     def download_item(self,
                       item: Item,
                       separate_content: bool,

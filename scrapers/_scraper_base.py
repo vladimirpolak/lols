@@ -6,7 +6,7 @@ import re
 
 
 class ScraperBase:
-    ALL_ITEMS: list = []
+    ALL_ITEMS: list = []  # List of scraped items
     VALID_URL_RE: Union[re.Pattern, List]  # Regex pattern for url validation
     PROTOCOL: str  # http/s
     DOMAIN: str  # domain.com
@@ -85,12 +85,12 @@ class ExtractorBase(ScraperBase):
 
     @abstractmethod
     def _extract_data(self, url: str):
-        """This method is implemented in the subclass"""
+        """This method is implemented in the subclass."""
         pass
 
     @classmethod
     def extract_from_html(cls, html):
-        """This method is implemented in the subclass"""
+        """This method is implemented in the subclass. (Optional)"""
         pass
 
 

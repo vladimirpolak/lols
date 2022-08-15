@@ -84,9 +84,9 @@ class LoLs:
         # Displays the amount/type of scraped data
         print_data(data)
 
-        output_dir_name = input("Enter name for output directory: ")
-
-        self.download(items=data, dir_name=output_dir_name)
+        if data:
+            output_dir_name = input("Enter name for output directory: ")
+            self.download(items=data, dir_name=output_dir_name)
 
     def crawler_method(self,
                        url: str,
@@ -125,9 +125,10 @@ class LoLs:
 
         # Displays the amount/type of scraped data
         logging.debug(f"Scraped total of {len(data)} items.")
-        print_data(data)
 
-        self.download(items=data, dir_name=model_name)
+        print_data(data)
+        if data:
+            self.download(items=data, dir_name=model_name)
 
     def download(self, items: List[Item], dir_name: str):
         while items:
