@@ -27,3 +27,8 @@ parser.add_argument(
     help="Provided the flag, all direct urls for content will be saved into txt"
          "file in the output folder. (default=False)"
 )
+parser.add_argument(
+    '--session',
+    dest='session',
+    help="Path to a last terminated session file. (.json)"
+)
