@@ -28,3 +28,4 @@ from .imagehaha import ImagehahaExtractor
 from .hexupload import HexuploadVideoExtractor
 from .streamlare import StreamlareVideoExtractor
 from .voe import VOEVideoExtractor
+from .streamtape import StreamtapeVideoExtractor
