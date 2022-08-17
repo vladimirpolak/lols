@@ -12,7 +12,7 @@ PATTERN_VOE = r"(?:https://)?voe\.sx/[a-zA-Z\d]+"
 
 
 class VOEVideoExtractor(ExtractorBase):
-    VALID_URL_RE = re.compile(r"")
+    VALID_URL_RE = re.compile(PATTERN_VOE)
     PROTOCOL = "https"
     DOMAIN = "voe.sx"
     DESC = "Voe Video Hosting"
