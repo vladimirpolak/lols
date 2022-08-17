@@ -2,17 +2,13 @@ import requests
 from options import parser
 from pathlib import Path
 from downloader import Downloader
-from scrapers._scraper_base import ExtractorBase, CrawlerBase, ScraperBase
+from scrapers._scraper_base import ExtractorBase, CrawlerBase
 from utils import load_file, clear_output, print_data, dump_curr_session
 from downloader.models import Item
 from typing import Union, List, TypeVar
 import logging
 from scrapers import get_scraper_classes
 
-# logging.debug('This message should go to the log file')
-# logging.info('So should this')
-# logging.warning('And this, too')
-# logging.error('And non-ASCII stuff, too, like Øresund and Malmö')
 
 Extractor = TypeVar('Extractor', bound='ExtractorBase')
 Crawler = TypeVar('Crawler', bound='CrawlerBase')
