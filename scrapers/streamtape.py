@@ -1,54 +1,49 @@
-from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_, img_extensions, vid_extensions
-from exceptions import ExtractionError, ScraperInitError
-from config import Manager as config
-from utils import split_filename_ext
-import logging
+from ._scraper_base import ExtractorBase
+from downloader.types import determine_content_type_, vid_extensions
+from exceptions import ExtractionError
+from utils import split_filename_ext, slugify
 import re
-import json
+
+ID = str
+Expires = int
+IP = str
+Token = str
+
+URL_STREAMTAPE_GETVIDEO = "https://streamtape.com/get_video"
+
+PATTERN_STREAMTAPE_VIDEO = rf'(?:https://)?streamtape\.com/v/[a-zA-Z\d]+/[-\w\d]+(?:{"|".join(vid_extensions)})'
+PATTERN_STREAMTAPE_GETVIDEO_PARAMS = re.compile(
+    r"\('[a-z]+\?"
+    r"id=(?P<id>[a-zA-Z\d]+)"
+    r"&expires=(?P<expires>\d+)"
+    r"&ip=(?P<ip>[a-zA-Z\d]+)"
+    r"&token=(?P<token>[-a-zA-Z\d]+)"
+    r"'\)"
+)
 
 
-# Request URL: https://adblockeronstape.me/get_video?id=L280lgyDKWfa82&expires=1660760175&ip=GxMsDRSAKxSHDN&token=NgrscXNPTAMP&stream=1
-# Request Method: GET
-# Status Code: 302
-# Remote Address: 188.114.97.3:443
-# Referrer Policy: strict-origin-when-cross-origin
-# access-control-allow-origin: *
-# alt-svc: h3=":443"; ma=86400, h3-29=":443"; ma=86400
-# cache-control: private
-# cf-cache-status: DYNAMIC
-# cf-ray: 73bdbaf249b9c31d-VIE
-# content-type: video/mp4
-# date: Tue, 16 Aug 2022 22:50:40 GMT
-# expect-ct: max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
-# location: https://868418908.tapecontent.net/radosgw/L280lgyDKWfa82/4i2mq9eCBDfc3gpKzNMOxNfE79dNmVkGWTiCcsHeGfWV3r2yI4dvGkIbw11cbK-z9_hhg9UFweDy0sKvu-TToXRj9xlz8xPwdZBGyye1MiFh5WNwoS_OYzg8LBh33l5g2-SIZuy7gFdNjinbVHGoNaQBh2sZQxPzsxDAy0UcRFfx91Jv4KJcN5ZJDHVJ9-slNp7Im4-S3cBfEo38-cbgiyxZmCmNtLpvSzVavhcBfV-jZXV4CQL4nsopVfjB7F76xGFNTHQGah4J2T-jnhWib8Uh2JI0x1CF0qv8OVogu1zxpDF9hvBTTZnTZtU/Lauren+Alexis+Fuck+Me+Daddy+Video+Leaked.mp4?stream=1
-# nel: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
-# report-to: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=%2B1S2AJIOFu01Jdc5E6TNHt5aDoYHjQdCy1vFcDvRlahf%2FwSVi9PbVg1i5BsY%2FWWPkhCMb1Nx1lQBIHVqB4dKI5Z1dyvHr3X0CS7kzjS0srypGOwnWhmFiafDqtmGlAzlE5w%2Binlb"}],"group":"cf-nel","max_age":604800}
-# server: cloudflare
-# :authority: adblockeronstape.me
-# :method: GET
-# :path: /get_video?id=L280lgyDKWfa82&expires=1660760175&ip=GxMsDRSAKxSHDN&token=NgrscXNPTAMP&stream=1
-# :scheme: https
-# accept: */*
-# accept-encoding: identity;q=1, *;q=0
-# accept-language: en-US,en;q=0.9,sk;q=0.8
-# cookie: _csrf=406aacf195686f0b802dd829d37e15ecc724e88ab5676b99b3cee3f318a6d2cca%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22fElXKmvZNUcyD0llDSDCy9EU1vgayJU1%22%3B%7D; _b=kube12; _popfired=1; _popfired_expires=Wed%2C%2017%20Aug%202022%2022%3A43%3A36%20GMT; lastOpenAt_=1660689816428
-# range: bytes=0-
-# referer: https://adblockeronstape.me/v/L280lgyDKWfa82/Lauren_Alexis_Fuck_Me_Daddy_Video_Leaked.mp4
-# sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
-# sec-ch-ua-mobile: ?0
-# sec-ch-ua-platform: "Windows"
-# sec-fetch-dest: video
-# sec-fetch-mode: cors
-# sec-fetch-site: same-origin
-# sec-gpc: 1
-# user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+def getvideo_headers(url: str):
+    return {
+        'accept': 'video/webm,video/ogg,video/*;q=0.9,application/ogg;q=0.7,audio/*;q=0.6,*/*;q=0.5',
+        'accept-encoding': 'identity;q=1, *;q=0',
+        'range': 'bytes=0-',
+        'referer': url,
+        'sec-fetch-dest': 'video',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
+        'connection': 'keep-alive',
+        'host': 'streamtape.com'
+    }
 
 
-URL_STREAMTAPE_GETVIDEO = "https://adblockeronstape.me/"
-
-PATTERN_STREAMTAPE_VIDEO = rf'(?:https://)streamtape\.com/v/[a-zA-Z\d]+/[-\w\d]+({"|".join(vid_extensions)})'
-PATTERN_STREAMTAPE_DIRECTURL_INFO = r'get_video\?id=[a-zA-Z\d]+&expires=\d+&ip=[a-zA-Z\d]+&token=[a-zA-Z\d]+'
+def getvideo_params(id_param: str, expires: int, ip: str, token: str):
+    return {
+        'id': id_param,
+        'expires': expires,
+        'ip': ip,
+        'token': token,
+        'stream': 1
+    }
 
 
 class StreamtapeVideoExtractor(ExtractorBase):
@@ -62,33 +57,65 @@ class StreamtapeVideoExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url):
+        self.origin_url = url
+
         response = self.request(
-            url=url,
+            url=self.origin_url,
         )
         html = response.text
-        source = self._extract_directurl(html)
-        print(source)
-        exit()
 
-        # self.add_item(
-        #     content_type=content_type,
-        #     filename=filename,
-        #     extension=extension,
-        #     source=source,
-        #     album_title=album_title
-        # )
+        source = self._extract_directurl(html)
+        file_w_ext = self._extract_title(html)
+        filename, extension = split_filename_ext(file_w_ext)
+        content_type = determine_content_type_(extension)
+
+        self.add_item(
+            content_type=content_type,
+            filename=filename,
+            extension=extension,
+            source=source,
+        )
 
     def _extract_directurl(self, html):
-        result = re.findall(PATTERN_STREAMTAPE_DIRECTURL_INFO, html)
-        if result:
-            return URL_STREAMTAPE_GETVIDEO + result[0]
+        # Extract url parameters for direct url from html
+        id_param, expires, ip, token = self._extract_getvideo_params(html)
+
+        params = getvideo_params(id_param, expires, ip, token)
+        headers = getvideo_headers(self.origin_url)
+
+        response = self.request(
+            url=URL_STREAMTAPE_GETVIDEO,
+            params=params,
+            headers=headers,
+            allow_redirects=False
+        )
+        res_headers = response.headers
+        return res_headers["Location"]
+
+    def _extract_getvideo_params(self, html) -> (ID, Expires, IP, Token):
+        """Extracts parameters for get_video url."""
+        params = PATTERN_STREAMTAPE_GETVIDEO_PARAMS.search(html)
+        if params:
+            return params.group('id'), params.group('expires'), params.group('ip'), params.group('token')
         else:
-            return None
+            raise ExtractionError(
+                f"Failed to extract 'get_video' params from html: {self.origin_url}"
+            )
+
+    def _extract_title(self, html):
+        """Extracts title of the video."""
+        p = re.compile(
+            r'"showtitle":"(.*?)"'
+        )
+        result = p.search(html)
+        if result:
+            title = result.group(1)
+            return slugify(title)
+        else:
+            raise ExtractionError(
+                f"Failed to extract title from html: {self.origin_url}"
+            )
 
     @classmethod
     def extract_from_html(cls, html):
         return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
-
-    # Crawler method only
-    # def _crawl_link(self, url) -> html[str]:
-    #     pass
