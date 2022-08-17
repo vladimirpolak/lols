@@ -52,7 +52,8 @@ class Downloader(HeadersMixin):
     def _send_request(self, prepared_request, **kwargs) -> requests.Response:
         res = self._session.send(
             request=prepared_request,
-            stream=True if kwargs.pop("stream", None) else None
+            stream=True if kwargs.pop("stream", None) else None,
+            allow_redirects=True if kwargs.pop("allow_redirects", None) else None
         )
         if res.status_code == 429:
             time.sleep(10)
