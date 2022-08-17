@@ -81,3 +81,8 @@ def dump_curr_session(cookies: dict, items_to_download: List[Item]):
 
 def decode_base64(input_str: str):
     return base64.b64decode(input_str).decode()
+
+
+def slugify(input_str: str):
+    return input_str.lower().replace(" ", "-")
+
