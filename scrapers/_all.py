@@ -18,7 +18,8 @@ from .forum_thotsbay import (ForumThotsbayCrawler,
                              ForumThotsbayImageExtractor)
 from .xvideos import XvideosVideoExtractor
 from .forum_nudostar import (ForumNudostarCrawler,
-                             ForumNudostarImageExtractor)
+                             ForumNudostarImageExtractor,
+                             ForumNudostarVideoExtractor)
 from .skygallery import SkygalleryExtractor
 from .leakedmodelsforum import (LeakedmodelsForumCrawler,
                                 LeakedmodelsForumImageExtractor,

@@ -1,5 +1,6 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type_, vid_extensions
+from utils import split_filename_ext
 from exceptions import ExtractionError
 from .forum_nudostar_auth import ForumNudostarAuth
 from typing import Union
@@ -8,7 +9,13 @@ import re
 # Regex Patterns
 PATTERN_NUDOSTARFORUM_THREAD = r"(?:https://)?nudostar\.com/forum/threads/([-\w\d\.]+)/?"
 PATTERN_NUDOSTARFORUM_IMAGE = r"(?:(?:https://)?nudostar\.com)?/(forum/attachments/([-\d\w]+)-([a-zA-Z]+)\.\d+/)"
+PATTERN_NUDOSTARFORUM_VIDEO = rf"(?:(?:https://)?nudostar\.com)?/(forum/data/video/\d+/[-\w\d]+(?:{'|'.join(vid_extensions)}))"
 PATTERN_NUDOSTARFORUM_THREAD_NEXTPAGE = r'rel="next"\s*href="(.*?)"'
+PATTERN_NUDOSTARFORUM_THREADTITLE = r'<h1\s+class="p-title-value">' \
+                                    r'<span\s+[-\w\d\s"=]+>[\d\w]+</span>' \
+                                    r'<span\s+[-\w\d\s"=]+>&[\w\d]+;</span>' \
+                                    r'(.*)' \
+                                    r'</h1>'
 
 Html = str
 NextPage = str
@@ -61,7 +68,7 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
         if self.username not in html:
             raise ExtractionError(f"Not authorized! (Most likely login session is expired.)")
         if not self.THREAD_NAME:
-            self.THREAD_NAME = self._extract_model_name(html)
+            self.THREAD_NAME = self._extract_threadname(html)
         next_page = self._extract_nextpage(html)
         print(next_page)
 
@@ -77,6 +84,16 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
             else:
                 return self.base_url + url_path[1:]
         return None
+
+    def _extract_threadname(self, html):
+        p = re.compile(PATTERN_NUDOSTARFORUM_THREADTITLE)
+        results = p.findall(html)
+        if isinstance(results, list) and results:
+            return results[0]
+        elif isinstance(results, str):
+            return results
+        else:
+            return None
 
     def _extract_model_name(self, html):
         patterns = (
@@ -132,3 +149,35 @@ class ForumNudostarImageExtractor(ExtractorBase):
             results.extend([data[0] for data in set(re.findall(cls.VALID_URL_RE, html))])
         return results
 
+
+class ForumNudostarVideoExtractor(ExtractorBase):
+    VALID_URL_RE = re.compile(PATTERN_NUDOSTARFORUM_VIDEO)
+    PROTOCOL = "https"
+    DOMAIN = "nudostar.com"
+    DESC = "Nudostar Forum Video"
+    CONTENT_TYPE = "ITEM"
+    SAMPLE_URLS = [
+        "https://nudostar.com/forum/data/video/1639/1639695-aa0598d17264f7e9002f653e9e446295.mp4",
+        "https://nudostar.com/forum/data/video/1639/1639696-dce64cca4e52895283c02d1b317e904f.mp4",
+        "/forum/data/video/1639/1639697-b49a90ba4f5727d1cddc36e736094ceb.mp4"
+    ]
+
+    def _extract_data(self, url):
+        source = self.base_url + url
+        file_w_extension = source.split("/")[-1]
+        filename, extension = split_filename_ext(file_w_extension)
+        content_type = determine_content_type_(extension)
+
+        self.add_item(
+            content_type=content_type,
+            filename=filename,
+            extension=extension,
+            source=source
+        )
+
+    @classmethod
+    def extract_from_html(cls, html):
+        results = []
+        if is_nudostar_domain(html):
+            results.extend([data for data in set(re.findall(cls.VALID_URL_RE, html))])
+        return results
