@@ -88,11 +88,13 @@ class Downloader(HeadersMixin):
         else:
             dl_dir_path = album_path
 
+        # Create directory
         if not dl_dir_path.exists():
             dl_dir_path.mkdir(parents=True)
 
         file_path = dl_dir_path / (item.filename + item.extension)
 
+        # Skip if file already exists
         if file_path.exists():
             logging.debug(f"Filename already exists: {item}")
             return
@@ -118,7 +120,6 @@ class Downloader(HeadersMixin):
 
             # Download without progress bar
             with open(file_path, 'wb') as f:
-                response.raw.decode_content = True
                 shutil.copyfileobj(response.raw, f)
         else:
             with tqdm.wrapattr(response.raw, "read", total=total_size, desc="") as raw:
