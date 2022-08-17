@@ -14,7 +14,6 @@ PATTERN_IMAGETWIST_DIRECT_LINK = r"(?:https://)?(?:i|img)\d+\.imagetwist\.com/i/
 
 
 class ImageTwistImageExtractor(ExtractorBase):
-    NEXT_PAGE = None
     VALID_URL_RE = re.compile(PATTERN_IMAGETWIST_INDIRECT_LINK)
     PROTOCOL = "https"
     DOMAIN = "imagetwist.com"
@@ -32,7 +31,7 @@ class ImageTwistImageExtractor(ExtractorBase):
 
         source = self._extract_direct_link(html)
         if not source:
-            raise ExtractionError(f"Failed to extract direct link for image. ({url})")
+            raise ExtractionError(f"Failed to extract direct link for image: {url}")
 
         file = source.split("/")[-1]
         filename, extension = split_filename_ext(file)

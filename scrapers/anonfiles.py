@@ -1,7 +1,7 @@
 from ._scraper_base import ExtractorBase
 from downloader.types import determine_content_type_
 from utils import split_filename_ext
-import logging
+from exceptions import ExtractionError
 import re
 
 # Regex Patterns
@@ -30,19 +30,7 @@ class AnonfilesExtractor(ExtractorBase):
         )
         html = response.text
 
-        # Find the 'download-url' html tag containing direct url for target file
-        result = re.findall(PATTERN_ANONFILES_DLTAG, html)
-
-        if result:
-            # If the result is a string its the url
-            if isinstance(result, str):
-                source = result
-            else:
-                # If the result is a list get the first item
-                source = result[0]
-        else:
-            logging.debug(f"Failed to download URL from: {url}")
-            return
+        source = self._extract_download_url(html, url)
 
         # Parse the data
         file = source.split("/")[-1]
@@ -56,6 +44,13 @@ class AnonfilesExtractor(ExtractorBase):
             extension=extension,
             source=source
         )
+
+    def _extract_download_url(self, html: str, origin_url: str):
+        result = re.findall(PATTERN_ANONFILES_DLTAG, html)
+        if not result:
+            raise ExtractionError(f"Failed to extract download url from: {origin_url}")
+        return result.pop()
+
 
     @classmethod
     def extract_from_html(cls, html):

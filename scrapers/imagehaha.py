@@ -4,6 +4,7 @@ from exceptions import ExtractionError
 from utils import split_filename_ext
 import re
 
+# Regex Patterns
 PATTERN_IMAGEHAHA_URL = r"(?:https://)?imagehaha\.com/[\w\d]+/[-\d\w]+\.[\w\d]+"
 PATTERN_IMAGEHAHA_DIRECTURL = r"((?:https://)?(?:img|i)\d+\.imagehaha\.com/i/\d+/[\w\d]+\.[\d\w]+/[-\d\w.]+)"
 
@@ -21,17 +22,13 @@ class ImagehahaExtractor(ExtractorBase):
         "https://imagehaha.com/bguyye73fah1/3840x2560_255dbcc9d07cba639a9e1c4e615c61eb.jpg"
     ]
 
-    # Extractor method
     def _extract_data(self, url):
         response = self.request(
             url=url,
         )
         html = response.text
-        source = self._extract_directurl(html)
 
-        if not source:
-            raise ExtractionError(f"Failed to extract direct url for image: {url}")
-
+        source = self._extract_direct_url(html, url)
         filename, extension = split_filename_ext(source.split("/")[-1])
         content_type = determine_content_type_(extension)
 
@@ -42,15 +39,12 @@ class ImagehahaExtractor(ExtractorBase):
             source=source
         )
 
-    def _extract_directurl(self, html) -> str:
+    def _extract_direct_url(self, html, origin_url) -> str:
         result = re.findall(PATTERN_IMAGEHAHA_DIRECTURL, html, re.I)
-        if result:
-            if isinstance(result, list):
-                return result[0]
-            elif isinstance(result, str):
-                return result
+        if not result:
+            raise ExtractionError(f"Failed to extract direct url for image: {origin_url}")
+        return result.pop()
 
-    # Extractor method only
     @classmethod
     def extract_from_html(cls, html):
         return [data for data in set(re.findall(cls.VALID_URL_RE, html))]

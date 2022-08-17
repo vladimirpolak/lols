@@ -29,11 +29,7 @@ class ImageBamExtractor(ExtractorBase):
         )
         html = response.text
 
-        result = set(re.findall(PATTERN_IMAGEBAM_DIRECT_LINK, html, re.I))
-        if not result:
-            raise ExtractionError(f"Failed to extract direct link from: {url}")
-
-        source = result.pop()
+        source = self._extract_direct_url(html, url)
         file = source.split("/")[-1]
         filename, extension = split_filename_ext(file)
         content_type = determine_content_type_(extension)
@@ -44,6 +40,12 @@ class ImageBamExtractor(ExtractorBase):
             extension=extension,
             source=source
         )
+
+    def _extract_direct_url(self, html, origin_url):
+        result = set(re.findall(PATTERN_IMAGEBAM_DIRECT_LINK, html, re.I))
+        if not result:
+            raise ExtractionError(f"Failed to extract direct link from: {origin_url}")
+        return result.pop()
 
     @classmethod
     def extract_from_html(cls, html):
