@@ -48,13 +48,16 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
             self.album_id = self.VALID_URL_RE.findall(url)[0]
         except IndexError:
             ExtractionError(f"Failed to extract album id from url: {url}")
-        else:
-            print(self.album_id)
 
         output = dict()
 
         while url:
+            print(f"Accessing: {url}")
             html, next_page = self._get_html_nextpage(url)
+            if next_page:
+                print(f"Next page: {next_page}")
+            else:
+                print("Found no next page.")
             output[url] = html
             url = next_page
 
@@ -70,7 +73,6 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
         if not self.THREAD_NAME:
             self.THREAD_NAME = self._extract_threadname(html)
         next_page = self._extract_nextpage(html)
-        print(next_page)
 
         return html, next_page
 
