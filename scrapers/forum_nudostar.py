@@ -1,6 +1,6 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
 from downloader.types import determine_content_type_, vid_extensions
-from utils import split_filename_ext
+from utils import split_filename_ext, slugify
 from exceptions import ExtractionError
 from .forum_nudostar_auth import ForumNudostarAuth
 from typing import Union
@@ -71,7 +71,7 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
         if self.username not in html:
             raise ExtractionError(f"Not authorized! (Most likely login session is expired.)")
         if not self.THREAD_NAME:
-            self.THREAD_NAME = self._extract_threadname(html)
+            self.THREAD_NAME = slugify(self._extract_threadname(html), sep="_")
         next_page = self._extract_nextpage(html)
 
         return html, next_page
