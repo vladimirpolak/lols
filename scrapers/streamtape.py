@@ -12,8 +12,9 @@ Token = str
 URL_STREAMTAPE_GETVIDEO = "https://streamtape.com/get_video"
 
 PATTERN_STREAMTAPE_VIDEO = rf'(?:https://)?streamtape\.com/v/[a-zA-Z\d]+/[-\w\d]+(?:{"|".join(vid_extensions)})'
+# ('xcddamtape.com/get_video?id=ygyXO6WBq0SeRQ&expires=1660841151&ip=GxMsDRSAKxSHDN&token=1rLV1fLW8KMn')
 PATTERN_STREAMTAPE_GETVIDEO_PARAMS = re.compile(
-    r"\('[a-z]+\?"
+    r"\('[-.\w/]+\?"
     r"id=(?P<id>[a-zA-Z\d]+)"
     r"&expires=(?P<expires>\d+)"
     r"&ip=(?P<ip>[a-zA-Z\d]+)"
@@ -62,6 +63,8 @@ class StreamtapeVideoExtractor(ExtractorBase):
         response = self.request(
             url=self.origin_url,
         )
+        if response.status_code == 404:
+            return
         html = response.text
 
         source = self._extract_directurl(html)
@@ -98,6 +101,7 @@ class StreamtapeVideoExtractor(ExtractorBase):
         if params:
             return params.group('id'), params.group('expires'), params.group('ip'), params.group('token')
         else:
+            print(html)
             raise ExtractionError(
                 f"Failed to extract 'get_video' params from html: {self.origin_url}"
             )

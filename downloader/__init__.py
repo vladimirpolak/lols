@@ -93,12 +93,17 @@ class Downloader(HeadersMixin):
         if not dl_dir_path.exists():
             dl_dir_path.mkdir(parents=True)
 
-        file_path = dl_dir_path / (item.filename + item.extension)
+        step = 0
+        while True:
+            if step:
+                file_path = dl_dir_path / (f'{item.filename} ({step})' + item.extension)
+            else:
+                file_path = dl_dir_path / (item.filename + item.extension)
 
-        # Skip if file already exists
-        if file_path.exists():
-            logging.debug(f"Filename already exists: {item}")
-            return
+            # Skip if file already exists
+            if not file_path.exists():
+                break
+            step += 1
 
         print(f"Downloading: {item.source}\n")
         # Make request
