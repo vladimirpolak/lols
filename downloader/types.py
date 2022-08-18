@@ -1,4 +1,5 @@
 from exceptions import ContentTypeError
+from enum import Enum, auto
 
 img_extensions = [
     ".jpg",
@@ -45,6 +46,26 @@ audio_extensions = [
 ]
 audio_extensions = audio_extensions + [ext.upper() for ext in audio_extensions]
 
+
+class ContentType(Enum):
+    IMAGE = auto()
+    VIDEO = auto()
+    AUDIO = auto()
+    ARCHIVE = auto()
+
+
+# def determine_content_type_(filename: str) -> ContentType:
+#     filename = filename.lower()
+#
+#     if any([filename.endswith(ext) for ext in img_extensions]):
+#         return ContentType.IMAGE
+#     elif any([filename.endswith(ext) for ext in vid_extensions]):
+#         return ContentType.VIDEO
+#     elif any([filename.endswith(ext) for ext in archive_extensions]):
+#         return ContentType.ARCHIVE
+#     elif any([filename.endswith(ext) for ext in audio_extensions]):
+#         return ContentType.AUDIO
+#     raise ContentTypeError(f"Unknown extension '{filename}'!")
 
 def determine_content_type_(filename: str) -> str:
     filename = filename.lower()
