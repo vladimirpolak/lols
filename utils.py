@@ -83,6 +83,17 @@ def decode_base64(input_str: str):
     return base64.b64decode(input_str).decode()
 
 
-def slugify(input_str: str, sep: str = "-"):
-    return input_str.lower().replace(" ", sep)
+def delete_special_chars(input_str: str):
+    special_chars = r"""!@#$%^+=`"',.;?~\/*<>()[]{}'\:"""
+    for char in special_chars:
+        input_str = input_str.replace(char, "")
+    input_str = input_str.replace("&", "and")
+    return input_str
+
+
+def slugify(input_str: str, sep: str = "-", del_special_chars: bool = False):
+    slugified = input_str.lower().replace(" ", sep)
+    if del_special_chars:
+        return delete_special_chars(slugified)
+    return slugified
 
