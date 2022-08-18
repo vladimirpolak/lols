@@ -6,6 +6,12 @@ import logging
 GOFILE_TOKEN_REQ_URL = "https://api.gofile.io/createAccount"
 
 
+def token_is_valid(date: datetime):
+    """Invalid token if current is older than 24 hours."""
+    difference = datetime.now() - date
+    return difference.days == 0
+
+
 class GoFileAuth:
     """GoFile Authorization mixin."""
     ACCESS_TOKEN = ""
@@ -15,20 +21,17 @@ class GoFileAuth:
 
         if not auth_data:
             self._create_login()
-            return self.ACCESS_TOKEN
+        else:
+            self.ACCESS_TOKEN = auth_data["token"]
+            date_created = auth_data["created_at"]
 
-        self.ACCESS_TOKEN = auth_data["token"]
-        date_created = auth_data["created_at"]
-
-        if not self.token_is_valid(date_created):
-            self._create_login()
-            return self.ACCESS_TOKEN
-
-        self._downloader.update_cookies(
-            cookies={"accountToken": self.ACCESS_TOKEN},
-            domain=self.DOMAIN
-        )
-        return self.ACCESS_TOKEN
+            if not token_is_valid(date_created):
+                self._create_login()
+            else:
+                self._downloader.update_cookies(
+                    cookies={"accountToken": self.ACCESS_TOKEN},
+                    domain=self.DOMAIN
+                )
 
     def _create_login(self):
         self.ACCESS_TOKEN = self.request_token()
@@ -61,9 +64,3 @@ class GoFileAuth:
             raise ScraperInitError(f"Failed to retrieve access token from data: {json}")
         logging.debug(response)
         raise ScraperInitError(f"Failed to retrieve access token, response code: {response.status_code}")
-
-    @classmethod
-    def token_is_valid(cls, date):
-        """Invalid token if current is older than 24 hours."""
-        difference = datetime.now() - date
-        return difference.days == 0
