@@ -7,13 +7,13 @@ from typing import Union
 import re
 
 # Regex Patterns
-PATTERN_LEAKEDMODELSFORUM_THREAD = r"(?:https://)?leakedmodels\.com/forum/threads/([-\w\d\.]+)/?"
+PATTERN_LEAKEDMODELSFORUM_THREAD = r"(?:https://)?leakedmodels\.com/forum/threads/([-\w\.]+)/?"
 PATTERN_LEAKEDMODELSFORUM_THREAD_NEXTPAGE = r'<a\s+' \
                                         r'href="(/forum/threads/{album_id}/page-\d+)"\s+' \
                                         r'class="[-\w\d\s]*pageNav-jump--next">'
 PATTERN_LEAKEDMODELSFORUM_IMAGE = r"(?:(?:https://)?leakedmodels\.com)?/(forum/attachments/([-\d\w]+)-([a-zA-Z]+)\.\d+/?)"
-PATTERN_LEAKEDMODELSFORUM_VIDEO = rf"(?:https://)?cdn\.leakedmodels\.com/forum/data/video/\d+/[-\d\w]+(?:{'|'.join(vid_extensions)})"
-PATTERN_LEAKEDMODELSFORUM_THREADTITLE = r'<h1 class="p-title-value"(?:.)*</span>([-\d\w\s]+)</h1>'
+PATTERN_LEAKEDMODELSFORUM_VIDEO = rf"(?:https://)?cdn\.leakedmodels\.com/forum/data/video/\d+/[-\w]+(?:{'|'.join(vid_extensions)})"
+PATTERN_LEAKEDMODELSFORUM_THREADTITLE = r'<h1 class="p-title-value"(?:.)*</span>([-\w\s]+)</h1>'
 
 Html = str
 NextPage = str

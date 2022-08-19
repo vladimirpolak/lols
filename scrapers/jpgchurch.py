@@ -6,12 +6,12 @@ import logging
 import re
 
 # Regex Patterns
-PATTERN_JPEGCHURCH_ALBUM = r"(?:https?://)?jpg\.church/a/[a-zA-Z\d-]+?\.[a-zA-Z]+"
+PATTERN_JPEGCHURCH_ALBUM = r"(?:https?://)?jpg\.church/a/[-\w]+?\.[a-zA-Z]+"
 PATTERN_JPEGCHURCH_NEXT_PAGE_TAG = r'<a\sdata-pagination="next"\s' \
     r'href="' \
-    r'(https://jpg\.church/a/{album_id}/\?page=\d+?&seek=(?:\d+-?)+\+(?:\d+(?:%3A)?)+\.[a-zA-Z\d]+)' \
+    r'(https://jpg\.church/a/{album_id}/\?page=\d+?&seek=(?:\d+-?)+\+(?:\d+(?:%3A)?)+\.\w+)' \
     r'"\s*>'
-PATTERN_JPEGCHURCH_IMAGE = rf'((?:https?://)?simp\d+\.jpg\.church/[-/\w\d]+?(?:.md)(?:{"|".join(img_extensions)}))'
+PATTERN_JPEGCHURCH_IMAGE = rf'((?:https?://)?simp\d+\.jpg\.church/[-/\w]+?(?:.md)(?:{"|".join(img_extensions)}))'
 
 
 class JPGChurchExtractor(ExtractorBase):

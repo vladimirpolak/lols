@@ -11,7 +11,7 @@ Token = str
 
 URL_STREAMTAPE_GETVIDEO = "https://streamtape.com/get_video"
 
-PATTERN_STREAMTAPE_VIDEO = rf'(?:https://)?streamtape\.com/v/[a-zA-Z\d]+/[-\w\d]+(?:{"|".join(vid_extensions)})'
+PATTERN_STREAMTAPE_VIDEO = rf'(?:https://)?streamtape\.com/v/\w+/[-\w]+(?:{"|".join(vid_extensions)})'
 # ('xcddamtape.com/get_video?id=ygyXO6WBq0SeRQ&expires=1660841151&ip=GxMsDRSAKxSHDN&token=1rLV1fLW8KMn')
 PATTERN_STREAMTAPE_GETVIDEO_PARAMS = re.compile(
     r"\('[-.\w/]+\?"

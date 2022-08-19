@@ -8,7 +8,7 @@ import re
 IMAGE_DIRECT_URL = "https://img{server_num}.pixhost.to/images{url_path}"
 
 # Regex Patterns
-PATTERN_PIXHOST_THUMBNAIL = rf"(https://t(\d+)\.pixhost\.to/thumbs(/\d+/[-\d\w]+(?:{'|'.join(img_extensions)})))"
+PATTERN_PIXHOST_THUMBNAIL = rf"(https://t(\d+)\.pixhost\.to/thumbs(/\d+/[-\w]+(?:{'|'.join(img_extensions)})))"
 
 
 class PixHostTHExtractor(ExtractorBase):

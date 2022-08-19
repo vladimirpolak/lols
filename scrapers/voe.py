@@ -8,7 +8,7 @@ import json
 
 # Constant URLs
 
-PATTERN_VOE = r"(?:https://)?voe\.sx/[a-zA-Z\d]+"
+PATTERN_VOE = r"(?:https://)?voe\.sx/\w+"
 
 
 class VOEVideoExtractor(ExtractorBase):

@@ -5,7 +5,7 @@ from exceptions import ExtractionError
 import re
 
 # Regex Patterns
-PATTERN_ANONFILES = r"(?:https?://)?anonfiles\.com/[-/\w\d]+"
+PATTERN_ANONFILES = r"(?:https?://)?anonfiles\.com/[-/\w]+"
 PATTERN_ANONFILES_DLTAG = r'"download-url"(?s).*?href="(.*?)">'
 
 

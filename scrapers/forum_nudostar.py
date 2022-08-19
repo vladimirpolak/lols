@@ -7,13 +7,13 @@ from typing import Union
 import re
 
 # Regex Patterns
-PATTERN_NUDOSTARFORUM_THREAD = r"(?:https://)?nudostar\.com/forum/threads/([-\w\d\.]+)/?"
-PATTERN_NUDOSTARFORUM_IMAGE = r"(?:(?:https://)?nudostar\.com)?/(forum/attachments/([-\d\w]+)-([a-zA-Z]+)\.\d+/)"
-PATTERN_NUDOSTARFORUM_VIDEO = rf"(?:(?:https://)?nudostar\.com)?/(forum/data/video/\d+/[-\w\d]+(?:{'|'.join(vid_extensions)}))"
+PATTERN_NUDOSTARFORUM_THREAD = r"(?:https://)?nudostar\.com/forum/threads/([-\w\.]+)/?"
+PATTERN_NUDOSTARFORUM_IMAGE = r"(?:(?:https://)?nudostar\.com)?/(forum/attachments/([-\w]+)-([a-zA-Z]+)\.\d+/)"
+PATTERN_NUDOSTARFORUM_VIDEO = rf"(?:(?:https://)?nudostar\.com)?/(forum/data/video/\d+/[-\w]+(?:{'|'.join(vid_extensions)}))"
 PATTERN_NUDOSTARFORUM_THREAD_NEXTPAGE = r'rel="next"\s*href="(.*?)"'
 PATTERN_NUDOSTARFORUM_THREADTITLE = r'<h1\s+class="p-title-value">' \
-                                    r'<span\s+[-\w\d\s"=]+>[\d\w]+</span>' \
-                                    r'<span\s+[-\w\d\s"=]+>&[\w\d]+;</span>' \
+                                    r'<span\s+[-\w\s"=]+>[\w]+</span>' \
+                                    r'<span\s+[-\w\s"=]+>&[\w]+;</span>' \
                                     r'(.*)' \
                                     r'</h1>'
 

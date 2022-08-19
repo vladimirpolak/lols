@@ -6,7 +6,7 @@ import re
 
 SIASKY_DOMAIN = "https://siasky.net/"
 
-PATTERN_SKYGALLERY_ALBUM = r"(?:https://)?skygallery\.hns\.siasky\.net/a/[-\w\d]+"
+PATTERN_SKYGALLERY_ALBUM = r"(?:https://)?skygallery\.hns\.siasky\.net/a/[-\w]+"
 
 
 class SkygalleryExtractor(ExtractorBase):

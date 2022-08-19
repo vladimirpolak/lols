@@ -9,7 +9,7 @@ import re
 # Regex Patterns
 PATTERN_HEXUPLOAD = r"https://hexupload.net/[a-z\d]+"
 VIDEO_ELEMENT = r'<source\s+' \
-                r'src="(https://\d+\.contenthx\.me/d/[\d\w]+/video\.mp4)"' \
+                r'src="(https://\d+\.contenthx\.me/d/\w+/video\.mp4)"' \
                 r'\s+type="video/mp4">'
 
 

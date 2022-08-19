@@ -10,7 +10,7 @@ import json
 GET_CONTENT_URL = "https://slwatch.co/api/video/download/get"
 
 # Regex Patterns
-PATTERN_STREAMLARE_VIDEO = r'(?:https://)?streamlare\.com/v/[\d\w]+'
+PATTERN_STREAMLARE_VIDEO = r'(?:https://)?streamlare\.com/v/\w+'
 PATTERN_STREAMLARE_DIRECTLINK_TAG = r'<video\s+' \
                                 r'.*?' \
                                 r'(src="https://larecontent\.com/video?token=[-\w\d]+)">'

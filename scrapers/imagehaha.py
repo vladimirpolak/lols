@@ -5,8 +5,8 @@ from utils import split_filename_ext
 import re
 
 # Regex Patterns
-PATTERN_IMAGEHAHA_URL = r"(?:https://)?imagehaha\.com/[\w\d]+/[-\d\w]+\.[\w\d]+"
-PATTERN_IMAGEHAHA_DIRECTURL = r"((?:https://)?(?:img|i)\d+\.imagehaha\.com/i/\d+/[\w\d]+\.[\d\w]+/[-\d\w.]+)"
+PATTERN_IMAGEHAHA_URL = r"(?:https://)?imagehaha\.com/\w+/[-\w]+\.\w+"
+PATTERN_IMAGEHAHA_DIRECTURL = r"((?:https://)?(?:img|i)\d+\.imagehaha\.com/i/\d+/\w+\.\w+/[-\w.]+)"
 
 
 class ImagehahaExtractor(ExtractorBase):
