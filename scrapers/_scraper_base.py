@@ -1,4 +1,5 @@
 from downloader import Downloader, Item
+from downloader.types import ContentType
 from abc import abstractmethod
 from exceptions import ExtractionError, ContentTypeError
 from typing import List, Union
@@ -40,7 +41,7 @@ class ScraperBase:
         return self._downloader.send_request(url, method, **kwargs)
 
     def add_item(self,
-                 content_type: str,
+                 content_type: ContentType,
                  filename: str,
                  extension: str,
                  source: str,
