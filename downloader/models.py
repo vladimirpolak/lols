@@ -1,5 +1,8 @@
+from .types import ContentType
+
+
 class Item:
-    content_type: str  # image/video/archive
+    content_type: ContentType
     album_title: str
     filename: str
     extension: str  # .jpg/.mp4...
