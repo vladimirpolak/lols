@@ -26,6 +26,9 @@ class XvideosVideoExtractor(ExtractorBase):
         "https://www.xvideos.com/video40596239/young_girl_gets_used_in_the_kitchen_before_class"
     ]
 
+    def initialize(self):
+        raise NotImplementedError()
+
     def _extract_data(self, url):
         response = self.request(
             url=url,
