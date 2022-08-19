@@ -8,6 +8,7 @@ import logging
 import re
 
 # Constant URLs
+GOFILE_ACCOUNTINFO_URL = "https://api.gofile.io/getAccountDetails"  # params = {'token': accountToken}
 GOFILE_CONTENT_URL = "https://api.gofile.io/getContent"
 
 # Regex Patterns

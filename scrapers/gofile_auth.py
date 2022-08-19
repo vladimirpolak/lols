@@ -28,13 +28,11 @@ class GoFileAuth:
             if not token_is_valid(date_created):
                 self._create_login()
             else:
-                self._downloader.update_cookies(
-                    cookies={"accountToken": self.ACCESS_TOKEN},
-                    domain=self.DOMAIN
-                )
+                self.load_cookies(token=self.ACCESS_TOKEN)
 
     def _create_login(self):
         self.ACCESS_TOKEN = self.request_token()
+        self.load_cookies(token=self.ACCESS_TOKEN)
 
         auth_data = {
             "token": self.ACCESS_TOKEN
@@ -64,3 +62,9 @@ class GoFileAuth:
             raise ScraperInitError(f"Failed to retrieve access token from data: {json}")
         logging.debug(response)
         raise ScraperInitError(f"Failed to retrieve access token, response code: {response.status_code}")
+
+    def load_cookies(self, token):
+        self._downloader.update_cookies(
+            cookies={"accountToken": token},
+            domain=self.DOMAIN
+        )
