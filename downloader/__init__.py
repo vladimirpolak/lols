@@ -6,6 +6,7 @@ from .headers import HeadersMixin
 from tqdm.auto import tqdm
 from urllib3.exceptions import ProtocolError
 from .models import Item
+from .types import ContentType
 import shutil
 import logging
 
@@ -78,14 +79,7 @@ class Downloader(HeadersMixin):
 
         # Set download path
         if separate_content:
-            if item.content_type == "image":
-                dl_dir_path = album_path / self.IMAGES_DIR_NAME
-            elif item.content_type == "video":
-                dl_dir_path = album_path / self.VIDEOS_DIR_NAME
-            elif item.content_type == "archive":
-                dl_dir_path = album_path / self.ARCHIVES_DIR_NAME
-            elif item.content_type == "audio":
-                dl_dir_path = album_path / self.AUDIO_DIR_NAME
+            dl_dir_path = album_path / self.contenttype_dir(item.content_type)
         else:
             dl_dir_path = album_path
 
@@ -141,6 +135,17 @@ class Downloader(HeadersMixin):
     def is_invalid(cls, response: requests.Response) -> bool:
         if response.status_code >= 400:
             return True
+
+    @classmethod
+    def contenttype_dir(cls, content_type: ContentType) -> str:
+        if content_type == ContentType.IMAGE:
+            return cls.IMAGES_DIR_NAME
+        elif content_type == ContentType.VIDEO:
+            return cls.VIDEOS_DIR_NAME
+        elif content_type == ContentType.ARCHIVE:
+            return cls.ARCHIVES_DIR_NAME
+        elif content_type == ContentType.AUDIO:
+            return cls.AUDIO_DIR_NAME
 
     @property
     def output_path(self):
