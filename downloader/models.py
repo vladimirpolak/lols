@@ -8,7 +8,7 @@ class Item:
     extension: str  # .jpg/.mp4...
     source: str
 
-    def __init__(self, content_type: str, filename: str, extension: str, source: str, album_title: str = None):
+    def __init__(self, content_type: ContentType, filename: str, extension: str, source: str, album_title: str = None):
         self.content_type = content_type
         self.album_title = album_title
         self.filename = filename

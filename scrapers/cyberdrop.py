@@ -1,6 +1,6 @@
 from ._scraper_base import ExtractorBase
 from exceptions import ExtractionError
-from downloader.types import vid_extensions, img_extensions
+from downloader.types import vid_extensions, img_extensions, determine_content_type_
 import re
 
 # Regex Patterns
@@ -29,36 +29,25 @@ class CyberdropAlbumExtractor(ExtractorBase):
         )
         html = response.text
 
-        results_images = set(re.findall(PATTERN_CYBERDROP_IMAGE, html, re.I))
-        results_videos = set(re.findall(PATTERN_CYBERDROP_VIDEO, html, re.I))
+        results_images = list(set(re.findall(PATTERN_CYBERDROP_IMAGE, html, re.I)))
+        results_videos = list(set(re.findall(PATTERN_CYBERDROP_VIDEO, html, re.I)))
         album_title = self._extract_title(html, url)
 
         if not results_images and not results_videos:
             raise ExtractionError(f"\n{url}\nFailed to extract any data.")
 
-        for image_match in results_images:
-            source = image_match[0]
-            filename = image_match[1]
-            extension = image_match[2]
+        results = results_images + results_videos
+        for item in results:
+            source = item[0]
+            filename = item[1]
+            extension = item[2]
+            content_type = determine_content_type_(extension)
 
             self.add_item(
-                content_type="image",
+                source=source,
                 filename=filename,
                 extension=extension,
-                source=source,
-                album_title=album_title
-            )
-
-        for video_match in results_videos:
-            source = video_match[0]
-            filename = video_match[1]
-            extension = video_match[2]
-
-            self.add_item(
-                content_type="video",
-                filename=filename,
-                extension=extension,
-                source=source,
+                content_type=content_type,
                 album_title=album_title
             )
 
@@ -96,12 +85,13 @@ class CyberdropImageExtractor(ExtractorBase):
 
         filename = match[1]
         extension = match[2]
+        content_type = determine_content_type_(extension)
 
         self.add_item(
-            content_type="image",
+            source=url,
+            content_type=content_type,
             filename=filename,
             extension=extension,
-            source=url,
         )
 
     @classmethod

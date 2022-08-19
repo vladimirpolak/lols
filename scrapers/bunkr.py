@@ -1,5 +1,9 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_, img_extensions, vid_extensions, archive_extensions
+from downloader.types import (determine_content_type_,
+                              img_extensions,
+                              vid_extensions,
+                              archive_extensions,
+                              ContentType)
 from exceptions import ExtractionError
 from utils import split_filename_ext
 from typing import Union
@@ -86,14 +90,14 @@ class BunkrAlbumExtractor(ExtractorBase):
             filename, extension = split_filename_ext(file_w_extension)
             content_type = determine_content_type_(extension)
 
-            if content_type == "image":
+            if content_type == ContentType.IMAGE:
                 source = f"{item['i']}/{file_w_extension}"
-            elif content_type == "video":
+            elif content_type == ContentType.VIDEO:
                 server_num = extract_server_number(item['cdn'])
                 source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
-            elif content_type == "audio":
+            elif content_type == ContentType.AUDIO:
                 source = f"{item['cdn']}/{file_w_extension}"
-            elif content_type == "archive":
+            elif content_type == ContentType.ARCHIVE:
                 source = f"{item['cdn']}/{file_w_extension}"
             else:
                 raise NotImplementedError(
