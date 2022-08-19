@@ -54,28 +54,28 @@ class ContentType(Enum):
     ARCHIVE = auto()
 
 
-# def determine_content_type_(filename: str) -> ContentType:
-#     filename = filename.lower()
-#
-#     if any([filename.endswith(ext) for ext in img_extensions]):
-#         return ContentType.IMAGE
-#     elif any([filename.endswith(ext) for ext in vid_extensions]):
-#         return ContentType.VIDEO
-#     elif any([filename.endswith(ext) for ext in archive_extensions]):
-#         return ContentType.ARCHIVE
-#     elif any([filename.endswith(ext) for ext in audio_extensions]):
-#         return ContentType.AUDIO
-#     raise ContentTypeError(f"Unknown extension '{filename}'!")
-
-def determine_content_type_(filename: str) -> str:
+def determine_content_type_(filename: str) -> ContentType:
     filename = filename.lower()
 
     if any([filename.endswith(ext) for ext in img_extensions]):
-        return "image"
+        return ContentType.IMAGE
     elif any([filename.endswith(ext) for ext in vid_extensions]):
-        return "video"
+        return ContentType.VIDEO
     elif any([filename.endswith(ext) for ext in archive_extensions]):
-        return "archive"
+        return ContentType.ARCHIVE
     elif any([filename.endswith(ext) for ext in audio_extensions]):
-        return "audio"
+        return ContentType.AUDIO
     raise ContentTypeError(f"Unknown extension '{filename}'!")
+
+# def determine_content_type_(filename: str) -> str:
+#     filename = filename.lower()
+#
+#     if any([filename.endswith(ext) for ext in img_extensions]):
+#         return "image"
+#     elif any([filename.endswith(ext) for ext in vid_extensions]):
+#         return "video"
+#     elif any([filename.endswith(ext) for ext in archive_extensions]):
+#         return "archive"
+#     elif any([filename.endswith(ext) for ext in audio_extensions]):
+#         return "audio"
+#     raise ContentTypeError(f"Unknown extension '{filename}'!")
