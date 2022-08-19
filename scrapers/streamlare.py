@@ -31,23 +31,24 @@ class StreamlareVideoExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url):
+        self.origin_url = url
         # raise NotImplementedError(self.__class__.__name__)
         response = self.request(
-            url=url,
+            url=self.origin_url,
         )
         html = response.text
         csrf_token = self._extract_csrf_token(html)
         video_info_str = self._extract_video_info_dict(html)
-        video_info = self._load_video_dict(video_info_str)
+        video_info_dict = self._load_video_dict(video_info_str)
 
-        file_w_extension = video_info["name"]
+        file_w_extension = video_info_dict["name"]
 
         response = self.request(
             method='POST',
             url=GET_CONTENT_URL,
             headers={
                 "origin": "https://slwatch.co",
-                "referer": url,
+                "referer": self.origin_url,
                 "x-csrf-token": csrf_token,
                 "x-requested-with": "XMLHttpRequest",
             },
@@ -76,23 +77,27 @@ class StreamlareVideoExtractor(ExtractorBase):
 
     def _extract_csrf_token(self, html):
         pattern = re.compile(
-            r'<meta\s+name="csrf-token"\s+content="([a-zA-Z\d]+)">'
+            r'<meta\s+name="csrf-token"\s+content="(?P<csrf_token>[a-zA-Z\d]+)">'
         )
-        result = pattern.findall(html)
-        try:
-            return result[0]
-        except IndexError:
-            return None
+        match = pattern.search(html)
+        if match:
+            return match.group('csrf_token')
+        else:
+            raise ExtractionError(
+                f"Failed to extract csrf token from: {self.origin_url}"
+            )
 
     def _extract_video_info_dict(self, html):
         pattern = re.compile(
-            r'<file-video\s+:file="(.*)" :config.*"></file-video>'
+            r'<file-video\s+:file="(?P<info_dict>.*)" :config.*"></file-video>'
         )
-        result = pattern.findall(html)
-        try:
-            return result[0]
-        except IndexError:
-            return None
+        match = pattern.search(html)
+        if match:
+            return match.group('info_dict')
+        else:
+            raise ExtractionError(
+                f"Failed to extract video info dictionary from: {self.origin_url}"
+            )
 
     def _load_video_dict(self, info_dict_str):
         """
