@@ -53,7 +53,7 @@ class Downloader(HeadersMixin):
         res = self._session.send(
             request=prepared_request,
             stream=True if kwargs.pop("stream", None) else None,
-            allow_redirects=True if kwargs.pop("allow_redirects", None) else None
+            allow_redirects=False if kwargs.pop("allow_redirects", None) is False else True
         )
         if res.status_code == 429:
             time.sleep(10)
