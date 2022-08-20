@@ -52,12 +52,11 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
         output = dict()
 
         while url:
-            print(f"Accessing: {url}")
             html, next_page = self._get_html_nextpage(url)
             if next_page:
                 print(f"Next page: {next_page}")
             else:
-                print("Found no next page.")
+                print("Thread end.")
             output[url] = html
             url = next_page
 
