@@ -34,19 +34,18 @@ class SkygalleryExtractor(ExtractorBase):
         data = json["files"]
 
         for item in data:
+            # thumbnail_link = SIASKY_DOMAIN + item["skylinks"]["thumbnail"]
+
             fname_w_ext = item["filename"]  # 4ng3lm3lly_vid_2.mp4
             filename, extension = split_filename_ext(fname_w_ext)
             source = SIASKY_DOMAIN + item["skylinks"]["source"]
-            # thumbnail_link = SIASKY_DOMAIN + item["skylinks"]["thumbnail"]
-            _type = item["type"]     # image/video
-
-            assert _type == determine_content_type_(extension), f"Content type error: {item}."
+            content_type = determine_content_type_(extension)
 
             self.add_item(
-                content_type=_type,
+                source=source,
+                content_type=content_type,
                 filename=filename,
                 extension=extension,
-                source=source,
                 album_title=album_title
             )
 

@@ -1,11 +1,14 @@
+from .types import ContentType
+
+
 class Item:
-    content_type: str  # image/video/archive
+    content_type: ContentType
     album_title: str
     filename: str
     extension: str  # .jpg/.mp4...
     source: str
 
-    def __init__(self, content_type: str, filename: str, extension: str, source: str, album_title: str = None):
+    def __init__(self, content_type: ContentType, filename: str, extension: str, source: str, album_title: str = None):
         self.content_type = content_type
         self.album_title = album_title
         self.filename = filename
