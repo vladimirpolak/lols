@@ -12,14 +12,8 @@ Token = str
 URL_STREAMTAPE_GETVIDEO = "https://streamtape.com/get_video"
 
 PATTERN_STREAMTAPE_VIDEO = rf'(?:https://)?streamtape\.com/v/\w+/[-\w]+(?:{"|".join(vid_extensions)})'
-# ('xcddamtape.com/get_video?id=ygyXO6WBq0SeRQ&expires=1660841151&ip=GxMsDRSAKxSHDN&token=1rLV1fLW8KMn')
 PATTERN_STREAMTAPE_GETVIDEO_PARAMS = re.compile(
-    r"\('[-.\w/]+\?"
-    r"id=(?P<id>[a-zA-Z\d]+)"
-    r"&expires=(?P<expires>\d+)"
-    r"&ip=(?P<ip>[a-zA-Z\d]+)"
-    r"&token=(?P<token>[-a-zA-Z\d]+)"
-    r"'\)"
+    r"document\.getElementById\('norobotlink'\)\.innerHTML = '(.*?)' \+ \('(.*?)'\)\.substring\(1\)\.substring\(2\);"
 )
 
 
@@ -99,9 +93,17 @@ class StreamtapeVideoExtractor(ExtractorBase):
         """Extracts parameters for get_video url."""
         params = PATTERN_STREAMTAPE_GETVIDEO_PARAMS.search(html)
         if params:
-            return params.group('id'), params.group('expires'), params.group('ip'), params.group('token')
+            domain_part = params.group(1)
+            params_part = params.group(2)
+
+            url = domain_part + params_part[3:]
+
+            id_param = re.compile(r"id=([a-zA-Z\d]+)&?").search(url).group(1)
+            expires = re.compile(r"expires=(\d+)&?").search(url).group(1)
+            ip = re.compile(r"ip=([a-zA-Z\d]+)&?").search(url).group(1)
+            token = re.compile(r"token=([-a-zA-Z\d]+)&?").search(url).group(1)
+            return id_param, expires, ip, token
         else:
-            print(html)
             raise ExtractionError(
                 f"Failed to extract 'get_video' params from html: {self.origin_url}"
             )
