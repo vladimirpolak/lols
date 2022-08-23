@@ -9,20 +9,20 @@ import logging
 import re
 
 # Constant URLs
-GOFILE_FOLDER_URL = "https://gofile.io/d/"
-GOFILE_CONTENT_URL = "https://api.gofile.io/getContent"
+URL_GOFILE_FOLDER = "https://gofile.io/d/"
+URL_GOFILE_CONTENT = "https://api.gofile.io/getContent"
 
 # Regex Patterns
 PATTERN_GOFILE_ALBUM = r"((?:https?://)?gofile\.io/d/\w+)"
 
-# GoFile Headers
+# GoFile request headers
 gofile_headers = {
     "origin": "https://gofile.io",
     "referer": "https://gofile.io/"
 }
 
 
-def gf_query_params(album_id, token, password: str = None):
+def gf_query_params(album_id, token, password: str = None) -> dict:
     """Query parameters for GoFile 'getContent' URL."""
     query_params = {
         "contentId": album_id,
@@ -36,16 +36,17 @@ def gf_query_params(album_id, token, password: str = None):
 
 
 class Status:
+    """Class that evaluates the Gofile response's status messages."""
     def __init__(self, status: str):
         self.status = status
     @property
-    def success(self):
+    def success(self) -> bool:
         return self.status == "ok"
     @property
-    def password_required(self):
+    def password_required(self) -> bool:
         return self.status == "error-passwordRequired"
     @property
-    def file_not_found(self):
+    def file_not_found(self) -> bool:
         return self.status == "error-notFound"
 
 
@@ -67,7 +68,7 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
         # Authorize here
         self.authorize()
 
-    def _extract_data(self, url, password: str = None):
+    def _extract_data(self, url, password: str = None) -> None:
         """Recursively scrapes the album if it contains any subfolders."""
         # GoFile Folder ID from url
         album_id = url.split("/")[-1]
@@ -77,11 +78,12 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
 
         # Request a page
         response = self.request(
-            url=GOFILE_CONTENT_URL,
+            url=URL_GOFILE_CONTENT,
             headers=gofile_headers,
             params=params
         )
 
+        # TODO This will have to be cleaned up somehow
         if not response.status_code == 200:
             raise ExtractionError(
                 f"Failed to retrieve GoFile webpage, "
@@ -91,7 +93,8 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
         json = response.json()
         album_status = Status(json["status"])
 
-        # TODO Status validation and album_data extraction should preferably
+        # TODO I'm not really satisfied with this bit,
+        #  status validation and album_data extraction should preferably
         #  be two separate functions/methods. It is what it is, for now.
         album_data = {}
         if album_status.success:
@@ -114,7 +117,7 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
             # If current album contains another folder:
             if file_type == "folder":
                 folder_code = item_info["code"]
-                folder_url = GOFILE_FOLDER_URL + folder_code
+                folder_url = URL_GOFILE_FOLDER + folder_code
 
                 # Extract subfolder (Recursive manner)
                 self._extract_data(url=folder_url)
