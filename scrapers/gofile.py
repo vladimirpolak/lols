@@ -1,6 +1,7 @@
 from ._scraper_base import ExtractorBase
 from downloader.types import determine_content_type_
-from exceptions import ExtractionError
+from exceptions import (ExtractionError,
+                        GoFileStatusUnknownError)
 from utils import split_filename_ext
 from .gofile_auth import GoFileAuth
 from hashlib import sha256
@@ -8,14 +9,20 @@ import logging
 import re
 
 # Constant URLs
-GOFILE_ACCOUNTINFO_URL = "https://api.gofile.io/getAccountDetails"  # params = {'token': accountToken}
-GOFILE_CONTENT_URL = "https://api.gofile.io/getContent"
+URL_GOFILE_FOLDER = "https://gofile.io/d/"
+URL_GOFILE_CONTENT = "https://api.gofile.io/getContent"
 
 # Regex Patterns
 PATTERN_GOFILE_ALBUM = r"((?:https?://)?gofile\.io/d/\w+)"
 
+# GoFile request headers
+gofile_headers = {
+    "origin": "https://gofile.io",
+    "referer": "https://gofile.io/"
+}
 
-def gf_query_params(album_id, token, password: str = None):
+
+def gf_query_params(album_id, token, password: str = None) -> dict:
     """Query parameters for GoFile 'getContent' URL."""
     query_params = {
         "contentId": album_id,
@@ -26,6 +33,21 @@ def gf_query_params(album_id, token, password: str = None):
         query_params["password"] = sha256(password.encode()).hexdigest()
         query_params["cache"] = "true"
     return query_params
+
+
+class Status:
+    """Class that evaluates the Gofile response's status messages."""
+    def __init__(self, status: str):
+        self.status = status
+    @property
+    def success(self) -> bool:
+        return self.status == "ok"
+    @property
+    def password_required(self) -> bool:
+        return self.status == "error-passwordRequired"
+    @property
+    def file_not_found(self) -> bool:
+        return self.status == "error-notFound"
 
 
 class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
@@ -46,72 +68,75 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
         # Authorize here
         self.authorize()
 
-    def _extract_data(self, url, password: str = None):
+    def _extract_data(self, url, password: str = None) -> None:
         """Recursively scrapes the album if it contains any subfolders."""
-        # Album ID from url
+        # GoFile Folder ID from url
         album_id = url.split("/")[-1]
 
         # Generate query parameters
         params = gf_query_params(album_id, self.ACCESS_TOKEN, password)
 
-        # Additional headers
-        gofile_headers = {
-            "origin": "https://gofile.io",
-            "referer": "https://gofile.io/"
-        }
-
         # Request a page
         response = self.request(
-            url=GOFILE_CONTENT_URL,
+            url=URL_GOFILE_CONTENT,
             headers=gofile_headers,
             params=params
         )
 
+        # TODO This will have to be cleaned up somehow
         if not response.status_code == 200:
             raise ExtractionError(
-                f"Failed to retrieve gallery data.\n"
-                f"Response status code: {response.status_code}"
+                f"Failed to retrieve GoFile webpage, "
+                f"response status code: {response.status_code}"
             )
 
         json = response.json()
+        album_status = Status(json["status"])
 
+        # TODO I'm not really satisfied with this bit,
+        #  status validation and album_data extraction should preferably
+        #  be two separate functions/methods. It is what it is, for now.
         album_data = {}
-        if json["status"] == "ok":
+        if album_status.success:
             album_data = json["data"]["contents"]
-        elif json["status"] == "error-notFound":
-            # Exception: GoFile ERROR: {'status': 'error-notFound', 'data': {}}
-            logging.debug(f"GoFile Error, file not found. {url}")
-        elif json["status"] == "error-passwordRequired":
-            logging.debug(f"PASSWORD REQUIRED FOR: {url}")
+        elif album_status.file_not_found:
+            logging.debug(f"Gofile 404: {url}")
+        elif album_status.password_required:
+            logging.debug(f"GoFile Password-Required: {url}")
             self._extract_data(url=url, password=input(f"Enter password for '{url}': "))
         else:
-            raise ExtractionError(f"GoFile ERROR: {json}")
+            raise GoFileStatusUnknownError(f"GoFile unknown status: {json}")
 
         if album_data:
-            # Album content extraction
-            for item_id, item_info in album_data.items():
-                file_type = item_info["type"]
+            self._parse_album_data(album_data)
 
-                # If current album contains another folder:
-                if file_type == "folder":
-                    folder_code = item_info["code"]
-                    folder_url = f"https://gofile.io/d/{folder_code}"
+    def _parse_album_data(self, album_data: dict) -> None:
+        for item_id, item_info in album_data.items():
+            file_type = item_info["type"]
 
-                    # Extract subfolder (Recursive manner)
-                    self._extract_data(url=folder_url)
+            # If current album contains another folder:
+            if file_type == "folder":
+                folder_code = item_info["code"]
+                folder_url = URL_GOFILE_FOLDER + folder_code
 
-                elif file_type == "file":
-                    source = item_info["link"]
-                    file_w_extension = item_info["name"]
-                    filename, extension = split_filename_ext(file_w_extension)
-                    content_type = determine_content_type_(extension)
+                # Extract subfolder (Recursive manner)
+                self._extract_data(url=folder_url)
 
-                    self.add_item(
-                        source=source,
-                        filename=filename,
-                        extension=extension,
-                        content_type=content_type
-                    )
+            # Else Parse the item
+            elif file_type == "file":
+                self.add_item(**self._parse_album_file(item_info))
+
+    def _parse_album_file(self, item_info: dict) -> dict:
+        source = item_info["link"]
+        file_w_extension = item_info["name"]
+        filename, extension = split_filename_ext(file_w_extension)
+        content_type = determine_content_type_(extension)
+        return {
+            'source': source,
+            'filename': filename,
+            'extension': extension,
+            'content_type': content_type
+        }
 
     @classmethod
     def extract_from_html(cls, html):

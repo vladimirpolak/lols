@@ -66,7 +66,7 @@ def print_data(data: List[Item]):
 
     print("-" * 50)
     for content_type, count in data_count.items():
-        print(f"Number of {content_type}s scraped: {count}")
+        print(f"Number of {content_type.name.lower()}s scraped: {count}")
     print("-" * 50)
 
 

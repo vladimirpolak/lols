@@ -20,3 +20,8 @@ class ContentTypeError(ScraperError):
 class ParsingError(ScraperError):
     """Raised if error during scraped data parsing."""
     pass
+
+
+class GoFileStatusUnknownError(ExtractionError):
+    """Raised if Gofile response contains an unknown status message."""
+    pass
