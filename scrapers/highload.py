@@ -6,6 +6,8 @@ from utils import split_filename_ext, decode_base64
 import logging
 import re
 import json
+# import js2py
+# result = js2py.eval_js(script)
 
 URL_HIGHLOAD_MASTERJS = "https://highload.to/assets/js/master.js"
 
@@ -29,21 +31,35 @@ class HighloadVideoExtractor(ExtractorBase):
             url=url,
         )
         html = response.text
+
         # extract vars_script
-        # parse vars_script
+        vars_script = self._extract_vars_script(html)
+
+        # prepare vars_script
+        prepped_vars_script = self._prepare_script(vars_script)
+
         # get vars_script output with js2py
+        # vars_script_output = js2py.eval_js(prepped_vars_script)
 
         # Request master.js
-        # parse master_script
+        master_script = self._get_masterjs(
+            referer=url
+        )
+
+        # prepare master_script
+        prepped_master_script = self._prepare_script(master_script)
+
         # get master_script output with js2py
+        # master_script_output = js2py.eval_js(prepped_master_script)
 
-        # extract target_var, res_1 value and res_2 value
-        # extract target_var value from variables_script
-        # decode the direct link based off values of target_var, res_1 and res_2
+        # extract source_variable, res_1 value and res_2 value
+        # extract source_variable value from variables_script
+        # decode the direct link based off values of source_variable, res_1 and res_2
 
-        self._request_masterjs(referer=url)
+        self._get_masterjs(referer=url)
 
-    def _request_masterjs(self, referer: str):
+    def _get_masterjs(self, referer: str):
+        """Returns master.js script."""
         headers = {
             "referer": referer
         }
@@ -51,22 +67,15 @@ class HighloadVideoExtractor(ExtractorBase):
             url=URL_HIGHLOAD_MASTERJS,
             headers=headers
         )
-        html = response.text
-        print(html)
-        exit()
+        return response.text
 
-    #     self.add_item(
-    #         content_type=content_type,
-    #         filename=filename,
-    #         extension=extension,
-    #         source=source,
-    #         album_title=album_title
-    #     )
 
     @staticmethod
-    def _prepare_script(script: str):
+    def _prepare_script(javascript: str):
         """
         Modifies the input javascript script so that the output is returned as a string.
+        Removes the eval() function from the script and just calls the main function
+        with its parameters. This way it returns the value and we can work with it going forward.
         """
         pattern = re.compile(
             r"(?P<first_half>.*)"
@@ -74,7 +83,7 @@ class HighloadVideoExtractor(ExtractorBase):
             r"(?P<main_func>.*})"
             r"(?P<main_params>\(.*)\)"
         )
-        match = pattern.search(script)
+        match = pattern.search(javascript)
         if not match:
             raise ValueError("Couldn't match regex.")
 
@@ -84,10 +93,28 @@ class HighloadVideoExtractor(ExtractorBase):
         return f"{first_half};function main {main_func};main{main_params}"
 
     @staticmethod
-    def _decode_direct_link(self):
-        # var res = eddaacefaffd.replace("ZjEyZWFlNzlmMmFiZDUwMTY5NGYxODgzZjJiZDgwOGU", "");
-        # var res2 = res.replace("NTQ5NmVlOWM1MTJmZjVhNGFiYzI4NWUwMTc0OTEyMTQ=", "");
-        pass
+    def _extract_vars_script(html: str):
+        pattern = re.compile(
+            r'type="text/javascript">(?P<vars_script>var.*)</script'
+        )
+        result = pattern.search(html)
+        if not result:
+            raise ExtractionError()
+        return result.group('vars_script')
+
+    @staticmethod
+    def _extract_source_var_name(javascript: str):
+        pattern = re.compile(
+            rf'var res = (\w+)\.replace'
+        )
+        match = pattern.search(javascript)
+        if not match:
+            raise ExtractionError()
+        return match.group(1)
+
+    @staticmethod
+    def _decode_direct_link(source_var: str, res_1: str, res_2: str):
+        return decode_base64(source_var.replace(res_1, "").replace(res_2, ""))
 
     @classmethod
     def extract_from_html(cls, html):
