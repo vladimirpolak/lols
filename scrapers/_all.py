@@ -30,3 +30,4 @@ from .streamlare import StreamlareVideoExtractor
 from .voe import VOEVideoExtractor
 from .streamtape import StreamtapeVideoExtractor
 from .highload import HighloadVideoExtractor
+from .erome import EromeAlbumExtractor
