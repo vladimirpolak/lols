@@ -104,7 +104,8 @@ class Downloader(HeadersMixin):
         response = self.send_request(
             method='GET',
             url=item.source,
-            stream=True
+            stream=True,
+            headers=item.headers
         )
         response.raw.decode_content = True
 
