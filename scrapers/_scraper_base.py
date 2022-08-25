@@ -41,19 +41,21 @@ class ScraperBase:
         return self._downloader.send_request(url, method, **kwargs)
 
     def add_item(self,
-                 content_type: ContentType,
+                 source: str,
                  filename: str,
                  extension: str,
-                 source: str,
-                 album_title: str = None
+                 content_type: ContentType,
+                 album_title: str = None,
+                 headers: dict = None
                  ):
 
         new_item = Item(
-            content_type=content_type,
+            source=source,
             filename=filename,
             extension=extension,
-            source=source,
-            album_title=album_title
+            content_type=content_type,
+            album_title=album_title,
+            headers=headers
         )
         logging.debug(f"{self.__class__.__name__} ADDED {new_item}")
         self.ALL_ITEMS.append(new_item)
