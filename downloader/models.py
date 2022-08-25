@@ -1,19 +1,24 @@
 from .types import ContentType
+from typing import Union
 
 
 class Item:
-    content_type: ContentType
-    album_title: str
+    source: str
     filename: str
     extension: str  # .jpg/.mp4...
-    source: str
+    content_type: ContentType
+    album_title: Union[str, None]
+    headers: Union[dict, None]
 
-    def __init__(self, content_type: ContentType, filename: str, extension: str, source: str, album_title: str = None):
-        self.content_type = content_type
-        self.album_title = album_title
+    def __init__(self, source: str, filename: str, extension: str, content_type: ContentType,
+                 album_title: str = None,
+                 headers: dict = None):
+        self.source = source
         self.filename = filename
         self.extension = extension
-        self.source = source
+        self.content_type = content_type
+        self.album_title = album_title
+        self.headers = headers
 
     def __str__(self):
         return f"Item(" \
