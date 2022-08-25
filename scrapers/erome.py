@@ -41,6 +41,7 @@ class EromeAlbumExtractor(ExtractorBase):
         return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
 
 # Images
+# rf"(?:https://)?s\d+\.erome\.com/\d+/\w+/\w+(?:{'|'.join(img_extensions)})?v=\d+"
 # https://s11.erome.com/981/69MH41fn/UwQFq07e.png?v=1661108453
 # https://s11.erome.com/981/69MH41fn/F75mTh6A.png?v=1661108459
 # https://s11.erome.com/981/69MH41fn/PQWXAKy4.png?v=1661108433
@@ -52,6 +53,7 @@ class EromeAlbumExtractor(ExtractorBase):
 
 
 # Videos
+# rf"(?:https://)?s\d+\.erome\.com/\d+/\w+/\w(?:{'|'.join(vid_extensions)})"
 # https://s11.erome.com/981/69MH41fn/IXs23YUp_720p.mp4
 # https://s18.erome.com/902/srArB7Yt/DTGmT1Qo_720p.mp4
 # https://s18.erome.com/902/srArB7Yt/2CVMSZFc_720p.mp4
