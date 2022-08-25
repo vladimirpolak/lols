@@ -24,35 +24,21 @@ class HighloadVideoExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url):
-        self.origin_url = url
         response = self.request(
-            url=self.origin_url,
+            url=url,
         )
         html = response.text
 
-        # extract vars_script
-        vars_script = self._extract_vars_script(html)
-        # prepare vars_script
-        prepped_vars_script = self._prepare_script(vars_script)
-        # get vars_script output with js2py
-        vars_script_output = js2py.eval_js(prepped_vars_script)
+        vars_script = self.get_vars_script(html)
+        master_script = self.get_master_script(origin=url)
 
-        # Request master.js
-        master_script = self._get_masterjs(
-            referer=self.origin_url
-        )
-
-        # prepare master_script
-        prepped_master_script = self._prepare_script(master_script)
-        # get master_script output with js2py
-        master_script_output = js2py.eval_js(prepped_master_script)
         # extract source_variable, res_1 value and res_2 value
-        source_var = self._extract_source_var_name(master_script_output)
-        res_1, res_2 = self._extract_res1_res2(master_script_output)
+        source_var = self._extract_source_var_name(master_script)
+        res_1, res_2 = self._extract_res1_res2(master_script)
 
         # extract source_variable value from variables_script
         source_value = self._extract_source_var_value(
-            javascript=vars_script_output,
+            javascript=vars_script,
             var_name=source_var
         )
         # decode the direct link based off values of source_variable, res_1 and res_2
@@ -60,7 +46,7 @@ class HighloadVideoExtractor(ExtractorBase):
             source_value, res_1, res_2
         )
 
-        file_w_ext = self.origin_url.split("/")[-1]
+        file_w_ext = url.split("/")[-1]
         filename, extension = split_filename_ext(file_w_ext)
         content_type = determine_content_type_(extension)
 
@@ -70,6 +56,23 @@ class HighloadVideoExtractor(ExtractorBase):
             extension=extension,
             content_type=content_type
         )
+
+    def get_vars_script(self, html):
+        # extract vars_script
+        vars_script_encrypted = self._extract_vars_script(html)
+        # prepare vars_script
+        prepped_vars_script = self._prepare_script(vars_script_encrypted)
+        return js2py.eval_js(prepped_vars_script)
+
+    def get_master_script(self, origin: str):
+        # Request master.js
+        master_script_encrypted = self._get_masterjs(
+            referer=origin
+        )
+
+        # prepare master_script
+        prepped_master_script = self._prepare_script(master_script_encrypted)
+        return js2py.eval_js(prepped_master_script)
 
     def _get_masterjs(self, referer: str):
         """Returns master.js script."""
