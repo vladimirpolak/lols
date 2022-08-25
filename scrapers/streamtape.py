@@ -61,8 +61,8 @@ class StreamtapeVideoExtractor(ExtractorBase):
             return
         html = response.text
 
-        source = self._extract_directurl(html)
-        file_w_ext = self._extract_title(html)
+        source = self.extract_directurl(html)
+        file_w_ext = self.extract_title(html)
         filename, extension = split_filename_ext(file_w_ext)
         content_type = determine_content_type_(extension)
 
@@ -73,7 +73,7 @@ class StreamtapeVideoExtractor(ExtractorBase):
             source=source,
         )
 
-    def _extract_directurl(self, html):
+    def extract_directurl(self, html):
         # Extract url parameters for direct url from html
         id_param, expires, ip, token = self._extract_getvideo_params(html)
 
@@ -88,6 +88,20 @@ class StreamtapeVideoExtractor(ExtractorBase):
         )
         res_headers = response.headers
         return res_headers["Location"]
+
+    def extract_title(self, html):
+        """Extracts title of the video."""
+        p = re.compile(
+            r'"showtitle":"(.*?)"'
+        )
+        result = p.search(html)
+        if result:
+            title = result.group(1)
+            return slugify(title)
+        else:
+            raise ExtractionError(
+                f"Failed to extract title from html: {self.origin_url}"
+            )
 
     def _extract_getvideo_params(self, html) -> (ID, Expires, IP, Token):
         """Extracts parameters for get_video url."""
@@ -106,20 +120,6 @@ class StreamtapeVideoExtractor(ExtractorBase):
         else:
             raise ExtractionError(
                 f"Failed to extract 'get_video' params from html: {self.origin_url}"
-            )
-
-    def _extract_title(self, html):
-        """Extracts title of the video."""
-        p = re.compile(
-            r'"showtitle":"(.*?)"'
-        )
-        result = p.search(html)
-        if result:
-            title = result.group(1)
-            return slugify(title)
-        else:
-            raise ExtractionError(
-                f"Failed to extract title from html: {self.origin_url}"
             )
 
     @classmethod
