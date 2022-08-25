@@ -32,20 +32,7 @@ class HighloadVideoExtractor(ExtractorBase):
         vars_script = self.get_vars_script(html)
         master_script = self.get_master_script(origin=url)
 
-        # extract source_variable, res_1 value and res_2 value
-        source_var = self._extract_source_var_name(master_script)
-        res_1, res_2 = self._extract_res1_res2(master_script)
-
-        # extract source_variable value from variables_script
-        source_value = self._extract_source_var_value(
-            javascript=vars_script,
-            var_name=source_var
-        )
-        # decode the direct link based off values of source_variable, res_1 and res_2
-        source = self._decode_direct_link(
-            source_value, res_1, res_2
-        )
-
+        source = self.generate_direct_link(vars_script, master_script)
         file_w_ext = url.split("/")[-1]
         filename, extension = split_filename_ext(file_w_ext)
         content_type = determine_content_type_(extension)
@@ -73,6 +60,21 @@ class HighloadVideoExtractor(ExtractorBase):
         # prepare master_script
         prepped_master_script = self._prepare_script(master_script_encrypted)
         return js2py.eval_js(prepped_master_script)
+
+    def generate_direct_link(self, vars_script, master_script):
+        # extract source_variable, res_1 value and res_2 value
+        source_var = self._extract_source_var_name(master_script)
+        res_1, res_2 = self._extract_res1_res2(master_script)
+
+        # extract source_variable value from variables_script
+        source_value = self._extract_source_var_value(
+            javascript=vars_script,
+            var_name=source_var
+        )
+        # decode the direct link based off values of source_variable, res_1 and res_2
+        return self._decode_direct_link(
+            source_value, res_1, res_2
+        )
 
     def _get_masterjs(self, referer: str):
         """Returns master.js script."""
