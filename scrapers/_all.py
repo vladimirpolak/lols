@@ -31,4 +31,6 @@ from .voe import VOEVideoExtractor
 from .streamtape import StreamtapeVideoExtractor
 from .highload import HighloadVideoExtractor
 from .erome import EromeAlbumExtractor
-from .forum_socialmediagirls import ForumSMGCrawler
+from .forum_socialmediagirls import (ForumSMGCrawler,
+                                     ForumSMGimageExtractor,
+                                     ForumSMGvideoExtractor)
