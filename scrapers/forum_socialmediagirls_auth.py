@@ -9,7 +9,6 @@ XfSession = str
 XfUser = str
 
 
-# '__ddg1_': '1rQZ12y5wISnZaZP8lCn'
 class ForumSMGAuth:
     def authorize(self):
         auth_data = config.load_config(self.DOMAIN)
