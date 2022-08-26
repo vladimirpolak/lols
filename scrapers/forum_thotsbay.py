@@ -31,7 +31,8 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
     ]
 
     def initialize(self):
-        self.authorize()
+        raise NotImplementedError("Site is shut down permanently.")
+        # self.authorize()
 
     def _crawl_link(self, url):
         try:
