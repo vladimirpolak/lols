@@ -8,7 +8,7 @@ import js2py
 
 URL_HIGHLOAD_MASTERJS = "https://highload.to/assets/js/master.js"
 
-PATTERN_HIGHLOAD_VIDEO = rf"(?:https://)?highload\.to/f/[a-z\d]+/[-\w]+(?:{'|'.join(vid_extensions)})"
+PATTERN_HIGHLOAD_VIDEO = rf"(?:https://)?highload\.to/f/[a-z\d]+/[-\w.%]+(?:{'|'.join(vid_extensions)})"
 
 
 class HighloadVideoExtractor(ExtractorBase):
@@ -18,9 +18,8 @@ class HighloadVideoExtractor(ExtractorBase):
     DESC = "Highload Video Hosting"
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
-        "https://highload.to/f/rooptpwx3pog/Joey_Fisher_bath_nude_boobs_onlyfans_video.mp4",
-        "https://highload.to/f/rvhuhxzpaioh/Joey_Fisher_2022-07-22_shower_onlyfans_video.mp4",
-        "https://highload.to/f/mwa7i7yarcff/Joey_Fisher_8min_nude_onlyfans_video.mp4",
+        "https://highload.to/f/ofyrlwactvuc/Vader_Stops_the_2nd_Ship...-5xkBtu_WTrk.mp4",
+        "https://highload.to/f/httzvdjv6p1v/F%40_%C2%A3_Society___Mr._Robot-4yKsIdr_PNU.mp4"
     ]
 
     def _extract_data(self, url):
