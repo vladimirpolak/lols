@@ -25,6 +25,7 @@ class LoLs:
         self.load_from_file = load_from_file
         self.session = kwargs.pop("session", None) or requests.Session()
         self.downloader = kwargs.pop("downloader", None) or Downloader(self.session)
+        self.thread_name = ""
         self.options = kwargs
 
     def main(self):
@@ -58,9 +59,18 @@ class LoLs:
 
         console.print(f"Chosen scraper: [green]{scraper.DESC}[/green]")
         if issubclass(scraper, ExtractorBase):
-            self.extractor_method(url, scraper)
+            data = self.extractor_method(url, scraper)
         elif issubclass(scraper, CrawlerBase):
-            self.crawler_method(url, scraper)
+            data = self.crawler_method(url, scraper)
+
+        # Displays the amount/type of scraped data
+        print_data(data)
+
+        if self.thread_name and data:
+            self.download(items=data, dir_name=self.thread_name)
+        elif data:
+            output_dir_name = console.input("Enter name for output directory: ")
+            self.download(items=data, dir_name=output_dir_name)
 
     @staticmethod
     def _assign_scraper(url: str) -> Union[ExtractorBase, CrawlerBase]:
@@ -75,20 +85,12 @@ class LoLs:
         # Initiate extractor
         e = extractor(self.downloader)
 
-        # Extract data
-        data = e.extract_data(url)
-
-        # Displays the amount/type of scraped data
-        print_data(data)
-
-        if data:
-            output_dir_name = console.input("Enter name for output directory: ")
-            self.download(items=data, dir_name=output_dir_name)
+        return e.extract_data(url)
 
     def crawler_method(self,
                        url: str,
                        crawler: Crawler,
-                       scrape_extracted_links: bool = True):
+                       scrape_extracted_links: bool = True) -> List[Item]:
         # Initiate crawler
         c = crawler(self.downloader)
 
@@ -96,7 +98,7 @@ class LoLs:
         crawled_html = c.extract_data(url)
 
         # Thread name (Used to name an output directory)
-        model_name = c.THREAD_NAME
+        self.thread_name = c.THREAD_NAME
 
         # Run the crawled html against Extractor classes
         data = []
@@ -119,13 +121,7 @@ class LoLs:
                         s = scraper(self.downloader)
                         for link_ in links:
                             data.extend(s.extract_data(link_))
-
-        # Displays the amount/type of scraped data
-        logging.debug(f"Scraped total of {len(data)} items.")
-
-        print_data(data)
-        if data:
-            self.download(items=data, dir_name=model_name)
+        return data
 
     def download(self, items: List[Item], dir_name: str):
 
