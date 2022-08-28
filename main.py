@@ -144,8 +144,7 @@ class LoLs:
                     total_length=list_length
                 )
                 step += 1
-                # if items:
-                #     clear_output(lines_to_clear=4)
+
             except KeyboardInterrupt:
                 items.append(item)
                 dump_curr_session(
