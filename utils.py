@@ -5,8 +5,6 @@ from downloader import Item
 from console import console
 import json
 import base64
-import os
-
 
 
 def split_filename_ext(file) -> tuple:
@@ -51,14 +49,6 @@ def load_file(path: str) -> list:
         raise Exception("Provided file doesn't exist!")
     else:
         return output
-
-
-def clear_output(lines_to_clear: int = 1):
-    for _ in range(lines_to_clear):
-        LINE_UP = '\033[1A'
-        LINE_CLEAR = '\x1b[2K'
-        console.print(LINE_UP, end=LINE_CLEAR)
-    # os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def print_data(data: List[Item]):

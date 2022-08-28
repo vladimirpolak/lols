@@ -4,7 +4,7 @@ from options import parser
 from pathlib import Path
 from downloader import Downloader
 from scrapers._scraper_base import ExtractorBase, CrawlerBase
-from utils import load_file, clear_output, print_data, dump_curr_session
+from utils import load_file, print_data, dump_curr_session
 from downloader.models import Item
 from typing import Union, List, TypeVar
 import logging
