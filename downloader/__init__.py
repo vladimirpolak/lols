@@ -4,7 +4,6 @@ from pathlib import Path
 import retry
 from .headers import HeadersMixin
 from console import console
-from tqdm.auto import tqdm
 from urllib3.exceptions import ProtocolError
 from .models import Item
 from .types import ContentType
