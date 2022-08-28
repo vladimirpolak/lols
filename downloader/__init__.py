@@ -3,10 +3,12 @@ import requests
 from pathlib import Path
 import retry
 from .headers import HeadersMixin
+from console import console
 from tqdm.auto import tqdm
 from urllib3.exceptions import ProtocolError
 from .models import Item
 from .types import ContentType
+from rich.progress import wrap_file
 import shutil
 import logging
 
@@ -70,7 +72,9 @@ class Downloader(HeadersMixin):
                       item: Item,
                       separate_content: bool,
                       save_urls: bool,
-                      album_name: str = None
+                      album_name: str = None,
+                      curr_item_num: int = None,
+                      total_length: int = None
                       ):
         album_dir = album_name or item.album_title or input(
             f"Enter the name for album directory: "
@@ -99,7 +103,11 @@ class Downloader(HeadersMixin):
                 break
             step += 1
 
-        print(f"Downloading: {item.source}\n")
+        progress_info = ""
+        if curr_item_num:
+            progress_info = f"{curr_item_num}/{total_length}"
+
+        console.print(f"\nURL: {item.source}")
         # Make request
         response = self.send_request(
             method='GET',
@@ -123,14 +131,19 @@ class Downloader(HeadersMixin):
             with open(file_path, 'wb') as f:
                 shutil.copyfileobj(response.raw, f)
         else:
-            with tqdm.wrapattr(response.raw, "read", total=total_size, desc="") as raw:
+            # RICH Progress bar
+            with wrap_file(response.raw,
+                           total=total_size,
+                           refresh_per_second=30,
+                           description=f"Downloading {progress_info}",
+                           console=console) as raw:
                 with open(file_path, 'wb') as f:
                     shutil.copyfileobj(raw, f)
 
-            if save_urls:
-                with open(album_path / "urls.txt", "a") as f:
-                    f.write(item.source)
-                    f.write("\n")
+        if save_urls:
+            with open(album_path / "urls.txt", "a") as f:
+                f.write(item.source)
+                f.write("\n")
 
     @classmethod
     def is_invalid(cls, response: requests.Response) -> bool:

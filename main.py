@@ -1,4 +1,5 @@
 import requests
+from console import console
 from options import parser
 from pathlib import Path
 from downloader import Downloader
@@ -55,7 +56,7 @@ class LoLs:
         if not scraper:
             return
 
-        print(f"Chosen scraper: {scraper.DESC}")
+        console.print(f"Chosen scraper: [green]{scraper.DESC}[/green]")
         if issubclass(scraper, ExtractorBase):
             self.extractor_method(url, scraper)
         elif issubclass(scraper, CrawlerBase):
@@ -81,7 +82,7 @@ class LoLs:
         print_data(data)
 
         if data:
-            output_dir_name = input("Enter name for output directory: ")
+            output_dir_name = console.input("Enter name for output directory: ")
             self.download(items=data, dir_name=output_dir_name)
 
     def crawler_method(self,
@@ -127,8 +128,10 @@ class LoLs:
             self.download(items=data, dir_name=model_name)
 
     def download(self, items: List[Item], dir_name: str):
+
+        list_length = len(items)
+        step = 1
         while items:
-            print(f"Remaining {len(items)} items.")
             item = items.pop(0)
 
             try:
@@ -136,10 +139,13 @@ class LoLs:
                     item=item,
                     separate_content=self.options["separate"],
                     save_urls=self.options["save_urls"],
-                    album_name=dir_name
+                    album_name=dir_name,
+                    curr_item_num=step,
+                    total_length=list_length
                 )
-                if items:
-                    clear_output(lines_to_clear=4)
+                step += 1
+                # if items:
+                #     clear_output(lines_to_clear=4)
             except KeyboardInterrupt:
                 items.append(item)
                 dump_curr_session(
@@ -155,7 +161,7 @@ class LoLs:
                     items_to_download=items
                 )
                 exit()
-        print(f"\nOutput directory: {dir_name}")
+        console.print(f"\nOutput directory: {dir_name}")
 
 
 if __name__ == '__main__':
