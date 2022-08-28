@@ -11,7 +11,7 @@ Token = str
 
 URL_STREAMTAPE_GETVIDEO = "https://streamtape.com/get_video"
 
-PATTERN_STREAMTAPE_VIDEO = rf'(?:https://)?streamtape\.com/v/\w+/[-\w]+(?:{"|".join(vid_extensions)})'
+PATTERN_STREAMTAPE_VIDEO = rf'(?:https://)?streamtape\.com/v/\w+/[-\w.%]+(?:{"|".join(vid_extensions)})'
 PATTERN_STREAMTAPE_GETVIDEO_PARAMS = re.compile(
     r"document\.getElementById\('norobotlink'\)\.innerHTML = '(.*?)' \+ \('(.*?)'\)\.substring\(1\)\.substring\(2\);"
 )
@@ -48,7 +48,8 @@ class StreamtapeVideoExtractor(ExtractorBase):
     DESC = "Streamtape Video Hosting"
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
-        "https://streamtape.com/v/L280lgyDKWfa82/Lauren_Alexis_Fuck_Me_Daddy_Video_Leaked.mp4"
+        "https://streamtape.com/v/GWA1z0g3r2t1K7A/Vader_Stops_the_2nd_Ship...-5xkBtu_WTrk.mp4",
+        "https://streamtape.com/v/wrjVxklwGDtJ82q/F%40_%C2%A3_Society___Mr._Robot-4yKsIdr_PNU.mp4"
     ]
 
     def _extract_data(self, url):

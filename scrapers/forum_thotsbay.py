@@ -22,13 +22,7 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
     DOMAIN = "forum.thotsbay.com"
     DESC = "Thotsbay Forum Thread"
     CONTENT_TYPE = "THREAD"
-    SAMPLE_URLS = [
-        "https://forum.thotsbay.com/threads/abby-rao-abbyrao.10221/",
-        "https://forum.thotsbay.com/threads/genesis-mia-lopez.24/",
-        "https://forum.thotsbay.com/threads/angelie-dolly.13727/",
-        "https://forum.thotsbay.com/threads/ines-helene.11402/",
-        "https://forum.thotsbay.com/threads/lupeandmicha.11155"
-    ]
+    SAMPLE_URLS = []
 
     def initialize(self):
         raise NotImplementedError("Site is shut down permanently.")
@@ -93,12 +87,7 @@ class ForumThotsbayImageExtractor(ExtractorBase):
     DOMAIN = "forum.thotsbay.com"
     DESC = "Thotsbay Forum Image"
     CONTENT_TYPE = "ITEM"
-    SAMPLE_URLS = [
-        "https://forum.thotsbay.com/attachments/yana-demeester_103986718_551074562441545_7929775646538835571_n-jpg.15820/",
-        "https://forum.thotsbay.com/attachments/2595x3461_7052232608779ce8b472fbc554bab754-jpg.48009/",
-        "https://forum.thotsbay.com/attachments/3840x2880_b8c756e2f4d095510a6ecc39c569d16e-jpg.48004/",
-        "https://forum.thotsbay.com/attachments/yana-demeester_236183838_551266026063915_5728592508069254494_n-jpg.48013/"
-    ]
+    SAMPLE_URLS = []
 
     def _extract_data(self, url):
         filename, extension = self._thotsbay_process_filename(url)

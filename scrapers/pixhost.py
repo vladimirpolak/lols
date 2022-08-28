@@ -9,6 +9,7 @@ IMAGE_DIRECT_URL = "https://img{server_num}.pixhost.to/images{url_path}"
 
 # Regex Patterns
 PATTERN_PIXHOST_THUMBNAIL = rf"(https://t(\d+)\.pixhost\.to/thumbs(/\d+/[-\w]+(?:{'|'.join(img_extensions)})))"
+# Pixhost gallery https://pixhost.to/gallery/ujdZj
 
 
 class PixHostTHExtractor(ExtractorBase):
@@ -18,7 +19,8 @@ class PixHostTHExtractor(ExtractorBase):
     DESC = "PixHost Image Hosting (Extract from thumbnail)"
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
-        "https://t37.pixhost.to/thumbs/355/131446931_daisy-keech_2___b6qtqyup0em.jpg"
+        "https://t76.pixhost.to/thumbs/87/302735411_pexels-photo-1525041.jpg",
+        "https://t76.pixhost.to/thumbs/87/302735434_pexels-photo-2662116.jpg"
     ]
 
     def _extract_data(self, url):

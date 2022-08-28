@@ -18,7 +18,7 @@ class PixlAlbumExtractor(ExtractorBase):
     DESC = "Pixl Image Storage Album"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
-        "https://pixl.is/album/lena12.sb3Az"
+        "https://pixl.is/album/nature.UGAdC"
     ]
 
     def _extract_data(self, url):
