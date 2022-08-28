@@ -104,7 +104,8 @@ class Downloader(HeadersMixin):
 
         progress_info = ""
         if curr_item_num:
-            progress_info = f"{curr_item_num}/{total_length}"
+            progress_info = f"[bright_cyan]{curr_item_num}[/bright_cyan]/" \
+                            f"[bright_cyan]{total_length}[/bright_cyan]"
 
         console.print(f"\nURL: {item.source}")
         # Make request
@@ -126,6 +127,7 @@ class Downloader(HeadersMixin):
                 f"Error when extracting 'content-length from {item.source} response."
             )
 
+            console.print(f"Downloading {progress_info} [red]PROGRESS NOT AVAILABLE[/red]")
             # Download without progress bar
             with open(file_path, 'wb') as f:
                 shutil.copyfileobj(response.raw, f)
