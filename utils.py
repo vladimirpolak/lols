@@ -56,7 +56,7 @@ def print_data(data: List[Item]):
     for item in data:
         data_count[item.content_type] += 1
 
-    console.rule("[green]SCRAPED")
+    console.rule("[green]-SCRAPED", align="left")
     for content_type, count in data_count.items():
         console.print(f"{count} {content_type.name.lower()}s.")
 
