@@ -2,9 +2,9 @@ from typing import List
 from pathlib import Path
 from collections import defaultdict
 from downloader import Item
+from console import console
 import json
 import base64
-import os
 
 
 def split_filename_ext(file) -> tuple:
@@ -29,7 +29,7 @@ def save_links(
     file_path = output_path / filename
 
     if debug:
-        print("Saved URLs to {}".format(str(file_path)))
+        console.print("Saved URLs to {}".format(str(file_path)))
 
     with open(str(file_path), "w") as f:
         f.write("\n".join(links))
@@ -51,23 +51,14 @@ def load_file(path: str) -> list:
         return output
 
 
-def clear_output(lines_to_clear: int = 1):
-    for _ in range(lines_to_clear):
-        LINE_UP = '\033[1A'
-        LINE_CLEAR = '\x1b[2K'
-        print(LINE_UP, end=LINE_CLEAR)
-    # os.system('cls' if os.name == 'nt' else 'clear')
-
-
 def print_data(data: List[Item]):
     data_count = defaultdict(int)
     for item in data:
         data_count[item.content_type] += 1
 
-    print("-" * 50)
+    console.rule("[green]-SCRAPED", align="left")
     for content_type, count in data_count.items():
-        print(f"Number of {content_type.name.lower()}s scraped: {count}")
-    print("-" * 50)
+        console.print(f"{count} {content_type.name.lower()}s.")
 
 
 def dump_curr_session(cookies: dict, items_to_download: List[Item]):

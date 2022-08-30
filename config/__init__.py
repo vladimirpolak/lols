@@ -4,10 +4,18 @@ import logging
 import json
 
 
+def base_dir(dir_name: str = "config"):
+    path = Path().cwd() / dir_name
+    if not path.exists():
+        path.mkdir()
+    return path
+
+
 class Manager:
     @staticmethod
     def load_config(domain_name) -> dict:
-        path = Path().cwd() / "config" / f"{domain_name}.json"
+        base_directory = base_dir()
+        path = base_directory / f"{domain_name}.json"
 
         if not path.exists():
             return {}
@@ -19,7 +27,8 @@ class Manager:
 
     @staticmethod
     def save_config(domain_name, data: dict):
-        path = Path().cwd() / "config" / f"{domain_name}.json"
+        base_directory = base_dir()
+        path = base_directory / f"{domain_name}.json"
 
         data["created_at"] = datetime.now().isoformat()
 

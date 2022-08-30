@@ -34,14 +34,17 @@ PATTERN_SMGFORUM_IMAGE_2 = re.compile(
     rf'(?P<filename>[-\w]+?)-(?P<extension>{"|".join([ext[1:] for ext in img_extensions])})\.\d+)/?'
 )
 
-# https://forums.socialmediagirls.com/threads/zlatasharv_-zlata-sharvarok-zlata_sh.27771/
+
 class ForumSMGCrawler(ForumSMGAuth, CrawlerBase):
     VALID_URL_RE = re.compile(PATTERN_SMGFORUM_THREAD)
     PROTOCOL = "https"
     DOMAIN = "forums.socialmediagirls.com"
     DESC = "SocialMediaGirls Forum"
     CONTENT_TYPE = "THREAD"
-    SAMPLE_URLS = []
+    SAMPLE_URLS = [
+        "https://forums.socialmediagirls.com/threads/zlatasharv_-zlata-sharvarok-zlata_sh.27771/",
+        "https://forums.socialmediagirls.com/threads/racharmstrong.209293/"
+    ]
 
     def initialize(self):
         self.authorize()

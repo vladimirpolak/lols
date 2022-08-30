@@ -94,7 +94,7 @@ class JPGChurchImageExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_JPEGCHURCH_IMAGE)
     PROTOCOL = "https"
     DOMAIN = "simp[0-9].jpeg.church"
-    DESC = "JPGChurch Image Link"
+    DESC = "JpegChurch Image Link"
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
         "https://simp2.jpg.church/0400d6f89e848a5df88.md.jpg",
