@@ -1,4 +1,5 @@
 import argparse
+from version import __version__
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -31,4 +32,10 @@ parser.add_argument(
     '--session',
     dest='session',
     help="Path to a last terminated session file. (.json)"
+)
+parser.add_argument(
+    '--version',
+    action='version',
+    version=__version__,
+    help='Print program version and exit'
 )
