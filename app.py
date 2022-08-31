@@ -3,6 +3,7 @@ from console import console
 from options import parser
 from pathlib import Path
 from downloader import Downloader
+from supported_sites import print_supported_sites
 from scrapers._scraper_base import ExtractorBase, CrawlerBase
 from utils import load_file, print_data, dump_curr_session
 from downloader.models import Item
@@ -167,6 +168,10 @@ if __name__ == '__main__':
     batchfile = Path(args.batchfile) if args.batchfile else None
     separate_content = False if args.separate else True
     save_urls = args.save_urls
+    ss = args.supported_sites
+    if ss:
+        print_supported_sites(console=console)
+        exit()
 
     if not (input_url or batchfile):
         raise Exception("You need to provide some URL!")

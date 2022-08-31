@@ -1,5 +1,6 @@
 import argparse
 from version import __version__
+from supported_sites import get_supported_sites
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -38,4 +39,10 @@ parser.add_argument(
     action='version',
     version=__version__,
     help='Print program version and exit'
+)
+parser.add_argument(
+    '--supported-sites',
+    action='store_true',
+    dest='supported_sites',
+    help='Print supported sites and exit'
 )
