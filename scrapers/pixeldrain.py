@@ -19,7 +19,7 @@ class PixelDrainAlbumExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_PIXELDRAIN_ALBUM)
     PROTOCOL = "https"
     DOMAIN = "pixeldrain.com"
-    DESC = "Pixeldrain Image Storage"
+    DESC = "Pixeldrain Image Hosting Album"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
         "https://pixeldrain.com/l/YqPurHqs",

@@ -12,7 +12,7 @@ class EromeAlbumExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_EROME_ALBUM)
     PROTOCOL = "https"
     DOMAIN = "erome.com"
-    DESC = "Erome Album"
+    DESC = "Erome.com Album"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
         "https://www.erome.com/a/69MH41fn",

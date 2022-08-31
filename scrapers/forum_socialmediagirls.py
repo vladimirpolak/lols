@@ -39,7 +39,7 @@ class ForumSMGCrawler(ForumSMGAuth, CrawlerBase):
     VALID_URL_RE = re.compile(PATTERN_SMGFORUM_THREAD)
     PROTOCOL = "https"
     DOMAIN = "forums.socialmediagirls.com"
-    DESC = "SocialMediaGirls Forum"
+    DESC = "SocialMediaGirls Forum Thread"
     CONTENT_TYPE = "THREAD"
     SAMPLE_URLS = [
         "https://forums.socialmediagirls.com/threads/zlatasharv_-zlata-sharvarok-zlata_sh.27771/",

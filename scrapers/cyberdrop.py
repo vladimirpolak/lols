@@ -13,7 +13,7 @@ class CyberdropAlbumExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_CYBERDROP_ALBUM)
     PROTOCOL = "https"
     DOMAIN = "cyberdrop.me"
-    DESC = "Cyberdrop storage"
+    DESC = "Cyberdrop Album"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
         "https://cyberdrop.me/a/prrohXbK",
@@ -70,7 +70,7 @@ class CyberdropImageExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_CYBERDROP_IMAGE)
     PROTOCOL = "https"
     DOMAIN = "cyberdrop.com"
-    DESC = "CyberDrop Image Link"
+    DESC = "CyberDrop Image URL"
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
         "https://fs-01.cyberdrop.cc/Ry2VcDEU-Ai4pQo-lMK3thIS.jpeg",

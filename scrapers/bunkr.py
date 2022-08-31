@@ -32,7 +32,7 @@ class BunkrAlbumExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_BUNKR_ALBUM)
     PROTOCOL = "https"
     DOMAIN = "bunkr.is"
-    DESC = "Bunkr.is storage"
+    DESC = "Bunkr.is Album"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
         "https://bunkr.is/a/rXQtFw5W",
@@ -131,7 +131,7 @@ class BunkrVideoExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_BUNKR_VIDEO)
     PROTOCOL = "https"
     DOMAIN = "stream.bunkr.is"
-    DESC = "Bunkr.is video page"
+    DESC = "Bunkr.is Video Page"
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
         "https://stream.bunkr.is/v/ea_vid_14-9a9Jq32V.mov",
@@ -214,7 +214,7 @@ class BunkrImageExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_BUNKR_IMAGE)
     PROTOCOL = "https"
     DOMAIN = "bunkr.is"
-    DESC = "Bunkr.is Image direct link"
+    DESC = "Bunkr.is Image Direct URL"
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
         "https://cdn3.bunkr.is/2021-07-03-3024x4032_c87b68ca72e0b5296829cf1a9e187b2c-Km9gaCRc.jpg",

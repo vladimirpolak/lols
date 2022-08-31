@@ -13,7 +13,7 @@ class SkygalleryExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_SKYGALLERY_ALBUM)
     PROTOCOL = "https"
     DOMAIN = "skygallery.hns.siasky.net"
-    DESC = "Skygallery Image hosting"
+    DESC = "Skygallery File Hosting Album"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
         "https://skygallery.hns.siasky.net/a/AQBizutvay2Ll9_fEmrhkZBHPrmkVlGif4XC2hD2qcXiWg",

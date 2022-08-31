@@ -54,7 +54,7 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
     VALID_URL_RE = re.compile(PATTERN_GOFILE_ALBUM)
     PROTOCOL = "https"
     DOMAIN = "gofile.io"
-    DESC = "GoFile File Storage"
+    DESC = "GoFile Hosting Directory"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
         "https://gofile.io/d/eG1URC",  # 1 video
