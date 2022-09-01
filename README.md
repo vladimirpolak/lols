@@ -53,7 +53,7 @@ _Use of git clone and python enviroment_
 
 <!-- SUPPORTED SITES -->
 ## Supported sites
-View supported sites [here](src/supported_sites.txt)
+View supported sites [here](docs/supported_sites.txt)
 
 
 
