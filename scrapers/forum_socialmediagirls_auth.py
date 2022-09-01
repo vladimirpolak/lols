@@ -1,4 +1,4 @@
-from config import Manager as config
+from config import Manager as Config
 from urllib.parse import urlencode
 from exceptions import ScraperInitError
 import logging

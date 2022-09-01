@@ -1,4 +1,4 @@
-from config import Manager as config
+from config import Manager as Config
 from exceptions import ScraperInitError
 from datetime import datetime
 import logging

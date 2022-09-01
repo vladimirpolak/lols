@@ -2,7 +2,7 @@ from ._scraper_base import ExtractorBase, CrawlerBase
 from downloader.types import determine_content_type_, vid_extensions
 from utils import split_filename_ext
 from exceptions import ExtractionError
-from .leakedmodelsforumauth import LeakedmodelsForumAuth
+from .leakedmodelsforum_auth import LeakedmodelsForumAuth
 from typing import Union
 import re
 
