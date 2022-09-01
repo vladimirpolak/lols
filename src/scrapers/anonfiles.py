@@ -1,7 +1,7 @@
 from ._scraper_base import ExtractorBase
-from src.downloader import determine_content_type_
-from utils import split_filename_ext
-from exceptions import ExtractionError
+from ..downloader.types import determine_content_type_
+from ..utils import split_filename_ext
+from ..exceptions import ExtractionError
 import re
 
 # Regex Patterns

@@ -1,6 +1,6 @@
 from ._scraper_base import ExtractorBase
-from src.downloader import determine_content_type_, img_extensions, vid_extensions
-from utils import split_filename_ext
+from ..downloader.types import determine_content_type_, img_extensions, vid_extensions
+from ..utils import split_filename_ext
 import re
 
 PATTERN_EROME_ALBUM = r"(?:https://)?(?:www\.)?erome\.com/a/\w+"

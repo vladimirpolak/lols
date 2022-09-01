@@ -1,6 +1,6 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from src.downloader import determine_content_type_
-from exceptions import ExtractionError
+from ..downloader.types import determine_content_type_
+from ..exceptions import ExtractionError
 from .forum_thotsbay_auth import ForumThotsbayAuth
 from typing import Union
 import re

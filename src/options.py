@@ -1,8 +1,8 @@
 import argparse
-from version import __version__
+from .version import __version__
 from pathlib import Path
-from console import console
-from supported_sites import print_supported_sites
+from .console import console
+from .supported_sites import print_supported_sites
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

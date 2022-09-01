@@ -1,8 +1,7 @@
 from ._scraper_base import ExtractorBase
-from src.downloader import determine_content_type_
-from exceptions import ExtractionError
-from utils import split_filename_ext
-from utils import decode_base64
+from ..downloader.types import determine_content_type_
+from ..exceptions import ExtractionError
+from ..utils import split_filename_ext, decode_base64
 import re
 import json
 

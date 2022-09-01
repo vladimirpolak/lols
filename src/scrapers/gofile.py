@@ -1,8 +1,8 @@
 from ._scraper_base import ExtractorBase
-from src.downloader import determine_content_type_
-from exceptions import (ExtractionError,
+from ..downloader.types import determine_content_type_
+from ..exceptions import (ExtractionError,
                         GoFileStatusUnknownError)
-from utils import split_filename_ext
+from ..utils import split_filename_ext
 from .gofile_auth import GoFileAuth
 from hashlib import sha256
 import logging

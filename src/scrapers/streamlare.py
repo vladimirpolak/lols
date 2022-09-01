@@ -1,8 +1,8 @@
 from ._scraper_base import ExtractorBase
-from src.downloader import determine_content_type_
-from exceptions import ExtractionError
+from ..downloader.types import determine_content_type_
+from ..exceptions import ExtractionError
+from ..utils import split_filename_ext
 from w3lib.html import replace_entities
-from utils import split_filename_ext
 import re
 import json
 

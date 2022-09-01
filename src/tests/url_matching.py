@@ -1,4 +1,4 @@
-from scrapers import get_scraper_classes
+from ..scrapers import get_scraper_classes
 
 
 class UrlMatchingTest:

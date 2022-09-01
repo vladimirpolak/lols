@@ -1,4 +1,4 @@
-from exceptions import ContentTypeError
+from ..exceptions import ContentTypeError
 from enum import Enum, auto
 
 img_extensions = [

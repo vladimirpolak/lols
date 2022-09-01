@@ -1,11 +1,11 @@
 from ._scraper_base import ExtractorBase
-from src.downloader import (determine_content_type_,
+from ..downloader.types import (determine_content_type_,
                             img_extensions,
                             vid_extensions,
                             archive_extensions,
                             ContentType)
-from exceptions import ExtractionError
-from utils import split_filename_ext
+from ..exceptions import ExtractionError
+from ..utils import split_filename_ext
 from typing import Union
 import yarl
 import logging

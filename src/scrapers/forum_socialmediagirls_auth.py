@@ -1,6 +1,6 @@
-from config import Manager as Config
+from ..config import Manager as Config
 from urllib.parse import urlencode
-from exceptions import ScraperInitError
+from ..exceptions import ScraperInitError
 import logging
 import re
 
@@ -11,7 +11,7 @@ XfUser = str
 
 class ForumSMGAuth:
     def authorize(self):
-        auth_data = config.load_config(self.DOMAIN)
+        auth_data = Config.load_config(self.DOMAIN)
 
         # If there isnt an auth file
         # create new file with username, password fields to fill in
@@ -166,7 +166,7 @@ class ForumSMGAuth:
                 "xf_user": user_id
             }
         }
-        config.save_config(
+        Config.save_config(
             domain_name=self.DOMAIN,
             data=data
         )

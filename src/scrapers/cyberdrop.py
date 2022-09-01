@@ -1,6 +1,6 @@
 from ._scraper_base import ExtractorBase
-from exceptions import ExtractionError
-from src.downloader import vid_extensions, img_extensions, determine_content_type_
+from ..exceptions import ExtractionError
+from ..downloader.types import vid_extensions, img_extensions, determine_content_type_
 import re
 
 # Regex Patterns

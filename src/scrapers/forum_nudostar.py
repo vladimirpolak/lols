@@ -1,7 +1,7 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from src.downloader import determine_content_type_, vid_extensions
-from utils import split_filename_ext, slugify
-from exceptions import ExtractionError
+from ..downloader.types import determine_content_type_, vid_extensions
+from ..utils import split_filename_ext, slugify
+from ..exceptions import ExtractionError
 from .forum_nudostar_auth import ForumNudostarAuth
 from typing import Union
 import re

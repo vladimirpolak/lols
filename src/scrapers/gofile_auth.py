@@ -1,5 +1,5 @@
-from config import Manager as Config
-from exceptions import ScraperInitError
+from ..config import Manager as Config
+from ..exceptions import ScraperInitError
 from datetime import datetime
 import logging
 
@@ -17,7 +17,7 @@ class GoFileAuth:
     ACCESS_TOKEN = ""
 
     def authorize(self):
-        auth_data = config.load_config(self.DOMAIN)
+        auth_data = Config.load_config(self.DOMAIN)
 
         if not auth_data:
             self._create_login()
@@ -37,7 +37,7 @@ class GoFileAuth:
         auth_data = {
             "token": self.ACCESS_TOKEN
         }
-        config.save_config(
+        Config.save_config(
             self.DOMAIN,
             auth_data
         )

@@ -1,8 +1,8 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from src.downloader import determine_content_type_, img_extensions, vid_extensions
-from exceptions import ExtractionError
+from ..downloader.types import determine_content_type_, img_extensions, vid_extensions
+from ..exceptions import ExtractionError
 from .forum_socialmediagirls_auth import ForumSMGAuth
-from utils import slugify
+from ..utils import slugify
 import re
 
 

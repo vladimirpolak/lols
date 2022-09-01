@@ -1,7 +1,7 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from src.downloader import determine_content_type_, vid_extensions
-from utils import split_filename_ext
-from exceptions import ExtractionError
+from ..downloader.types import determine_content_type_, vid_extensions
+from ..utils import split_filename_ext
+from ..exceptions import ExtractionError
 from .leakedmodelsforum_auth import LeakedmodelsForumAuth
 from typing import Union
 import re
