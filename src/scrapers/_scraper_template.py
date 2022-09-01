@@ -1,6 +1,6 @@
-from exceptions import ExtractionError, ScraperInitError
-from config import Manager as config
-from utils import split_filename_ext
+from ..exceptions import ExtractionError, ScraperInitError
+from ..config import Manager as config
+from ..utils import split_filename_ext
 import logging
 import re
 import json

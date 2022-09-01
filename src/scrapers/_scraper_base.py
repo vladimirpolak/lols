@@ -1,7 +1,7 @@
-from src.downloader import Downloader, Item
-from src.downloader import ContentType
+from ..downloader import Downloader, Item
+from ..downloader.models import ContentType
 from abc import abstractmethod
-from exceptions import ExtractionError, ContentTypeError
+from ..exceptions import ExtractionError, ContentTypeError
 from typing import List, Union
 import logging
 import re
