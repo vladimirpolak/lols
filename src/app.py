@@ -1,13 +1,13 @@
 import requests
-from .console import console
-from .options import parse_options
-from .downloader import Downloader
-from .scrapers._scraper_base import ExtractorBase, CrawlerBase
-from .utils import load_file, print_data, dump_curr_session
-from .downloader.models import Item
+from console import console
+from options import parse_options
+from downloader import Downloader
+from scrapers._scraper_base import ExtractorBase, CrawlerBase
+from utils import load_file, print_data, dump_curr_session
+from downloader.models import Item
 from typing import Union, List, TypeVar
 import logging
-from .scrapers import get_scraper_classes
+from scrapers import get_scraper_classes
 
 
 Extractor = TypeVar('Extractor', bound='ExtractorBase')

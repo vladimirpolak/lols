@@ -1,8 +1,8 @@
 from typing import List
 from pathlib import Path
 from collections import defaultdict
-from .downloader import Item
-from .console import console
+from downloader import Item
+from console import console
 import json
 import base64
 

@@ -1,4 +1,4 @@
-from .scrapers import get_scraper_classes
+from scrapers import get_scraper_classes
 from rich.console import Console
 from pathlib import Path
 
