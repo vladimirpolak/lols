@@ -3,6 +3,7 @@ from pathlib import Path
 from collections import defaultdict
 from downloader import Item
 from console import console
+from datetime import datetime
 import json
 import base64
 
@@ -87,4 +88,8 @@ def slugify(input_str: str, sep: str = "-", del_special_chars: bool = False):
     if del_special_chars:
         return delete_special_chars(slugified)
     return slugified
+
+
+def curr_time(format: str = "%Y-%m-%d-%H-%M"):
+    return datetime.now().strftime(format)
 

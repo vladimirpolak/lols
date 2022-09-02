@@ -3,9 +3,10 @@ from console import console
 from options import parse_options
 from downloader import Downloader
 from scrapers._scraper_base import ExtractorBase, CrawlerBase
-from utils import load_file, print_data, dump_curr_session
+from utils import load_file, print_data, dump_curr_session, curr_time
 from downloader.models import Item
 from typing import Union, List, TypeVar
+from pathlib import Path
 import logging
 from scrapers import get_scraper_classes
 
@@ -161,8 +162,10 @@ class LoLs:
 if __name__ == '__main__':
     app_options = parse_options()
 
+    log_filename = f"{curr_time()}.log"
+    log_filepath = Path().cwd() / log_filename
     logging.basicConfig(
-        handlers=[logging.FileHandler('../last_run.log', 'w', 'utf-8')],
+        handlers=[logging.FileHandler(str(log_filepath), 'w', 'utf-8')],
         level=logging.DEBUG,
         format='%(levelname)s %(asctime)s %(message)s',
         datefmt='%d/%m/%Y %I:%M:%S',
