@@ -62,10 +62,6 @@ Imagebam Image Hosting (Indirect Link)
 --domain: imagebam.com
 --example url: https://www.imagebam.com/image/c444481329385981
 
-Xvideos Video Page
---domain: xvideos.com
---example url: https://www.xvideos.com/video66403637/amateur_colombian_latina_teen_pov_blowjob_and_horny_sex_on_camera
-
 Nudostar Forum Thread
 --domain: nudostar.com
 --example url: https://nudostar.com/forum/threads/ck0rf.34621/
