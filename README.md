@@ -55,16 +55,16 @@ Basic usage syntax is as follows:
 
 ### Options
    ```
-  -h, --help                     Show help and exit.
-
-  -a FILE, --batch-file FILE     (alpha)File containing URLs to download, one URL per line.
-                                  Lines starting with '#', ';' or ']' are considered as comments and ignored.
-
-  -s, --separate-content         Provided the flag, downloaded content will NOT be separated in folders based on content type.
-  
-  -u, --save-urls                Provided the flag, all direct urls for content will be saved into txtfile in the output folder.
-  --version                      Print program version and exit
-  --supported-sites              Print supported sites and exit
+  -h, --help                                 Show help and exit.
+            
+  -a [file.txt], --batch-file [file.txt]     (alpha)File containing URLs to download, one URL per line.
+                                              Lines starting with '#', ';' or ']' are considered as comments and ignored.
+            
+  -s, --separate-content                     Provided the flag, downloaded content will NOT be separated in folders based on content type.
+            
+  -u, --save-urls                            Provided the flag, all direct urls for content will be saved into txtfile in the output folder.
+  --version                                  Print program version and exit
+  --supported-sites                          Print supported sites and exit
    ```
 
 
