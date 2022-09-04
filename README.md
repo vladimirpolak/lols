@@ -18,8 +18,8 @@ _Using executable_
 1. Download bundled executable from [here](https://www.example.com).
 2. In command line navigate to the folder containing the app.
 3. Run the program
-   ```
-   app [url] [flags]
+   ```sh
+   lols [url] [options]
    ```
 
 ### Git clone
@@ -41,13 +41,32 @@ _Use of git clone and python enviroment_
    ```
 5. Run the program
    ```sh
-   app [url] [flags]
+   lols.py [url] [options]
    ```
 
 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+Basic usage syntax is as follows:
+   ```
+   [program] [url] [options]
+   ```
+
+### Options
+   ```
+  -h, --help                     Show help and exit.
+
+  -a FILE, --batch-file FILE     (alpha)File containing URLs to download, one URL per line.
+                                  Lines starting with '#', ';' or ']' are considered as comments and ignored.
+
+  -s, --separate-content         Provided the flag, downloaded content will NOT be separated in folders based on content type.
+  
+  -u, --save-urls                Provided the flag, all direct urls for content will be saved into txtfile in the output folder.
+  --version                      Print program version and exit
+  --supported-sites              Print supported sites and exit
+   ```
+
 
 
 
