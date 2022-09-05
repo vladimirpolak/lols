@@ -108,4 +108,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Vladimír Polák - vladimirpolak2@gmail.com - Dio#7865
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/vladimirpolak/lols_v3](https://github.com/vladimirpolak/lols_v3)
