@@ -63,8 +63,7 @@ def parse_options():
         exit()
 
     if not (input_url or batchfile):
-        console.print("[bright_red]You need to provide some URL![/bright_red]")
-        exit()
+        input_url = console.input("Enter URL to scrape: ").strip()
 
     app_options = {
         "link": input_url,
