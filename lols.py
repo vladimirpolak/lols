@@ -162,8 +162,9 @@ class LoLs:
 if __name__ == '__main__':
     app_options = parse_options()
 
+    logs_dir = "logs"
     log_filename = f"{curr_time()}.log"
-    log_filepath = Path().cwd() / log_filename
+    log_filepath = Path().cwd() / logs_dir / log_filename
     logging.basicConfig(
         handlers=[logging.FileHandler(str(log_filepath), 'w', 'utf-8')],
         level=logging.DEBUG,
