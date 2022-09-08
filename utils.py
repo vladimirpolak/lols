@@ -4,6 +4,7 @@ from collections import defaultdict
 from downloader import Item
 from console import console
 from datetime import datetime
+import logging
 import json
 import base64
 
@@ -97,3 +98,22 @@ def slugify(input_str: str, sep: str = "-", del_special_chars: bool = False):
 def curr_time(format: str = "%Y-%m-%d-%H-%M"):
     return datetime.now().strftime(format)
 
+
+def logs_setup(
+        logs_directory: str = "logs",
+        log_filename: str = str(curr_time())
+):
+    if logs_directory:
+        log_dir = Path().cwd() / logs_directory
+        if not log_dir.exists():
+            log_dir.mkdir()
+        log_path = log_dir / log_filename
+    else:
+        log_path = Path.cwd() / log_filename
+
+    logging.basicConfig(
+        handlers=[logging.FileHandler(str(log_path), 'w', 'utf-8')],
+        level=logging.DEBUG,
+        format='%(levelname)s %(asctime)s %(message)s',
+        datefmt='%d/%m/%Y %I:%M:%S',
+    )
