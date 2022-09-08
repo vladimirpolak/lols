@@ -62,13 +62,17 @@ def print_data(data: List[Item]):
         console.print(f"{count} {content_type.name.lower()}s.")
 
 
-def dump_curr_session(cookies: dict, items_to_download: List[Item]):
-    output = dict()
-    output["cookies"] = cookies
-    output["items"] = [item.__dict__ for item in items_to_download]
+def dump_curr_session(
+        cookies: dict,
+        items_to_download: List[Item],
+        filename: str = "terminated_session"
+):
+    data = dict()
+    data["cookies"] = cookies
+    data["items"] = [item.__dict__() for item in items_to_download]
 
-    with open("../terminated_session.json", "w") as outfile:
-        json.dump(output, outfile, indent=4)
+    with open(f"{filename}.json", "w") as outfile:
+        json.dump(data, outfile, indent=4)
 
 
 def decode_base64(input_str: str):
