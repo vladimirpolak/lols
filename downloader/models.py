@@ -29,7 +29,7 @@ class Item:
             "source": self.source,
             "filename": self.filename,
             "extension": self.extension,
-            "content_type": self.content_type.name,
+            "content_type": self.content_type.value,
             "album_title": self.album_title,
             "headers": self.headers
         }

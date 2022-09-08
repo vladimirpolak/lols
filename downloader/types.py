@@ -48,10 +48,14 @@ audio_extensions = audio_extensions + [ext.upper() for ext in audio_extensions]
 
 
 class ContentType(Enum):
-    IMAGE = auto()
-    VIDEO = auto()
-    AUDIO = auto()
-    ARCHIVE = auto()
+    IMAGE = 'image'
+    VIDEO = 'video'
+    AUDIO = 'audio'
+    ARCHIVE = 'archive'
+
+    @classmethod
+    def from_str(cls, string_repr: str):
+        return cls(string_repr)
 
 
 def determine_content_type_(filename: str) -> ContentType:
@@ -67,15 +71,3 @@ def determine_content_type_(filename: str) -> ContentType:
         return ContentType.AUDIO
     raise ContentTypeError(f"Unknown extension '{filename}'!")
 
-# def determine_content_type_(filename: str) -> str:
-#     filename = filename.lower()
-#
-#     if any([filename.endswith(ext) for ext in img_extensions]):
-#         return "image"
-#     elif any([filename.endswith(ext) for ext in vid_extensions]):
-#         return "video"
-#     elif any([filename.endswith(ext) for ext in archive_extensions]):
-#         return "archive"
-#     elif any([filename.endswith(ext) for ext in audio_extensions]):
-#         return "audio"
-#     raise ContentTypeError(f"Unknown extension '{filename}'!")
