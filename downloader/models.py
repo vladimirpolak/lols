@@ -24,6 +24,16 @@ class Item:
     def headers(self):
         return self.headers_ or {}
 
+    def __dict__(self):
+        return {
+            "source": self.source,
+            "filename": self.filename,
+            "extension": self.extension,
+            "content_type": self.content_type.name,
+            "album_title": self.album_title,
+            "headers": self.headers
+        }
+
     def __str__(self):
         return f"Item(" \
                f"{self.filename}{self.extension}, " \
