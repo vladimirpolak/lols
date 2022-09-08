@@ -103,6 +103,7 @@ def logs_setup(
         logs_directory: str = "logs",
         log_filename: str = str(curr_time())
 ):
+    log_filename = f"{log_filename}.log"
     if logs_directory:
         log_dir = Path().cwd() / logs_directory
         if not log_dir.exists():
