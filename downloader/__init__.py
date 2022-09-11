@@ -166,7 +166,8 @@ class Downloader(HeadersMixin):
     def output_path(self):
         return self._create_path(self.OUTPUT_DIR)
 
-    def _create_path(self, dirname_or_absolutepath: str):
+    @staticmethod
+    def _create_path(dirname_or_absolutepath: str):
         path = Path(dirname_or_absolutepath)
         if path.is_absolute():
             return path
