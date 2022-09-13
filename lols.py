@@ -7,7 +7,7 @@ from utils import load_file, print_data, dump_curr_session, logs_setup
 from downloader.models import Item
 from typing import Union, List, TypeVar
 import logging
-from scrapers import get_scraper_classes
+from scrapers import get_scraper_classes, get_extractor_classes, get_crawler_classes
 
 
 Extractor = TypeVar('Extractor', bound='ExtractorBase')
@@ -101,25 +101,24 @@ class LoLs:
 
         # Run the crawled html against Extractor classes
         data = []
-        for scraper in get_scraper_classes():
-            if scraper.SCRAPER_TYPE == "EXTRACTOR":
-                links = []
+        for extractor in get_extractor_classes():
+            links = []
 
-                # Loops through crawled pages
-                for url, html in crawled_html.items():
-                    # Searches for valid urls here
-                    scraper_output = scraper.extract_from_html(html)
-                    if scraper_output:
-                        links.extend(scraper_output)
+            # Loops through crawled pages
+            for url, html in crawled_html.items():
+                # Searches for valid urls here
+                scraper_output = extractor.extract_from_html(html)
+                if scraper_output:
+                    links.extend(scraper_output)
 
-                # If any valid links were scraped it extracts data from them
-                if links:
-                    logging.debug(f"{scraper.__name__} extracted {len(links)} urls."
-                                  f"DATA: {links}")
-                    if scrape_extracted_links:
-                        s = scraper(self.downloader)
-                        for link_ in links:
-                            data.extend(s.extract_data(link_))
+            # If any valid links were scraped it extracts data from them
+            if links:
+                logging.debug(f"{extractor.__name__} extracted {len(links)} urls."
+                              f"DATA: {links}")
+                if scrape_extracted_links:
+                    s = extractor(self.downloader)
+                    for link_ in links:
+                        data.extend(s.extract_data(link_))
         return data
 
     def download(self, items: List[Item], dir_name: str):
