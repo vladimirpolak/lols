@@ -18,7 +18,7 @@ STREAM_URL = "https://media-files{server_num}.bunkr.is"
 # Regex Patterns
 PATTERN_BUNKR_ALBUM = r"((?:https?://)?bunkr\.is/a/\w+)"
 PATTERN_BUNKR_ALBUM_DATA_SCRIPT = r'<script id="__NEXT_DATA__" type="application/json">(\{.*?})</script>'
-PATTERN_BUNKR_VIDEO = rf"((?:https?://)(?:stream|media-files(\d)*|cdn(\d)*)\.bunkr\.is/(?:v/)?[-\w]+?(?:{'|'.join(vid_extensions)}))"
+PATTERN_BUNKR_VIDEO = rf"((?:https?://)(?:stream|media-files(\d)*|cdn(\d)*)\.bunkr\.is/(?:v/)?[-~%\w]+(?:{'|'.join(vid_extensions)}))"
 PATTERN_BUNKR_IMAGE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\w]+(?:{'|'.join(img_extensions)}))"
 PATTERN_BUNKR_ARCHIVE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\w]+(?:{'|'.join(archive_extensions)}))"
 
@@ -191,9 +191,12 @@ class BunkrVideoExtractor(ExtractorBase):
         if json_ and is_fallback:
             page_props = self._fallback_method(json_)
 
-        item_info = page_props["file"]
-        filename = item_info["name"]
-        url_base = item_info["mediafiles"]
+        try:
+            item_info = page_props["file"]
+            filename = item_info["name"]
+            url_base = item_info["mediafiles"]
+        except KeyError:
+            raise ExtractionError(f"Failed to extract info: {page_props}")
         return f"{url_base}/{filename}"
 
     def _fallback_method(self, json: dict):
@@ -207,7 +210,10 @@ class BunkrVideoExtractor(ExtractorBase):
 
     @classmethod
     def extract_from_html(cls, html):
-        return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
+        data = [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
+        print(data)
+        exit()
+        return data
 
 
 class BunkrImageExtractor(ExtractorBase):
