@@ -211,8 +211,6 @@ class BunkrVideoExtractor(ExtractorBase):
     @classmethod
     def extract_from_html(cls, html):
         data = [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
-        print(data)
-        exit()
         return data
 
 
