@@ -81,10 +81,7 @@ class LoLs:
     def extractor_method(self,
                          url: str,
                          extractor: Extractor):
-        # Initiate extractor
-        e = extractor(self.downloader)
-
-        return e.extract_data(url)
+        return extractor(self.downloader).extract_data(url)
 
     def crawler_method(self,
                        url: str,
