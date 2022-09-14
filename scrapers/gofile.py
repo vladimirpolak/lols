@@ -60,7 +60,6 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
         "https://gofile.io/d/eG1URC",  # 1 video
         "https://gofile.io/d/RPoxUP",  # Multiple directories
         "https://gofile.io/d/rhjWaX",  # 1 archive
-        "https://gofile.io/d/O407z8",  # Images and Videos
         "https://gofile.io/d/rtHOqG",  # 1 video
     ]
 
