@@ -17,7 +17,7 @@ There are 2 main ways to use the script:
 _Using executable_
 1. Download bundled executable from [here](https://www.example.com).
 2. In command line navigate to the folder containing the app.
-3. Run the program
+3. Run the program directly or through command line as follows.
    ```sh
    lols [url] [options]
    ```
