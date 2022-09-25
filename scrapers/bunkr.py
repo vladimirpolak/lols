@@ -72,7 +72,7 @@ class BunkrAlbumExtractor(ExtractorBase):
 
         try:
             title = page_props['album']['name']
-            files = page_props['files']
+            files = page_props['album']['files']
         except KeyError as e:
             raise ExtractionError(
                 f"Failed extracting '{e}'\n"
