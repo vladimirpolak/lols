@@ -7,7 +7,7 @@ import re
 
 
 PATTERN_SMGFORUM_THREAD = r"(?:https://)?forums\.socialmediagirls\.com/threads/(?P<album_id>[-\w\.]+)/?"
-PATTERN_SMGFORUM_THREADTITLE = r'<h1 class="p-title-value"(?:.*)</span>(?P<thread_name>[-/\w\s]+)</h1>'
+PATTERN_SMGFORUM_THREADTITLE = '<meta property="og:title" content="(?:Request - )?(?P<thread_title>.*?)"\s+/>'
 PATTERN_SMGFORUM_THREAD_NEXTPAGE = r'<a\s+' \
                                    r'href="(/threads/{album_id}/page-\d+)"\s+' \
                                    r'class="[-\w\d\s]*pageNav-jump--next">'
@@ -74,7 +74,6 @@ class ForumSMGCrawler(ForumSMGAuth, CrawlerBase):
             raise ExtractionError(f"Not authorized! (Most likely login session is expired.)")
         if not self.THREAD_NAME:
             self.THREAD_NAME = self.extract_threadname(html)
-            print(self.THREAD_NAME)
         next_page = self._extract_nextpage(html)
 
         return html, next_page
@@ -91,10 +90,10 @@ class ForumSMGCrawler(ForumSMGAuth, CrawlerBase):
         return None
 
     def extract_threadname(self, html):
-        results = re.search(PATTERN_SMGFORUM_THREADTITLE, html)
-        if not results:
+        match = re.search(PATTERN_SMGFORUM_THREADTITLE, html)
+        if not match:
             return None
-        title = results.group('thread_name')
+        title = match.group('thread_title')
         return self._parse_title(title)
 
     @staticmethod
