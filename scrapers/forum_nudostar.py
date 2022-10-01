@@ -11,11 +11,7 @@ PATTERN_NUDOSTARFORUM_THREAD = r"(?:https://)?nudostar\.com/forum/threads/([-\w\
 PATTERN_NUDOSTARFORUM_IMAGE = r"(?:(?:https://)?nudostar\.com)?/(forum/attachments/([-\w]+)-([a-zA-Z]+)\.\d+/)"
 PATTERN_NUDOSTARFORUM_VIDEO = rf"(?:(?:https://)?nudostar\.com)?/(forum/data/video/\d+/[-\w]+(?:{'|'.join(vid_extensions)}))"
 PATTERN_NUDOSTARFORUM_THREAD_NEXTPAGE = r'rel="next"\s*href="(.*?)"'
-PATTERN_NUDOSTARFORUM_THREADTITLE = r'<h1\s+class="p-title-value">' \
-                                    r'<span\s+[-\w\s"=]+>[\w]+</span>' \
-                                    r'<span\s+[-\w\s"=]+>&[\w]+;</span>' \
-                                    r'(.*)' \
-                                    r'</h1>'
+PATTERN_NUDOSTARFORUM_THREADTITLE = '<meta property="og:title" content="(?:OnlyFans - )?(?P<thread_title>.*?)"\s+/>'
 
 Html = str
 NextPage = str
@@ -87,14 +83,10 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
         return None
 
     def _extract_threadname(self, html):
-        p = re.compile(PATTERN_NUDOSTARFORUM_THREADTITLE)
-        results = p.findall(html)
-        if isinstance(results, list) and results:
-            return results[0]
-        elif isinstance(results, str):
-            return results
-        else:
-            return None
+        match = re.search(PATTERN_NUDOSTARFORUM_THREADTITLE, html)
+        if match:
+            return match.group("thread_title")
+        return None
 
     def _extract_model_name(self, html):
         patterns = (
