@@ -48,6 +48,23 @@ parser.add_argument(
     dest='supported_sites',
     help='Print supported sites and exit'
 )
+parser.add_argument(
+    '--skip-existing',
+    action='store_true',
+    dest='skip_existing',
+    help='Skips items with colliding names.'
+         'By default the duplicate items are downloaded with integer added to the name.'
+)
+parser.add_argument(
+    '--download-path',
+    dest='download_path',
+    help='Provide custom download path.'
+)
+parser.add_argument(
+    '--album-name',
+    dest='album_name',
+    help='Provide custom album name.'
+)
 
 
 def parse_options():
@@ -57,6 +74,9 @@ def parse_options():
     batchfile = Path(args.batchfile) if args.batchfile else None
     separate_content = False if args.separate else True
     save_urls = args.save_urls
+    skip_existing = args.skip_existing
+    download_path = args.download_path
+    album_name = args.album_name
     ss = args.supported_sites
     if ss:
         print_supported_sites(console=console)
@@ -69,7 +89,10 @@ def parse_options():
         "link": input_url,
         "load_from_file": batchfile,
         "separate": separate_content,
-        "save_urls": save_urls
+        "save_urls": save_urls,
+        "skip_existing": skip_existing,
+        "download_path": download_path,
+        "album_name": album_name
     }
     return app_options
 
