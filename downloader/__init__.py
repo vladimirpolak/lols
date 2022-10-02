@@ -20,9 +20,11 @@ class Downloader(HeadersMixin):
     AUDIO_DIR_NAME = "Audio"
 
     def __init__(self,
-                 session: requests.Session
+                 session: requests.Session,
+                 download_path: str = None
                  ):
         self._session = session
+        self.custom_download_path = download_path
 
     def set_session(self, session: requests.Session):
         self._session = session
@@ -73,7 +75,8 @@ class Downloader(HeadersMixin):
                       save_urls: bool,
                       album_name: str = None,
                       curr_item_num: int = None,
-                      total_length: int = None
+                      total_length: int = None,
+                      skip_existing: bool = False
                       ):
         album_dir = album_name or item.album_title or input(
             f"Enter the name for album directory: "
@@ -90,17 +93,14 @@ class Downloader(HeadersMixin):
         if not dl_dir_path.exists():
             dl_dir_path.mkdir(parents=True)
 
-        step = 0
-        while True:
-            if step:
-                file_path = dl_dir_path / (f'{item.filename} ({step})' + item.extension)
-            else:
-                file_path = dl_dir_path / (item.filename + item.extension)
-
-            # Skip if file already exists
-            if not file_path.exists():
-                break
-            step += 1
+        file_path = self.generate_download_path(
+            download_directory=dl_dir_path,
+            download_item=item,
+            skip_existing=skip_existing
+        )
+        if file_path is None:
+            logging.debug(f"Filename already exists, skipping: {item}")
+            return
 
         progress_info = ""
         if curr_item_num:
@@ -146,6 +146,22 @@ class Downloader(HeadersMixin):
                 f.write(item.source)
                 f.write("\n")
 
+    @staticmethod
+    def generate_download_path(download_directory: Path, download_item: Item, skip_existing: bool, step: int = 1):
+        file_path = download_directory / (download_item.filename + download_item.extension)
+
+        if file_path.exists():
+            if skip_existing is False:
+                while True:
+                    file_path = download_directory / (f'{download_item.filename} ({step})' + download_item.extension)
+                    if not file_path.exists():
+                        break
+                    step += 1
+                return file_path
+            else:
+                return None
+        return file_path
+
     @classmethod
     def is_invalid(cls, response: requests.Response) -> bool:
         if response.status_code >= 400:
@@ -164,6 +180,8 @@ class Downloader(HeadersMixin):
 
     @property
     def output_path(self):
+        if self.custom_download_path:
+            return self._create_path(self.custom_download_path)
         return self._create_path(self.OUTPUT_DIR)
 
     @staticmethod

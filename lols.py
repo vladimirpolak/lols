@@ -23,9 +23,10 @@ class LoLs:
         self.input_link = link
         self.load_from_file = load_from_file
         self.session = kwargs.pop("session", None) or requests.Session()
-        self.downloader = kwargs.pop("downloader", None) or Downloader(self.session)
         self.thread_name = ""
         self.options = kwargs
+
+        self.downloader = kwargs.pop("downloader", None) or Downloader(self.session, self.options["download_path"])
 
     def main(self):
         """
@@ -124,15 +125,15 @@ class LoLs:
         step = 1
         while items:
             item = items.pop(0)
-
             try:
                 self.downloader.download_item(
                     item=item,
+                    curr_item_num=step,
+                    total_length=list_length,
+                    album_name=self.options["album_name"] or dir_name,
                     separate_content=self.options["separate"],
                     save_urls=self.options["save_urls"],
-                    album_name=dir_name,
-                    curr_item_num=step,
-                    total_length=list_length
+                    skip_existing=self.options["skip_existing"]
                 )
                 step += 1
 
