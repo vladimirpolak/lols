@@ -4,8 +4,8 @@ from utils import split_filename_ext
 import re
 
 PATTERN_EROME_ALBUM = r"(?:https://)?(?:www\.)?erome\.com/a/\w+"
-PATTERN_EROME_IMAGE = rf"(?:https://)?s\d+\.erome\.com/\d+/\w+/\w+(?:{'|'.join(img_extensions)})\?v=\d+"
-PATTERN_EROME_VIDEO = rf"(?:https://)?s\d+\.erome\.com/\d+/\w+/\w+(?:{'|'.join(vid_extensions)})"
+PATTERN_EROME_IMAGE = rf"(?:https://)?[a-z]\d+\.erome\.com/\d+/\w+/\w+(?:{'|'.join(img_extensions)})\?v=\d+"
+PATTERN_EROME_VIDEO = rf"(?:https://)?[a-z]\d+\.erome\.com/\d+/\w+/\w+(?:{'|'.join(vid_extensions)})"
 
 
 class EromeAlbumExtractor(ExtractorBase):
