@@ -56,6 +56,13 @@ parser.add_argument(
          'By default the duplicate items are downloaded with integer added to the name.'
 )
 parser.add_argument(
+    '--overwrite-existing',
+    action='store_true',
+    dest='overwrite_existing',
+    help='Ovewrites items with duplicate names.'
+         'By default differentiates items by appending integer to the filename.'
+)
+parser.add_argument(
     '--download-path',
     dest='download_path',
     help='Provide custom download path.'
@@ -75,6 +82,7 @@ def parse_options():
     separate_content = False if args.separate else True
     save_urls = args.save_urls
     skip_existing = args.skip_existing
+    overwrite_existing = args.overwrite_existing
     download_path = args.download_path
     album_name = args.album_name
     ss = args.supported_sites
@@ -91,6 +99,7 @@ def parse_options():
         "separate": separate_content,
         "save_urls": save_urls,
         "skip_existing": skip_existing,
+        "overwrite_existing": overwrite_existing,
         "download_path": download_path,
         "album_name": album_name
     }

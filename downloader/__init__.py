@@ -76,7 +76,8 @@ class Downloader(HeadersMixin):
                       album_name: str = None,
                       curr_item_num: int = None,
                       total_length: int = None,
-                      skip_existing: bool = False
+                      skip_existing: bool = False,
+                      overwrite_existing: bool = False
                       ):
         album_dir = album_name or item.album_title or input(
             f"Enter the name for album directory: "
@@ -89,14 +90,16 @@ class Downloader(HeadersMixin):
         else:
             dl_dir_path = album_path
 
-        # Create directory
+        # Create download directory
         if not dl_dir_path.exists():
             dl_dir_path.mkdir(parents=True)
 
+        # Create file path
         file_path = self.generate_download_path(
             download_directory=dl_dir_path,
             download_item=item,
-            skip_existing=skip_existing
+            skip_existing=skip_existing,
+            overwrite_existing=overwrite_existing
         )
         if file_path is None:
             logging.debug(f"Filename already exists, skipping: {item}")
@@ -147,17 +150,26 @@ class Downloader(HeadersMixin):
                 f.write("\n")
 
     @staticmethod
-    def generate_download_path(download_directory: Path, download_item: Item, skip_existing: bool, step: int = 1):
+    def generate_download_path(
+            download_directory: Path,
+            download_item: Item,
+            skip_existing: bool,
+            overwrite_existing: bool,
+            step: int = 1):
         file_path = download_directory / (download_item.filename + download_item.extension)
 
         if file_path.exists():
             if skip_existing is False:
-                while True:
-                    file_path = download_directory / (f'{download_item.filename} ({step})' + download_item.extension)
-                    if not file_path.exists():
-                        break
-                    step += 1
-                return file_path
+                if overwrite_existing:
+                    file_path = download_directory / (download_item.filename + download_item.extension)
+                    return file_path
+                else:
+                    while True:
+                        file_path = download_directory / (f'{download_item.filename} ({step})' + download_item.extension)
+                        if not file_path.exists():
+                            break
+                        step += 1
+                    return file_path
             else:
                 return None
         return file_path

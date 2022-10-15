@@ -133,7 +133,8 @@ class LoLs:
                     album_name=self.options["album_name"] or dir_name,
                     separate_content=self.options["separate"],
                     save_urls=self.options["save_urls"],
-                    skip_existing=self.options["skip_existing"]
+                    skip_existing=self.options["skip_existing"],
+                    overwrite_existing=self.options["overwrite_existing"]
                 )
                 step += 1
 
