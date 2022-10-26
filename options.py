@@ -21,8 +21,8 @@ parser.add_argument(
     '-s', '--separate-content',
     dest='separate',
     action="store_true",
-    help="Provided the flag, downloaded items will be separated into"
-         "corresponding folders by the content type. (default=True)"
+    help="Provided the flag, downloaded items will NOT be separated into "
+         "corresponding folders. (default=True)"
 )
 parser.add_argument(
     '-u', '--save-urls',
