@@ -70,5 +70,7 @@ def determine_content_type_(filename: str) -> ContentType:
         return ContentType.ARCHIVE
     elif any([filename.endswith(ext) for ext in audio_extensions]):
         return ContentType.AUDIO
+    elif filename.endswith('m3u8'):
+        return ContentType.M3U8
     raise ContentTypeError(f"Unknown extension '{filename}'!")
 
