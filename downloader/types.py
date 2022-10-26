@@ -52,6 +52,7 @@ class ContentType(Enum):
     VIDEO = 'video'
     AUDIO = 'audio'
     ARCHIVE = 'archive'
+    M3U8 = 'm3u8'
 
     @classmethod
     def from_str(cls, string_repr: str):
