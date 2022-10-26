@@ -87,7 +87,7 @@ class ExtractorBase(ScraperBase):
             logging.error(e)
 
         if len(self.ALL_ITEMS) > 1:
-            logging.info(f"{self.__class__.__name__} EXTRACTED {len(self.ALL_ITEMS)} ITEMS")
+            logging.debug(f"{self.__class__.__name__} EXTRACTED {len(self.ALL_ITEMS)} ITEMS")
         return self.ALL_ITEMS
 
     @abstractmethod
