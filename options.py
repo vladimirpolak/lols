@@ -72,6 +72,13 @@ parser.add_argument(
     dest='album_name',
     help='Provide custom album name.'
 )
+parser.add_argument(
+    '-d',
+    '--debug',
+    dest='debug',
+    action='store_true',
+    help='Enable debug mode.'
+)
 
 
 def parse_options():
@@ -86,6 +93,7 @@ def parse_options():
     download_path = args.download_path
     album_name = args.album_name
     ss = args.supported_sites
+    debug = args.debug
     if ss:
         print_supported_sites(console=console)
         exit()
@@ -101,7 +109,8 @@ def parse_options():
         "skip_existing": skip_existing,
         "overwrite_existing": overwrite_existing,
         "download_path": download_path,
-        "album_name": album_name
+        "album_name": album_name,
+        "debug": debug
     }
     return app_options
 

@@ -100,6 +100,7 @@ def curr_time(format: str = "%Y-%m-%d-%H-%M"):
 
 
 def logs_setup(
+        debug: bool,
         logs_directory: str = "logs",
         log_filename: str = str(curr_time())
 ):
@@ -113,8 +114,8 @@ def logs_setup(
         log_path = Path.cwd() / log_filename
 
     logging.basicConfig(
-        handlers=[logging.FileHandler(str(log_path), 'w', 'utf-8')],
-        level=logging.DEBUG,
+        handlers=[logging.FileHandler(str(log_path), 'w', 'utf-8'), logging.StreamHandler()],
+        level=logging.DEBUG if debug else logging.INFO,
         format='%(levelname)s %(asctime)s %(message)s',
         datefmt='%d/%m/%Y %I:%M:%S',
     )

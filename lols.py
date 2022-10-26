@@ -157,8 +157,7 @@ class LoLs:
 
 
 if __name__ == '__main__':
-    logs_setup()
-
     app_options = parse_options()
+    logs_setup(app_options["debug"])
     lols = LoLs(**app_options)
     lols.main()
