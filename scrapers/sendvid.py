@@ -4,7 +4,7 @@ from downloader.types import determine_content_type_
 import re
 
 # Regex Patterns
-PATTERN_SENDVIDEO_VIDEOPAGE = r"https://sendvid\.com/[a-z\d]"
+PATTERN_SENDVIDEO_VIDEOPAGE = r"https://sendvid\.com/[a-z\d]+"
 
 
 class SendvideoVideoExtractor(ExtractorBase):
