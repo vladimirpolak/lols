@@ -62,6 +62,10 @@ Imagebam Image Hosting (Indirect Link)
 --domain: imagebam.com
 --example url: https://www.imagebam.com/image/c444481329385981
 
+Xvideos Video Page
+--domain: xvideos.com
+--example url: https://www.xvideos.com/video47959115/sexy_bitch_koketochka555_masturbates_on_camera_and_shows_tits
+
 Nudostar Forum Thread
 --domain: nudostar.com
 --example url: https://nudostar.com/forum/threads/ck0rf.34621/
@@ -129,3 +133,7 @@ Socialmediagirls Forum Image
 Socialmediagirls Forum Video
 --domain: forums.socialmediagirls.com
 --example url: https://symedia.sexy-youtubers.com/forum/2020/06/IMG_0508_391443.mp4
+
+Sendvideo Video Hosting
+--domain: sendvideo.com
+--example url: https://sendvid.com/7ocshpp8
