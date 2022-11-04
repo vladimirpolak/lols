@@ -18,7 +18,7 @@ STREAM_URL = "https://media-files{server_num}.bunkr.is"
 
 # Regex Patterns
 PATTERN_BUNKR_ALBUM = r"((?:https?://)?bunkr\.is/a/\w+)"
-PATTERN_BUNKR_ALBUM_DATA_SCRIPT = r'<script id="__NEXT_DATA__" type="application/json">(\{.*?})</script>'
+PATTERN_BUNKR_ALBUM_DATA_SCRIPT = r'<script id="__NEXT_DATA__" type="application/json">(?P<json>\{.*?})</script>'
 PATTERN_BUNKR_VIDEO = rf"((?:https?://)(?:stream|media-files(\d)*|cdn(\d)*)\.bunkr\.is/(?:v/)?[-~%\w]+(?:{'|'.join(vid_extensions)}))"
 PATTERN_BUNKR_IMAGE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\w]+(?:{'|'.join(img_extensions)}))"
 PATTERN_BUNKR_ARCHIVE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\w]+(?:{'|'.join(archive_extensions)}))"
@@ -52,41 +52,50 @@ class BunkrAlbumExtractor(ExtractorBase):
             }
         )
         html = response.text
+        data = self._extract_data_tag(html)
 
-        # Extract the script that fetches album data in json format
+        if data and not data["isFallback"]:
+            page_props = data["props"]["pageProps"]
+        else:
+            page_props = self._fallback_method(build_id=data['buildId'])
+
+        self._parse_page_props(page_props)
+
+    def _extract_data_tag(self, html):
+        """Returns data in json format"""
         pattern = re.compile(PATTERN_BUNKR_ALBUM_DATA_SCRIPT)
         data_tag = re.search(pattern, html)
-
         if not data_tag:
-            logging.debug(
-                f"ERROR Didn't find data tag on page {self.url}."
-            )
-
-        # Load into json
-        json_ = json.loads(data_tag.group(1))
-        is_fallback = json_["isFallback"]
-
-        if json_ and not is_fallback:
-            page_props = json_["props"]["pageProps"]
-        else:
-            page_props = self._fallback_method(json_)
-
-        try:
-            self.title = page_props['album']['name']
-            files = page_props['album']['files']
-        except KeyError as e:
             raise ExtractionError(
-                f"Failed extracting '{e}'\n"
-                f"Data: {page_props}"
+                f"Didn't find data tag on page {self.url}."
             )
 
-        logging.info(
-            f"[SCRAPED] ALBUM TITLE: {self.title} "
-            f"DATA LENGTH: {len(files)}"
-        )
+        return json.loads(data_tag.group('json'))
+
+    def _parse_page_props(self, page_props: dict):
+        self.title = self._get_title(page_props)
+        files = self._get_album_files(page_props)
 
         for item in files:
             self._parse_item(item)
+
+    @staticmethod
+    def _get_title(page_props):
+        try:
+            title = page_props['album']['name']
+        except KeyError:
+            raise ExtractionError(f"Failed to extract album title. Data: {page_props}")
+        else:
+            return title
+
+    @staticmethod
+    def _get_album_files(page_props):
+        try:
+            files = page_props['album']['files']
+        except KeyError:
+            raise ExtractionError(f"Failed to extract album files. Data: {page_props}")
+        else:
+            return files
 
     def _parse_item(self, item: dict):
         album_title = self.title
@@ -99,32 +108,33 @@ class BunkrAlbumExtractor(ExtractorBase):
                 f"Error parsing data for bunkr.\n"
                 f"Data to parse: {item}"
             )
-            return
+        else:
+            if content_type == ContentType.IMAGE:
+                source = f"{item['i']}/{file_w_extension}"
+            elif content_type == ContentType.VIDEO:
+                server_num = extract_server_number(item['cdn'])
+                source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
+            elif content_type == ContentType.AUDIO:
+                source = f"{item['cdn']}/{file_w_extension}"
+            elif content_type == ContentType.ARCHIVE:
+                source = f"{item['cdn']}/{file_w_extension}"
 
-        if content_type == ContentType.IMAGE:
-            source = f"{item['i']}/{file_w_extension}"
-        elif content_type == ContentType.VIDEO:
-            server_num = extract_server_number(item['cdn'])
-            source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
-        elif content_type == ContentType.AUDIO:
-            source = f"{item['cdn']}/{file_w_extension}"
-        elif content_type == ContentType.ARCHIVE:
-            source = f"{item['cdn']}/{file_w_extension}"
+            self.add_item(
+                content_type=content_type,
+                filename=filename,
+                extension=extension,
+                source=source,
+                album_title=album_title
+            )
 
-        self.add_item(
-            content_type=content_type,
-            filename=filename,
-            extension=extension,
-            source=source,
-            album_title=album_title
-        )
-
-    def _fallback_method(self, json):
+    def _fallback_method(self, build_id: str):
+        # Transform the album URL into URL that fetches album's data in json format
         url = yarl.URL(self.url)
-        fetch_url = "https://" + url.host + "/_next/data/" + json['buildId'] + url.path + '.json'
+        fetch_url = "https://" + url.host + "/_next/data/" + build_id + url.path + '.json'
+
         response = self.request(fetch_url)
         if response.status_code != 200:
-            logging.debug(f"ERROR Failed to extract page data from {self.url}.")
+            raise ExtractionError(f"Failed to extract page data from {self.url}.")
         json_ = response.json()
         return json_["pageProps"]
 
