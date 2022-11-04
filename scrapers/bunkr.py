@@ -3,7 +3,8 @@ from downloader.types import (determine_content_type_,
                             img_extensions,
                             vid_extensions,
                             archive_extensions,
-                            ContentType)
+                            ContentType,
+                            ContentTypeError)
 from exceptions import ExtractionError
 from utils import split_filename_ext
 from typing import Union
@@ -71,7 +72,7 @@ class BunkrAlbumExtractor(ExtractorBase):
             page_props = self._fallback_method(json_)
 
         try:
-            title = page_props['album']['name']
+            self.title = page_props['album']['name']
             files = page_props['album']['files']
         except KeyError as e:
             raise ExtractionError(
@@ -80,38 +81,43 @@ class BunkrAlbumExtractor(ExtractorBase):
             )
 
         logging.info(
-            f"[SCRAPED] ALBUM TITLE: {title} "
+            f"[SCRAPED] ALBUM TITLE: {self.title} "
             f"DATA LENGTH: {len(files)}"
         )
 
         for item in files:
-            album_title = title
-            file_w_extension = item['name']
-            filename, extension = split_filename_ext(file_w_extension)
+            self._parse_item(item)
+
+    def _parse_item(self, item: dict):
+        album_title = self.title
+        file_w_extension = item['name']
+        filename, extension = split_filename_ext(file_w_extension)
+        try:
             content_type = determine_content_type_(extension)
-
-            if content_type == ContentType.IMAGE:
-                source = f"{item['i']}/{file_w_extension}"
-            elif content_type == ContentType.VIDEO:
-                server_num = extract_server_number(item['cdn'])
-                source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
-            elif content_type == ContentType.AUDIO:
-                source = f"{item['cdn']}/{file_w_extension}"
-            elif content_type == ContentType.ARCHIVE:
-                source = f"{item['cdn']}/{file_w_extension}"
-            else:
-                raise NotImplementedError(
-                    f"Error parsing data for bunkr.\n"
-                    f"Data to parse: {item}"
-                )
-
-            self.add_item(
-                content_type=content_type,
-                filename=filename,
-                extension=extension,
-                source=source,
-                album_title=album_title
+        except ContentTypeError:
+            logging.error(
+                f"Error parsing data for bunkr.\n"
+                f"Data to parse: {item}"
             )
+            return
+
+        if content_type == ContentType.IMAGE:
+            source = f"{item['i']}/{file_w_extension}"
+        elif content_type == ContentType.VIDEO:
+            server_num = extract_server_number(item['cdn'])
+            source = f"{STREAM_URL.format(server_num=server_num)}/{file_w_extension}"
+        elif content_type == ContentType.AUDIO:
+            source = f"{item['cdn']}/{file_w_extension}"
+        elif content_type == ContentType.ARCHIVE:
+            source = f"{item['cdn']}/{file_w_extension}"
+
+        self.add_item(
+            content_type=content_type,
+            filename=filename,
+            extension=extension,
+            source=source,
+            album_title=album_title
+        )
 
     def _fallback_method(self, json):
         url = yarl.URL(self.url)
