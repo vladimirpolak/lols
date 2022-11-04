@@ -38,9 +38,9 @@ class XvideosVideoExtractor(ExtractorBase):
         )
 
     def _extract_video_info(self, html):
-        url = self._extract_stream_url(html)
+        stream_url = self._extract_stream_url(html)
         title = self._extract_title(html)
-        return title, url
+        return title, stream_url
 
     def _extract_stream_url(self, html):
         pattern = re.compile(r"html5player\.setVideoHLS\('(?P<stream_url>.*?)'\)")
