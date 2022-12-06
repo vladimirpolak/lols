@@ -1,10 +1,11 @@
+import logging
+import re
+
 from downloader import Downloader, Item
 from downloader.models import ContentType
 from abc import abstractmethod
 from exceptions import ExtractionError, ContentTypeError
 from typing import List, Union
-import logging
-import re
 
 
 class ScraperBase:
@@ -111,9 +112,10 @@ class CrawlerBase(ScraperBase):
     SCRAPER_TYPE = "CRAWLER"
     THREAD_NAME = ""
 
-    def __init__(self, downloader=None):
+    def __init__(self, downloader=None, page_limit: int = 0):
         self._downloader = downloader
         self.initialize()
+        self.page_limit = page_limit
 
     def extract_data(self, url: str) -> str:
         return self._crawl_link(url)
