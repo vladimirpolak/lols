@@ -1,13 +1,13 @@
 import requests
 from console import console
-from options import parse_options
 from downloader import Downloader
 from scrapers._scraper_base import ExtractorBase, CrawlerBase
 from utils import load_file, print_data, dump_curr_session, logs_setup
 from downloader.models import Item
 from typing import Union, List, TypeVar
 import logging
-from scrapers import get_scraper_classes, get_extractor_classes, get_crawler_classes
+from settings import Settings, parse_settings
+from scrapers import get_scraper_classes, get_extractor_classes
 
 
 Extractor = TypeVar('Extractor', bound='ExtractorBase')
@@ -15,18 +15,15 @@ Crawler = TypeVar('Crawler', bound='CrawlerBase')
 
 
 class LoLs:
-    def __init__(self,
-                 link: str = None,
-                 load_from_file: str = None,
-                 **kwargs
-                 ):
-        self.input_link = link
-        self.load_from_file = load_from_file
-        self.session = kwargs.pop("session", None) or requests.Session()
-        self.thread_name = ""
-        self.options = kwargs
+    def __init__(self, settings: Settings):
+        self.settings = settings
 
-        self.downloader = kwargs.pop("downloader", None) or Downloader(self.session, self.options["download_path"])
+        self.input_link = self.settings.input_url
+        self.batchfile = self.settings.batchfile
+        self.session = requests.Session()
+        self.downloader = Downloader(self.session, self.settings.download_path)
+
+        self.thread_name = ""
 
     def main(self):
         """
@@ -35,8 +32,8 @@ class LoLs:
         if self.input_link:
             self.scrape(self.input_link)
 
-        elif self.load_from_file:
-            urls = load_file(self.load_from_file)
+        elif self.batchfile:
+            urls = load_file(self.batchfile)
             for url in urls:
                 self.scrape(url)
 
@@ -55,6 +52,7 @@ class LoLs:
         scraper = self._assign_scraper(url)
 
         if not scraper:
+            console.print(f"No valid scraper for: {url}.")
             return
 
         console.print(f"Chosen scraper: [green]{scraper.DESC}[/green]")
@@ -89,10 +87,10 @@ class LoLs:
                        crawler: Crawler,
                        scrape_extracted_links: bool = True) -> List[Item]:
         # Initiate crawler
-        c = crawler(self.downloader)
+        c = crawler(self.downloader, page_limit=self.settings.crawl_page_limit)
 
         # Crawl the target thread for html
-        crawled_html = c.extract_data(url)
+        crawled_html: dict = c.extract_data(url)
 
         # Thread name (Used to name an output directory)
         self.thread_name = c.THREAD_NAME
@@ -130,11 +128,12 @@ class LoLs:
                     item=item,
                     curr_item_num=step,
                     total_length=list_length,
-                    album_name=self.options["album_name"] or dir_name,
-                    separate_content=self.options["separate"],
-                    save_urls=self.options["save_urls"],
-                    skip_existing=self.options["skip_existing"],
-                    overwrite_existing=self.options["overwrite_existing"]
+                    album_name=self.settings.album_name or dir_name,
+                    separate_content=self.settings.separate_content,
+                    save_urls=self.settings.save_urls,
+                    skip_existing=self.settings.skip_existing,
+                    overwrite_existing=self.settings.overwrite_existing,
+                    omit_download=self.settings.omit_download
                 )
                 step += 1
 
@@ -157,7 +156,8 @@ class LoLs:
 
 
 if __name__ == '__main__':
-    app_options = parse_options()
-    logs_setup(app_options["debug"])
-    lols = LoLs(**app_options)
+    settings = parse_settings()
+
+    logs_setup(settings.debug)
+    lols = LoLs(settings)
     lols.main()
