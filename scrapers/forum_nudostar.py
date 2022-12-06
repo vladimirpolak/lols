@@ -56,6 +56,10 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
             output[url] = html
             url = next_page
 
+            # Break if custom page limit has been reached
+            if self.page_limit and len(output) == self.page_limit:
+                break
+
         return output
 
     def _get_html_nextpage(self, url) -> (Html, NextPage):
