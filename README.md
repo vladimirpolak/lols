@@ -55,16 +55,34 @@ Basic usage syntax is as follows:
 
 ### Options
    ```
-  -h, --help                                 Show help and exit.
-            
-  -a [file.txt], --batch-file [file.txt]     (alpha)File containing URLs to download, one URL per line.
-                                              Lines starting with '#', ';' or ']' are considered as comments and ignored.
-            
-  -s, --separate-content                     Provided the flag, downloaded content will NOT be separated in folders based on content type.
-            
-  -u, --save-urls                            Provided the flag, all direct urls for content will be saved into txtfile in the output folder.
-  --version                                  Print program version and exit
-  --supported-sites                          Print supported sites and exit
+   usage: lols.py [-h] [-a FILE] [-s] [-u] [--session SESSION] [--version] [--supported-sites] [--skip-existing] [--overwrite-existing] [--download-path DOWNLOAD_PATH] [--album-name ALBUM_NAME] [-d] [--page-limit CRAWL_PAGE_LIMIT]
+                  [--omit-download] [--only-mega]
+                  [url]
+   
+   positional arguments:
+     url                   URL to scrape.
+   
+   optional arguments:
+     -h, --help            show this help message and exit
+     -a FILE, --batch-file FILE
+                           File containing URLs to download ('-' for stdin), one URL per line. Lines starting with '#', ';' or ']' are considered as comments and ignored.
+     -s, --separate-content
+                           Provided the flag, downloaded items will NOT be separated into corresponding folders. (default=True)
+     -u, --save-urls       Provided the flag, all direct urls for content will be saved into txtfile in the output folder. (default=False)
+     --session SESSION     Path to a last terminated session file. (.json)
+     --version             Print program version and exit
+     --supported-sites     Print supported sites and exit
+     --skip-existing       Skips items with colliding names.By default the duplicate items are downloaded with integer added to the name.
+     --overwrite-existing  Ovewrites items with duplicate names.By default differentiates items by appending integer to the filename.
+     --download-path DOWNLOAD_PATH
+                           Provide custom download path.
+     --album-name ALBUM_NAME
+                           Provide custom album name.
+     -d, --debug           Enable debug mode.
+     --page-limit CRAWL_PAGE_LIMIT
+                           Limit number of pages scraped when crawling.
+     --omit-download       Skip downloading files, useful when just scraping links like mega.nz or when debugging and don't want to download.
+     --only-mega           Only extract mega.nz urls.
    ```
 
 

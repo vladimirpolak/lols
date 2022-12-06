@@ -137,3 +137,7 @@ Socialmediagirls Forum Video
 Sendvideo Video Hosting
 --domain: sendvideo.com
 --example url: https://sendvid.com/7ocshpp8
+
+Mega.Nz File Hosting (Download Not Supported)
+--domain: mega.nz
+--example url: https://mega.nz/folder/ITkSVDbY#uF8L36gsmHi8ETyHRir4aw
