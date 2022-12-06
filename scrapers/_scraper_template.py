@@ -1,4 +1,5 @@
 from exceptions import ExtractionError, ScraperInitError
+from ._scraper_base import ExtractorBase, CrawlerBase
 from config import Manager as config
 from utils import split_filename_ext
 import logging
