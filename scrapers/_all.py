@@ -35,3 +35,4 @@ from .forum_socialmediagirls import (ForumSMGCrawler,
                                      ForumSMGimageExtractor,
                                      ForumSMGvideoExtractor)
 from .sendvid import SendvideoVideoExtractor
+from .mega import MegaNZExtractor
