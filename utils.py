@@ -37,14 +37,14 @@ def save_links(
         f.write("\n".join(links))
 
 
-def load_file(path: str) -> list:
+def load_file(path: Path) -> list:
     """Opens the provided file as list of lines."""
     try:
-        with open(path, "r") as file:
+        with path.open("r") as file:
             output = [
                 line.strip()
                 for line in file.readlines()
-                if not (line.startswith("#")
+                if not (line.startswith("#")  # Commented lines
                         or line.startswith("//"))
             ]
     except FileNotFoundError:
