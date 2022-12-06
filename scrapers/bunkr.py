@@ -24,9 +24,12 @@ PATTERN_BUNKR_IMAGE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\w]+(?:{'|'.join(img_
 PATTERN_BUNKR_ARCHIVE = rf"((?:https://)?cdn\d+\.bunkr\.is/[-\w]+(?:{'|'.join(archive_extensions)}))"
 
 
-def extract_server_number(url: str) -> int:
-    pattern = re.compile(r"(?:cdn|stream|i|media-files)(\d)*\.bunkr\.is")
-    return pattern.findall(url)[0]
+def extract_server_number(url: str) -> Union[int, None]:
+    pattern = re.compile(r"(?:cdn|stream|i|media-files)(?P<server_num>\d+)\.bunkr\.is")
+    match = re.search(pattern, url)
+    if match:
+        return match.group("server_num")
+    return None
 
 
 class BunkrAlbumExtractor(ExtractorBase):
@@ -109,6 +112,7 @@ class BunkrAlbumExtractor(ExtractorBase):
                 f"Data to parse: {item}"
             )
         else:
+            source = None
             if content_type == ContentType.IMAGE:
                 source = f"{item['i']}/{file_w_extension}"
             elif content_type == ContentType.VIDEO:
@@ -119,13 +123,14 @@ class BunkrAlbumExtractor(ExtractorBase):
             elif content_type == ContentType.ARCHIVE:
                 source = f"{item['cdn']}/{file_w_extension}"
 
-            self.add_item(
-                content_type=content_type,
-                filename=filename,
-                extension=extension,
-                source=source,
-                album_title=album_title
-            )
+            if source:
+                self.add_item(
+                    content_type=content_type,
+                    filename=filename,
+                    extension=extension,
+                    source=source,
+                    album_title=album_title
+                )
 
     def _fallback_method(self, build_id: str):
         # Transform the album URL into URL that fetches album's data in json format
