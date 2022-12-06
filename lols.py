@@ -98,6 +98,8 @@ class LoLs:
         # Run the crawled html against Extractor classes
         data = []
         for extractor in get_extractor_classes():
+            if settings.only_mega and extractor.DOMAIN != "mega.nz":
+                continue
             links = []
 
             # Loops through crawled pages

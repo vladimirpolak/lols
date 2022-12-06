@@ -74,11 +74,12 @@ class Downloader(HeadersMixin):
                       item: Item,
                       separate_content: bool,
                       save_urls: bool,
+                      skip_existing: bool,
+                      overwrite_existing: bool,
+                      omit_download: bool,
                       album_name: str = None,
                       curr_item_num: int = None,
                       total_length: int = None,
-                      skip_existing: bool = False,
-                      overwrite_existing: bool = False
                       ):
         album_dir = album_name or item.album_title or input(
             f"Enter the name for album directory: "
@@ -86,7 +87,7 @@ class Downloader(HeadersMixin):
         album_path = self.output_path / album_dir
 
         # Set download path
-        if separate_content:
+        if separate_content and item.content_type != ContentType.URL:
             dl_dir_path = album_path / self.contenttype_dir(item.content_type)
         else:
             dl_dir_path = album_path
@@ -94,6 +95,19 @@ class Downloader(HeadersMixin):
         # Create download directory
         if not dl_dir_path.exists():
             dl_dir_path.mkdir(parents=True)
+
+        # Save item URL into a txt file
+        if (save_urls or
+                item.content_type == ContentType.URL):
+            with open(album_path / "urls.txt", "a") as f:
+                f.write(item.source)
+                f.write("\n")
+            if item.content_type == ContentType.URL:
+                return
+
+        if omit_download:
+            logging.debug(f"Skipping download of: {item}")
+            return
 
         # Create file path
         file_path = self.generate_download_path(
@@ -136,6 +150,7 @@ class Downloader(HeadersMixin):
             )
 
             console.print(f"Downloading {progress_info} [dark_red]...progress not available...[/dark_red]")
+            logging.debug(response.headers)
             # Download without progress bar
             with open(file_path, 'wb') as f:
                 shutil.copyfileobj(response.raw, f)
@@ -148,11 +163,6 @@ class Downloader(HeadersMixin):
                            console=console) as raw:
                 with open(file_path, 'wb') as f:
                     shutil.copyfileobj(raw, f)
-
-        if save_urls:
-            with open(album_path / "urls.txt", "a") as f:
-                f.write(item.source)
-                f.write("\n")
 
     def m3u8_download(self, stream_url, file_path):
         downloader = M3u8Downloader(
@@ -173,26 +183,24 @@ class Downloader(HeadersMixin):
         file_path = download_directory / (download_item.filename + download_item.extension)
 
         if file_path.exists():
-            if skip_existing is False:
+            if skip_existing is True:
+                return None
+            else:
                 if overwrite_existing:
                     file_path = download_directory / (download_item.filename + download_item.extension)
-                    return file_path
                 else:
                     while True:
                         file_path = download_directory / (
-                                    f'{download_item.filename} ({step})' + download_item.extension)
+                                f'{download_item.filename} ({step})' + download_item.extension
+                        )
                         if not file_path.exists():
                             break
                         step += 1
-                    return file_path
-            else:
-                return None
         return file_path
 
     @classmethod
     def is_invalid(cls, response: requests.Response) -> bool:
-        if response.status_code >= 400:
-            return True
+        return response.status_code >= 400
 
     @classmethod
     def contenttype_dir(cls, content_type: ContentType) -> str:
