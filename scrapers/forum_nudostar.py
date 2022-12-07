@@ -49,16 +49,16 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
 
         while url:
             html, next_page = self._get_html_nextpage(url)
+            output[url] = html
+
             if next_page:
+                # Break if custom page limit has been reached
+                if self.page_limit and len(output) == self.page_limit:
+                    break
                 print(f"Next page: {next_page}")
             else:
                 print("Thread end.")
-            output[url] = html
             url = next_page
-
-            # Break if custom page limit has been reached
-            if self.page_limit and len(output) == self.page_limit:
-                break
 
         return output
 
