@@ -1,12 +1,13 @@
-from typing import List
-from pathlib import Path
-from collections import defaultdict
-from downloader import Item
-from console import console
-from datetime import datetime
 import logging
 import json
 import base64
+
+from typing import List
+from pathlib import Path
+from collections import defaultdict
+from downloader.models import Item
+from console import console
+from datetime import datetime
 
 
 def split_filename_ext(file) -> tuple:
@@ -35,6 +36,17 @@ def save_links(
 
     with open(str(file_path), "w") as f:
         f.write("\n".join(links))
+
+
+def save_to_file(file: Path, data: str):
+    if not file.parent.exists():
+        file.parent.mkdir(parents=True)
+    try:
+        with file.open("a", encoding='utf-8') as f:
+            f.write(data)
+            f.write("\n")
+    except ValueError as e:
+        logging.debug(f"{e}\nFailed to write '{data}' to file at '{file}'.")
 
 
 def load_file(path: Path) -> list:
