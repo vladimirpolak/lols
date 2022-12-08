@@ -1,7 +1,11 @@
+import shutil
+import logging
 import time
 import requests
-from pathlib import Path
 import retry
+import utils
+
+from pathlib import Path
 from .headers import HeadersMixin
 from console import console
 from urllib3.exceptions import ProtocolError
@@ -9,8 +13,6 @@ from .models import Item
 from .types import ContentType
 from rich.progress import wrap_file
 from .m3u8 import M3u8Downloader
-import shutil
-import logging
 
 
 class Downloader(HeadersMixin):
@@ -79,7 +81,7 @@ class Downloader(HeadersMixin):
                       omit_download: bool,
                       album_name: str = None,
                       curr_item_num: int = None,
-                      total_length: int = None,
+                      total_items_len: int = None,
                       ):
         album_dir = album_name or item.album_title or input(
             f"Enter the name for album directory: "
@@ -99,11 +101,11 @@ class Downloader(HeadersMixin):
         # Save item URL into a txt file
         if (save_urls or
                 item.content_type == ContentType.URL):
-            with open(album_path / "urls.txt", "a") as f:
-                f.write(item.source)
-                f.write("\n")
             if item.content_type == ContentType.URL:
+                utils.save_to_file(file=album_path / 'mega.txt', data=item.source)
                 return
+            else:
+                utils.save_to_file(file=album_path / 'urls.txt', data=item.source)
 
         if omit_download:
             logging.debug(f"Skipping download of: {item}")
@@ -127,7 +129,7 @@ class Downloader(HeadersMixin):
         progress_info = ""
         if curr_item_num:
             progress_info = f"[bright_cyan]{curr_item_num}[/bright_cyan]/" \
-                            f"[bright_cyan]{total_length}[/bright_cyan]"
+                            f"[bright_cyan]{total_items_len}[/bright_cyan]"
 
         console.print(f"\nURL: {item.source}")
         # Make request
