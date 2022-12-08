@@ -129,7 +129,7 @@ class LoLs:
                 self.downloader.download_item(
                     item=item,
                     curr_item_num=step,
-                    total_length=list_length,
+                    total_items_len=list_length,
                     album_name=self.settings.album_name or dir_name,
                     separate_content=self.settings.separate_content,
                     save_urls=self.settings.save_urls,
