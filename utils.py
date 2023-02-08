@@ -2,7 +2,8 @@ import logging
 import json
 import base64
 
-from typing import List
+from urllib.parse import unquote
+from typing import List, Union
 from pathlib import Path
 from collections import defaultdict
 from downloader.models import Item
@@ -21,21 +22,6 @@ def split_filename_ext(file) -> tuple:
     extension = "." + file.split('.')[-1]
 
     return filename, extension
-
-
-def save_links(
-        links: List[str],
-        output_path: Path,
-        filename: str,
-        debug: bool
-):
-    file_path = output_path / filename
-
-    if debug:
-        console.print("Saved URLs to {}".format(str(file_path)))
-
-    with open(str(file_path), "w") as f:
-        f.write("\n".join(links))
 
 
 def save_to_file(file: Path, data: str):
@@ -84,12 +70,26 @@ def dump_curr_session(
     data["cookies"] = cookies
     data["items"] = [item.__dict__() for item in items_to_download]
 
-    with open(f"{filename}.json", "w") as outfile:
+    with open(f"{filename}.json", "w", encoding='utf-8') as outfile:
         json.dump(data, outfile, indent=4)
 
 
 def decode_base64(input_str: str):
     return base64.b64decode(input_str).decode()
+
+
+def url_params_to_dict(params: str) -> Union[dict, None]:
+    """
+    key=value&key=value -> {key: value, key: value}
+    :param params: str
+    :return: dict
+    """
+    try:
+        output = {item.split("=")[0]: item.split("=")[-1] for item in unquote(params).split("&")}
+    except IndexError:
+        return None
+    else:
+        return output
 
 
 def delete_special_chars(input_str: str):
