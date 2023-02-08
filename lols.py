@@ -57,9 +57,9 @@ class LoLs:
 
         console.print(f"Chosen scraper: [green]{scraper.DESC}[/green]")
         if issubclass(scraper, ExtractorBase):
-            data = self.extractor_method(url, scraper)
+            data: List[Item] = self.extractor_method(url, scraper)
         elif issubclass(scraper, CrawlerBase):
-            data = self.crawler_method(url, scraper)
+            data: List[Item] = self.crawler_method(url, scraper)
 
         # Displays the amount/type of scraped data
         print_data(data)
