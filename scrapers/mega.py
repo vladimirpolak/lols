@@ -1,6 +1,8 @@
 from downloader.types import ContentType
 from ._scraper_base import ExtractorBase
 from random import randint
+import requests
+import retry
 import logging
 import re
 
@@ -43,6 +45,7 @@ class MegaNZExtractor(ExtractorBase):
                 source=url,
             )
 
+    @retry.retry(requests.exceptions.JSONDecodeError, tries=3, delay=3)
     def _is_alive(self, url: str) -> bool:
         """
         Thanks to https://github.com/basisvectors for his mega link checker.
