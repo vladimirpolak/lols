@@ -141,3 +141,7 @@ Sendvideo Video Hosting
 Mega.Nz File Hosting (Download Not Supported)
 --domain: mega.nz
 --example url: https://mega.nz/folder/ITkSVDbY#uF8L36gsmHi8ETyHRir4aw
+
+Ibb Album Extractor
+--domain: ibb.co
+--example url: https://ibb.co/album/j6FBxt
