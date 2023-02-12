@@ -1,27 +1,17 @@
-from ._scraper_base import ExtractorBase
-from exceptions import ExtractionError
-from utils import split_filename_ext
 from downloader.types import (determine_content_type,
                               vid_extensions,
                               ContentType)
-import logging
+from ._scraper_base import ExtractorBase
+from exceptions import ExtractionError
+from utils import split_filename_ext
 from typing import List
+import logging
 import re
 
 # Regex Patterns
 PATTERN_BUNKR_ALBUM = r"(?:https?://)?bunkr\.[a-z]+/a/\w+"
 PATTERN_BUNKR_ALBUM_CONTENT = rf"(?:https?://)?cdn\d*.bunkr\.[a-z]+/[-.\w]+"
-PATTERN_BUNKR_VIDEO_URL = rf"((?:https?://)(?:stream|media-files|cdn)\d*\.bunkr\.[a-z]+/(?:v/)?[-~%\w]+(?:{'|'.join(vid_extensions)}))"
-
-# https://cdn.bunkr.ru/val_3-2bVP7Fd5.jpg
-# https://cdn.bunkr.ru/val_12-DHE6WKnK.jpg
-# https://cdn.bunkr.ru/charming_2-R09UVW3v.jpeg
-# https://cdn.bunkr.ru/charming_7-pAm4mc8Q.jpg
-# https://cdn.bunkr.ru/val_vid_1-9If8Xil1.mp4  ->
-#   https://media-files.bunkr.ru/val_vid_1-9If8Xil1.mp4
-# /d/chimaev-EYU3itQ3.zip  ->
-#   https://bunkr.su/d/chimaev-EYU3itQ3.zip  ->
-#     https://media-files10.bunkr.ru/chimaev-EYU3itQ3.zip
+PATTERN_BUNKR_VIDEO_URL = rf"(?:https?://)(?:stream|media-files|cdn)\d*\.bunkr\.[a-z]+/(?:v/)?[-~%\w]+(?:{'|'.join(vid_extensions)})"
 
 
 def video_download_url(video_url: str) -> str:
@@ -62,9 +52,7 @@ class BunkrAlbumExtractor(ExtractorBase):
         self._parse_items(extracted_urls)
 
     def _extract_content(self, html) -> List[str]:
-        scraped_urls = []
-        scraped_urls.extend(re.findall(PATTERN_BUNKR_ALBUM_CONTENT, html))
-        return scraped_urls
+        return re.findall(PATTERN_BUNKR_ALBUM_CONTENT, html)
 
     def _parse_items(self, urls: List[str]):
         for url in urls:
@@ -87,6 +75,10 @@ class BunkrAlbumExtractor(ExtractorBase):
                     content_type=content_type
                 )
 
+    @classmethod
+    def extract_from_html(cls, html):
+        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
+
 
 class BunkrVideoExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_BUNKR_VIDEO_URL)
@@ -98,7 +90,6 @@ class BunkrVideoExtractor(ExtractorBase):
         "https://stream.bunkr.is/v/ea_vid_14-9a9Jq32V.mov",
         "https://stream.bunkr.is/v/ea_vid_12-rlwMZzT1.mov",
         "https://stream.bunkr.is/v/lai_vid_3-3Ymk80tH.mp4",
-        "https://stream.bunkr.is/v/rr_vid_12-3HiQTJtY.mp4",
         "https://cdn.bunkr.is/0h1owpgtrqdncpvflf8ey_source-XltlzTqe.mp4",
         "https://cdn3.bunkr.is/IMG_1141-6RvpacEH.MOV"
     ]
@@ -119,3 +110,6 @@ class BunkrVideoExtractor(ExtractorBase):
                 content_type=content_type
             )
 
+    @classmethod
+    def extract_from_html(cls, html):
+        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
