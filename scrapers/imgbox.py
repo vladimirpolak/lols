@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_, img_extensions
+from downloader.types import determine_content_type, img_extensions
 from utils import split_filename_ext
 import re
 
@@ -29,7 +29,7 @@ class IMGBoxImageExtractor(ExtractorBase):
         )
         file = source.split("/")[-1]
         filename, extension = split_filename_ext(file)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             source=source,

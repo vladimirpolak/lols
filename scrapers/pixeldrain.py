@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type
 from exceptions import ExtractionError
 from utils import split_filename_ext
 import logging
@@ -50,7 +50,7 @@ class PixelDrainAlbumExtractor(ExtractorBase):
             file_w_extension = item["name"]
             filename, extension = split_filename_ext(file_w_extension)
             source = API_FILE_LINK + item["id"]
-            content_type = determine_content_type_(extension)
+            content_type = determine_content_type(extension)
 
             self.add_item(
                 content_type=content_type,

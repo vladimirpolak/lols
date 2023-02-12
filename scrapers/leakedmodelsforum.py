@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_, vid_extensions
+from downloader.types import determine_content_type, vid_extensions
 from utils import split_filename_ext
 from exceptions import ExtractionError
 from .leakedmodelsforum_auth import LeakedmodelsForumAuth
@@ -111,7 +111,7 @@ class LeakedmodelsForumImageExtractor(ExtractorBase, LeakedmodelsForumAuth):
     def _extract_data(self, url):
         source = self.base_url + url
         filename, extension = self._leakedmodels_process_filename(source)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             content_type=content_type,
@@ -162,7 +162,7 @@ class LeakedmodelsForumVideoExtractor(ExtractorBase, LeakedmodelsForumAuth):
             file_w_ext = url.split("/")[-1]
 
         filename, extension = split_filename_ext(file_w_ext)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             content_type=content_type,

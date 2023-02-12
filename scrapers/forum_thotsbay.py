@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type
 from exceptions import ExtractionError
 from .forum_thotsbay_auth import ForumThotsbayAuth
 from typing import Union
@@ -91,7 +91,7 @@ class ForumThotsbayImageExtractor(ExtractorBase):
 
     def _extract_data(self, url):
         filename, extension = self._thotsbay_process_filename(url)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             content_type=content_type,

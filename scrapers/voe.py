@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type
 from exceptions import ExtractionError
 from utils import split_filename_ext, decode_base64
 import re
@@ -28,7 +28,7 @@ class VOEVideoExtractor(ExtractorBase):
         )
         html = response.text
         source = self._extract_direct_url(html, url)
-        content_type = determine_content_type_(source)
+        content_type = determine_content_type(source)
 
         title = self._extract_title(html)
         if not title:

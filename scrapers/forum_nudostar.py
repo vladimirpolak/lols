@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_, vid_extensions
+from downloader.types import determine_content_type, vid_extensions
 from utils import split_filename_ext, slugify
 from exceptions import ExtractionError
 from .forum_nudostar_auth import ForumNudostarAuth
@@ -120,7 +120,7 @@ class ForumNudostarImageExtractor(ExtractorBase):
     def _extract_data(self, url):
         source = self.base_url + url
         filename, extension = self._nudostar_process_filename(source)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             content_type=content_type,
@@ -163,7 +163,7 @@ class ForumNudostarVideoExtractor(ExtractorBase):
         source = self.base_url + url
         file_w_extension = source.split("/")[-1]
         filename, extension = split_filename_ext(file_w_extension)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             content_type=content_type,

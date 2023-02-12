@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_, vid_extensions
+from downloader.types import determine_content_type, vid_extensions
 from exceptions import ExtractionError
 from utils import split_filename_ext, slugify
 import re
@@ -65,7 +65,7 @@ class StreamtapeVideoExtractor(ExtractorBase):
         source = self.extract_directurl(html)
         file_w_ext = self.extract_title(html)
         filename, extension = split_filename_ext(file_w_ext)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             content_type=content_type,

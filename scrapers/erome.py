@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_, img_extensions, vid_extensions
+from downloader.types import determine_content_type, img_extensions, vid_extensions
 from utils import split_filename_ext
 import re
 
@@ -56,7 +56,7 @@ class EromeAlbumExtractor(ExtractorBase):
     def parse_url(self, url: str):
         filename_w_extension = self._extract_filename(url)
         filename, extension = split_filename_ext(filename_w_extension)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
         return filename, extension, content_type
 
     @staticmethod

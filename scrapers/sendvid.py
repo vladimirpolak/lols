@@ -1,6 +1,6 @@
 from exceptions import ExtractionError
 from scrapers._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type
 import re
 
 # Regex Patterns
@@ -27,7 +27,7 @@ class SendvideoVideoExtractor(ExtractorBase):
         filename, source = self._extract_video_info(html)
 
         self.add_item(
-            content_type=determine_content_type_('m3u8'),
+            content_type=determine_content_type('m3u8'),
             filename=filename,
             extension="",
             source=source,

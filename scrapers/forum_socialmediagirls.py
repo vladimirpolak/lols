@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase, CrawlerBase
-from downloader.types import determine_content_type_, img_extensions, vid_extensions
+from downloader.types import determine_content_type, img_extensions, vid_extensions
 from exceptions import ExtractionError
 from .forum_socialmediagirls_auth import ForumSMGAuth
 from utils import slugify
@@ -126,7 +126,7 @@ class ForumSMGimageExtractor(ExtractorBase):
 
     def _extract_data(self, url):
         filename, extension = self.parse_url(url)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             content_type=content_type,
@@ -176,7 +176,7 @@ class ForumSMGvideoExtractor(ExtractorBase):
 
     def _extract_data(self, url):
         filename, extension = self.parse_url(url)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             source=url,

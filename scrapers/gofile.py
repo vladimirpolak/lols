@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type
 from exceptions import (ExtractionError,
                         GoFileStatusUnknownError)
 from utils import split_filename_ext
@@ -129,7 +129,7 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
         source = item_info["link"]
         file_w_extension = item_info["name"]
         filename, extension = split_filename_ext(file_w_extension)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
         return {
             'source': source,
             'filename': filename,

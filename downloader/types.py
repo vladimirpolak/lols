@@ -60,7 +60,7 @@ class ContentType(Enum):
         return cls(string_repr)
 
 
-def determine_content_type_(filename: str) -> ContentType:
+def determine_content_type(filename: str) -> ContentType:
     filename = filename.lower()
 
     if any([filename.endswith(ext) for ext in img_extensions]):

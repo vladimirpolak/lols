@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type
 from utils import split_filename_ext
 from exceptions import ExtractionError
 import re
@@ -35,7 +35,7 @@ class AnonfilesExtractor(ExtractorBase):
         # Parse the data
         file = source.split("/")[-1]
         filename, extension = split_filename_ext(file)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         # Add item to output
         self.add_item(

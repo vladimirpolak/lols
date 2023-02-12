@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type
 from utils import split_filename_ext
 import re
 
@@ -38,7 +38,7 @@ class SkygalleryExtractor(ExtractorBase):
             fname_w_ext = item["filename"]  # 4ng3lm3lly_vid_2.mp4
             filename, extension = split_filename_ext(fname_w_ext)
             source = SIASKY_DOMAIN + item["skylinks"]["source"]
-            content_type = determine_content_type_(extension)
+            content_type = determine_content_type(extension)
 
             self.add_item(
                 source=source,

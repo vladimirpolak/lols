@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_, img_extensions
+from downloader.types import determine_content_type, img_extensions
 from exceptions import ExtractionError
 from utils import split_filename_ext
 import logging
@@ -50,7 +50,7 @@ class JPGChurchExtractor(ExtractorBase):
             source = url.replace(".md.", ".")
             file_w_extension = source.split("/")[-1]
             filename, extension = split_filename_ext(file_w_extension)
-            content_type = determine_content_type_(extension)
+            content_type = determine_content_type(extension)
 
             self.add_item(
                 source=source,
@@ -108,7 +108,7 @@ class JPGChurchImageExtractor(ExtractorBase):
         source = url.replace(".md.", ".")
         file_w_extension = source.split("/")[-1]
         filename, extension = split_filename_ext(file_w_extension)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             content_type=content_type,

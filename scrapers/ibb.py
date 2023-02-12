@@ -3,7 +3,7 @@ from ._scraper_base import ExtractorBase
 from typing import Union
 from utils import split_filename_ext, url_params_to_dict
 from urllib.parse import unquote, urlencode
-from downloader.types import determine_content_type_
+from downloader.types import determine_content_type
 import logging
 import re
 import json
@@ -114,7 +114,7 @@ class IBBExtractor(ExtractorBase):
         except KeyError:
             logging.error(f"Error parsing IBB item data: {item_dict}")
         else:
-            content_type = determine_content_type_(extension)
+            content_type = determine_content_type(extension)
             self.add_item(
                 content_type=content_type,
                 filename=filename,

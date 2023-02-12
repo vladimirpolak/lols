@@ -1,5 +1,5 @@
 from ._scraper_base import ExtractorBase
-from downloader.types import determine_content_type_, vid_extensions
+from downloader.types import determine_content_type, vid_extensions
 from exceptions import ExtractionError
 from utils import split_filename_ext, decode_base64
 import re
@@ -34,7 +34,7 @@ class HighloadVideoExtractor(ExtractorBase):
         source = self.generate_direct_link(vars_script, master_script)
         file_w_ext = url.split("/")[-1]
         filename, extension = split_filename_ext(file_w_ext)
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             source=source,

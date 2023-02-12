@@ -1,6 +1,6 @@
 from ._scraper_base import ExtractorBase
 from exceptions import ExtractionError
-from downloader.types import vid_extensions, img_extensions, determine_content_type_
+from downloader.types import vid_extensions, img_extensions, determine_content_type
 import re
 
 # Regex Patterns
@@ -41,7 +41,7 @@ class CyberdropAlbumExtractor(ExtractorBase):
             source = item[0]
             filename = item[1]
             extension = item[2]
-            content_type = determine_content_type_(extension)
+            content_type = determine_content_type(extension)
 
             self.add_item(
                 source=source,
@@ -85,7 +85,7 @@ class CyberdropImageExtractor(ExtractorBase):
 
         filename = match[1]
         extension = match[2]
-        content_type = determine_content_type_(extension)
+        content_type = determine_content_type(extension)
 
         self.add_item(
             source=url,
