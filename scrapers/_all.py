@@ -1,6 +1,5 @@
 from .bunkr import (BunkrAlbumExtractor,
-                    BunkrVideoExtractor,
-                    BunkrImageExtractor)
+                    BunkrVideoExtractor)
 from .cyberdrop import (CyberdropAlbumExtractor,
                         CyberdropImageExtractor)
 from .jpgchurch import (JPGChurchExtractor,
