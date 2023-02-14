@@ -105,7 +105,7 @@ class LoLs:
             # Loops through crawled pages
             for url, html in crawled_html.items():
                 # Searches for valid urls here
-                scraper_output = extractor.extract_from_html(html)
+                scraper_output = extractor.extract_from_html(url, html)
                 if scraper_output:
                     links.extend(scraper_output)
 
@@ -120,7 +120,6 @@ class LoLs:
         return data
 
     def download(self, items: List[Item], dir_name: str):
-
         list_length = len(items)
         step = 1
         while items:
