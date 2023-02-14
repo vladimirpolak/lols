@@ -1,6 +1,6 @@
 import logging
 import re
-
+import typing
 from downloader import Downloader, Item
 from downloader.models import ContentType
 from abc import abstractmethod
@@ -43,6 +43,7 @@ class ScraperBase:
         self._downloader = downloader
 
     def request(self, url: str, method: str = 'GET', **kwargs):
+        """Method for making Http requests."""
         return self._downloader.send_request(url, method, **kwargs)
 
     def add_item(self,
@@ -53,6 +54,7 @@ class ScraperBase:
                  album_title: str = None,
                  headers: dict = None
                  ):
+        """Used to add target item data to output list."""
 
         new_item = Item(
             source=source,
@@ -87,6 +89,7 @@ class ExtractorBase(ScraperBase):
     def extract_data(self, url: str) -> List[Item]:
         self.ALL_ITEMS = []
         try:
+            # _extract_data method is implemented in each extractor and adds target items into ALL_ITEMS list.
             self._extract_data(url)
         except (ExtractionError, ContentTypeError) as e:
             logging.error(e)
@@ -101,9 +104,8 @@ class ExtractorBase(ScraperBase):
         pass
 
     @classmethod
-    def extract_from_html(cls, html):
-        """This method is implemented in the subclass. (Optional)"""
-        pass
+    def extract_from_html(cls, url: str, html: str):
+        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
 
 
 class CrawlerBase(ScraperBase):
