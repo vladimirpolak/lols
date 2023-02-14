@@ -98,18 +98,6 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
             return match.group("thread_title")
         return None
 
-    def _extract_model_name(self, html):
-        patterns = (
-            re.compile(r"https://(?:www)?\.instagram\.com/([-\d\w.]+)/?"),
-            re.compile(r"https://(?:www)?onlyfans\.com/([-\d\w.]+)/?"),
-            re.compile(r"https://(?:www)?fansly\.com/([-\d\w.]+)/?")
-        )
-        for p in patterns:
-            results = p.findall(html)
-            if results and (len(results) > 1):
-                return results[1]
-            elif results and(len(results) == 1):
-                return results[0]
 
 class ForumNudostarContentExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_NUDOSTARFORUM_CONTENT)
