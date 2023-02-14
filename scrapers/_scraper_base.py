@@ -26,6 +26,10 @@ class ScraperBase:
         pass
 
     @classmethod
+    def is_active(cls):
+        return True
+
+    @classmethod
     def is_suitable(cls, url):
         """
         Determines if the scraper is suitable for extracting input link.
