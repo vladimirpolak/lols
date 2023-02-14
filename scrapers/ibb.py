@@ -12,7 +12,7 @@ import json
 IBB_JSON_URL = "https://ibb.co/json"
 
 # Regex Patterns
-PATTERN_IBB_ALBUM = r"(?:https://)?ibb\.co[/]+?album[/]+?(?:[a-zA-Z0-9]+?)"
+PATTERN_IBB_ALBUM = r"(?:https://)?ibb\.co[/]+?album[/]+?(?:[a-zA-Z0-9]+)"
 PATTERN_IBB_AUTH_TOKEN = r'PF\.obj\.config\.auth_token="(?P<auth_token>.+?)";'
 PATTERN_IBB_DATA_STRING = r"data-object='(?P<data>.*)'>"
 PATTERN_IBB_NEXT_PAGE = r'data-pagination="next" href="(?P<next_page_url>.*?)">'
