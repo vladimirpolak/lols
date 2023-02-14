@@ -69,7 +69,7 @@ class ScraperBase:
 
     @property
     def base_url(self):
-        return f"{self.PROTOCOL}://{self.DOMAIN}/"
+        return f"{self.PROTOCOL}://{self.DOMAIN}"
 
     @abstractmethod
     def extract_data(self, url: str):
