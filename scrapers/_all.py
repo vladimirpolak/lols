@@ -13,8 +13,8 @@ from .imagetwist import ImageTwistImageExtractor
 from .planetsuzy import PlanetSuzyCrawler
 from .pixhost import PixHostTHExtractor
 from .imagebam import ImageBamExtractor
-# from .forum_thotsbay import (ForumThotsbayCrawler,
-#                              ForumThotsbayImageExtractor)
+from .forum_thotsbay import (ForumThotsbayCrawler,
+                             ForumThotsbayImageExtractor)
 from .xvideos import XvideosVideoExtractor
 from .forum_nudostar import (ForumNudostarCrawler,
                              ForumNudostarContentExtractor)

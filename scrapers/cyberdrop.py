@@ -23,6 +23,10 @@ class CyberdropAlbumExtractor(ExtractorBase):
         "https://cyberdrop.me/a/zpxILGL3",
     ]
 
+    @classmethod
+    def is_active(cls):
+        return False
+
     def _extract_data(self, url):
         response = self.request(
             url=url,
@@ -74,6 +78,10 @@ class CyberdropImageExtractor(ExtractorBase):
         "https://fs-01.cyberdrop.cc/mlCKbS2X-dgSNyR-taejUtVI.jpeg",
         "https://fs-01.cyberdrop.cc/HTyQfoJu-2dBS3P-3OBgIkSu.jpeg"
     ]
+
+    @classmethod
+    def is_active(cls):
+        return False
 
     def _extract_data(self, url):
         match = self.VALID_URL_RE.match(url)

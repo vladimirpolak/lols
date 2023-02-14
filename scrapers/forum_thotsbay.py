@@ -24,6 +24,10 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
     CONTENT_TYPE = "THREAD"
     SAMPLE_URLS = []
 
+    @classmethod
+    def is_active(cls):
+        return False
+
     def initialize(self):
         raise NotImplementedError("Site is shut down permanently.")
         # self.authorize()
@@ -88,6 +92,10 @@ class ForumThotsbayImageExtractor(ExtractorBase):
     DESC = "Thotsbay Forum Image"
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = []
+
+    @classmethod
+    def is_active(cls):
+        return False
 
     def _extract_data(self, url):
         filename, extension = self._thotsbay_process_filename(url)
