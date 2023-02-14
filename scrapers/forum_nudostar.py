@@ -74,6 +74,7 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
         html = response.text
         if self.username not in html:
             raise ExtractionError(f"Not authorized! (Most likely login session is expired.)")
+
         if not self.THREAD_NAME:
             self.THREAD_NAME = slugify(self._extract_threadname(html), sep="_")
         next_page = self._extract_nextpage(html)
@@ -88,7 +89,7 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
             if url_path.startswith("http"):
                 return url_path
             else:
-                return self.base_url + url_path[1:]
+                return self.base_url + url_path
         return None
 
     def _extract_threadname(self, html):
@@ -123,7 +124,10 @@ class ForumNudostarContentExtractor(ExtractorBase):
     ]
 
     def _extract_data(self, url):
-        source = self.base_url + url
+        if url.startswith("https"):
+            source = url
+        else:
+            source = self.base_url + url
         filename, extension = self._nudostar_process_filename(source)
         content_type = determine_content_type(extension)
 
@@ -134,14 +138,15 @@ class ForumNudostarContentExtractor(ExtractorBase):
             source=source,
         )
 
-    def _nudostar_process_filename(self, url):
-        results = self.VALID_URL_RE.findall(url)
-        if not results:
-            print(results)
-            raise ExtractionError(f"Failed to extract filename, extension from url: {url}")
-        match = results[0]
-        filename = match[1]
-        extension = f".{match[2]}"
+    @classmethod
+    def _nudostar_process_filename(cls, url):
+        match = cls.VALID_URL_RE.match(url)
+        if not match:
+            raise ExtractionError(
+                f"Failed to extract (filename, extension) from url: {url}, matching results = {match}"
+            )
+        filename = match.group(2)
+        extension = f".{match.group(3)}"
         return filename, extension
 
     @classmethod
