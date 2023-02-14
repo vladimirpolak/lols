@@ -95,7 +95,7 @@ class ForumThotsbayAuth:
         }
 
         response = self.request(
-            url=self.base_url + "login/",
+            url=self.base_url + "/login/",
             headers=headers,
             params=pre_login_params
         )
@@ -133,7 +133,7 @@ class ForumThotsbayAuth:
 
         response = self.request(
             method='POST',
-            url=self.base_url + "login/login/",
+            url=self.base_url + "/login/login/",
             data=login_payload,
             headers=headers
         )

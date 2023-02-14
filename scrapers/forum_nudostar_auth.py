@@ -67,7 +67,7 @@ class ForumNudostarAuth:
     def _index_page(self):
         """Access index page and extract 'xf' token."""
         response = self.request(
-            url=self.base_url + "forum/"
+            url=self.base_url + "/forum/"
         )
         html = response.text
 
@@ -95,7 +95,7 @@ class ForumNudostarAuth:
         }
 
         response = self.request(
-            url=self.base_url + "forum/login/",
+            url=self.base_url + "/forum/login/",
             headers=headers,
             params=pre_login_params
         )
@@ -118,7 +118,7 @@ class ForumNudostarAuth:
             "login": self.username,
             "password": self.password,
             "remember": "1",
-            "_xfRedirect": self.base_url + "forum/",
+            "_xfRedirect": self.base_url + "/forum/",
             "_xfToken": pre_login_token
         }
         query_string = urlencode(login_payload)
@@ -127,13 +127,13 @@ class ForumNudostarAuth:
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
             "content-type": "application/x-www-form-urlencoded",
             "content-length": str(len(query_string)),
-            "origin": self.base_url + "forum/",
-            "referer": self.base_url + "forum/"
+            "origin": self.base_url + "/forum/",
+            "referer": self.base_url + "/forum/"
         }
 
         response = self.request(
             method='POST',
-            url=self.base_url + "forum/login/login/",
+            url=self.base_url + "/forum/login/login/",
             data=login_payload,
             headers=headers
         )

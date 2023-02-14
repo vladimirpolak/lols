@@ -89,7 +89,7 @@ class ForumSMGCrawler(ForumSMGAuth, CrawlerBase):
             if url_path.startswith("http"):
                 return url_path
             else:
-                return self.base_url + url_path[1:]
+                return self.base_url + url_path
         return None
 
     def extract_threadname(self, html):

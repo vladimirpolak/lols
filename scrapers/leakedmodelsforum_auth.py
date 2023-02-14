@@ -67,7 +67,7 @@ class LeakedmodelsForumAuth:
     def _index_page(self):
         """Access index page and extract 'xf' token."""
         response = self.request(
-            url=self.base_url + "forum/"
+            url=self.base_url + "/forum/"
         )
         html = response.text
 
@@ -95,7 +95,7 @@ class LeakedmodelsForumAuth:
         }
 
         response = self.request(
-            url=self.base_url + "forum/login/",
+            url=self.base_url + "/forum/login/",
             headers=headers,
             params=pre_login_params
         )
@@ -134,7 +134,7 @@ class LeakedmodelsForumAuth:
 
         response = self.request(
             method='POST',
-            url=self.base_url + "forum/login/login/",
+            url=self.base_url + "/forum/login/login/",
             data=login_payload,
             headers=headers
         )
