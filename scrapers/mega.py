@@ -10,7 +10,7 @@ import re
 MEGA_API_CHECK_STATUS_URL = 'https://g.api.mega.co.nz/cs'
 
 # Regex Patterns
-MEGA_CONTENT_URL_RE = r"(?P<url>(:?https://)mega\.nz/(:?(?P<url_type>folder|file)\/(?P<content_id>[-\w\d#]+))+)"
+MEGA_CONTENT_URL_RE = re.compile(r"(?P<url>(?:https://)mega\.nz(?:/(?P<url_type>folder|file)\/(?P<content_id>[-\w\d#]+))+)")
 
 
 class MegaNZExtractor(ExtractorBase):
