@@ -116,8 +116,8 @@ class ForumSMGimageExtractor(ExtractorBase):
     DESC = "SocialMediaGirls Forum Image"
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
-        "https://forums.socialmediagirls.com/attachments/photo_2019-08-25_21-30-20-jpg.375004/",
-        "https://forums.socialmediagirls.com/attachments/960x1280_0a5e57b8e3616cae6108a08f7a7a1052-jpg.2454459/",
+        "https://forums.socialmediagirls.com/attachments/photo_2019-08-25_21-30-20-jpg.375004",
+        "https://forums.socialmediagirls.com/attachments/960x1280_0a5e57b8e3616cae6108a08f7a7a1052-jpg.2454459",
         "https://symedia.sexy-youtubers.com/forum/2020/06/photo_2019-09-28_23-38-58_391486.jpg",
         "https://symedia.sexy-youtubers.com/forum/2020/06/photo_2019-09-25_01-00-02_391484.jpg",
         "https://smgmedia.socialmediagirls.com/forum/2020/06/photo_2019-08-25_21-30-20_391478.jpg",
@@ -154,7 +154,7 @@ class ForumSMGimageExtractor(ExtractorBase):
         return filename, extension
 
     @classmethod
-    def extract_from_html(cls, html):
+    def extract_from_html(cls, url, html):
         output = []
         for pattern in cls.VALID_URL_RE:
             output.extend([data[0] for data in set(pattern.findall(html))])
@@ -191,5 +191,5 @@ class ForumSMGvideoExtractor(ExtractorBase):
         return result.group('filename'), result.group('extension')
 
     @classmethod
-    def extract_from_html(cls, html):
+    def extract_from_html(cls, url, html):
         return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]

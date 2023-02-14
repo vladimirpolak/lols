@@ -51,11 +51,3 @@ class SendvideoVideoExtractor(ExtractorBase):
         if not result:
             raise ExtractionError("Failed to extract title from html.")
         return result.group("title")
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
-
-    # Crawler method only
-    # def _crawl_link(self, url) -> html[str]:
-    #     pass

@@ -122,7 +122,3 @@ class StreamtapeVideoExtractor(ExtractorBase):
             raise ExtractionError(
                 f"Failed to extract 'get_video' params from html: {self.origin_url}"
             )
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]

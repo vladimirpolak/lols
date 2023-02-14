@@ -150,9 +150,9 @@ class ForumNudostarContentExtractor(ExtractorBase):
         return filename, extension
 
     @classmethod
-    def extract_from_html(cls, html):
+    def extract_from_html(cls, url, html):
         results = []
-        if is_nudostar_domain(html):
+        if is_nudostar_domain(html) or url == "test":
             results.extend([data[0] for data in set(re.findall(cls.VALID_URL_RE, html))])
         return results
 

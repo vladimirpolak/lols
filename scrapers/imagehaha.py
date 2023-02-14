@@ -44,7 +44,3 @@ class ImagehahaExtractor(ExtractorBase):
         if not result:
             raise ExtractionError(f"Failed to extract direct url for image: {origin_url}")
         return result.pop()
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]

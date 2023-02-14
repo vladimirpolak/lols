@@ -140,8 +140,3 @@ class IBBExtractor(ExtractorBase):
             raise ExtractionError("Failed parsing URL params.")
 
         return params_dict
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
-

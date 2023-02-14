@@ -50,8 +50,3 @@ class AnonfilesExtractor(ExtractorBase):
         if not result:
             raise ExtractionError(f"Failed to extract download url from: {origin_url}")
         return result.pop()
-
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]

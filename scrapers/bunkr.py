@@ -15,6 +15,7 @@ PATTERN_BUNKR_VIDEO_URL = rf"(?:https?://)(?:stream|media-files|cdn)\d*\.bunkr\.
 
 
 def video_download_url(video_url: str) -> str:
+    """Parse bunkr video page into download url."""
     pattern = re.compile(
         r"(?:https?://)?(?:cdn|stream)(?P<server_num_domain>\d*\.bunkr\.[a-z]+)/(?:v/)?(?P<filename>[-.\w]+)"
     )
@@ -75,10 +76,6 @@ class BunkrAlbumExtractor(ExtractorBase):
                     content_type=content_type
                 )
 
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
-
 
 class BunkrVideoExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_BUNKR_VIDEO_URL)
@@ -109,7 +106,3 @@ class BunkrVideoExtractor(ExtractorBase):
                 extension=extension,
                 content_type=content_type
             )
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]

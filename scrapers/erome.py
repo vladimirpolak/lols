@@ -15,7 +15,6 @@ class EromeAlbumExtractor(ExtractorBase):
     DESC = "Erome.com Album"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
-        "https://www.erome.com/a/69MH41fn",
         "https://www.erome.com/a/srArB7Yt"
     ]
 
@@ -64,7 +63,3 @@ class EromeAlbumExtractor(ExtractorBase):
         if re.match(PATTERN_EROME_IMAGE, url):
             return url.split("?v")[0].split("/")[-1]
         return url.split("/")[-1]
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]

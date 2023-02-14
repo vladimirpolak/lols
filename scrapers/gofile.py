@@ -136,7 +136,3 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
             'extension': extension,
             'content_type': content_type
         }
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]

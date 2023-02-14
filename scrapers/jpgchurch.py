@@ -85,10 +85,6 @@ class JPGChurchExtractor(ExtractorBase):
         else:
             return next_page
 
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
-
 
 class JPGChurchImageExtractor(ExtractorBase):
     VALID_URL_RE = re.compile(PATTERN_JPEGCHURCH_IMAGE)
@@ -116,9 +112,3 @@ class JPGChurchImageExtractor(ExtractorBase):
             extension=extension,
             source=source
         )
-
-    @classmethod
-    def extract_from_html(cls, html):
-        data = [data for data in set(re.findall(PATTERN_JPEGCHURCH_IMAGE, html))]
-        return data
-

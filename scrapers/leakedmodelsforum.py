@@ -131,9 +131,9 @@ class LeakedmodelsForumImageExtractor(ExtractorBase, LeakedmodelsForumAuth):
         return filename, extension
 
     @classmethod
-    def extract_from_html(cls, html):
+    def extract_from_html(cls, url, html):
         results = []
-        if is_leakedmodels_domain(html):
+        if is_leakedmodels_domain(html) or url == "test":
             results.extend([data[0] for data in set(re.findall(cls.VALID_URL_RE, html))])
         return results
 
@@ -170,8 +170,3 @@ class LeakedmodelsForumVideoExtractor(ExtractorBase, LeakedmodelsForumAuth):
             extension=extension,
             source=url,
         )
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
-

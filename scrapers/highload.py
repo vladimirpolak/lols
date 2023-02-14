@@ -152,7 +152,3 @@ class HighloadVideoExtractor(ExtractorBase):
     @staticmethod
     def _decode_direct_link(source_var: str, res_1: str, res_2: str):
         return decode_base64(source_var.replace(res_1, "").replace(res_2, ""))
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]

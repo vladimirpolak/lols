@@ -47,8 +47,3 @@ class SkygalleryExtractor(ExtractorBase):
                 extension=extension,
                 album_title=album_title
             )
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
-

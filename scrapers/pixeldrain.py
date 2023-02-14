@@ -71,8 +71,3 @@ class PixelDrainAlbumExtractor(ExtractorBase):
         data = json.loads(data_str)
         logging.debug(f"ALBUM DATA: {data}")
         return data["api_response"]
-
-    @classmethod
-    def extract_from_html(cls, html):
-        return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
-

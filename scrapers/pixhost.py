@@ -47,5 +47,5 @@ class PixHostTHExtractor(ExtractorBase):
         )
 
     @classmethod
-    def extract_from_html(cls, html):
+    def extract_from_html(cls, url, html):
         return [data[0] for data in set(re.findall(cls.VALID_URL_RE, html))]
