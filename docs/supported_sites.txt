@@ -6,18 +6,6 @@ Bunkr.Is Video Page
 --domain: stream.bunkr.is
 --example url: https://stream.bunkr.is/v/ea_vid_14-9a9Jq32V.mov
 
-Bunkr.Is Image Direct Url
---domain: bunkr.is
---example url: https://cdn3.bunkr.is/2021-07-03-3024x4032_c87b68ca72e0b5296829cf1a9e187b2c-Km9gaCRc.jpg
-
-Cyberdrop Album
---domain: cyberdrop.me
---example url: https://cyberdrop.me/a/prrohXbK
-
-Cyberdrop Image Url
---domain: cyberdrop.com
---example url: https://fs-01.cyberdrop.cc/Ry2VcDEU-Ai4pQo-lMK3thIS.jpeg
-
 Jpegchurch Image Album
 --domain: jpg.church
 --example url: https://jpg.church/a/masquerade-ball.NXhmc
@@ -58,6 +46,10 @@ Pixhost Image Hosting (Extract From Thumbnail)
 --domain: pixhost.to
 --example url: https://t76.pixhost.to/thumbs/87/302735411_pexels-photo-1525041.jpg
 
+Pixhost Image Gallery
+--domain: pixhost.to
+--example url: https://pixhost.to/gallery/ujdZj
+
 Imagebam Image Hosting (Indirect Link)
 --domain: imagebam.com
 --example url: https://www.imagebam.com/image/c444481329385981
@@ -70,13 +62,9 @@ Nudostar Forum Thread
 --domain: nudostar.com
 --example url: https://nudostar.com/forum/threads/ck0rf.34621/
 
-Nudostar Forum Image
+Nudostar Forum Content
 --domain: nudostar.com
 --example url: https://nudostar.com/forum/attachments/rn1yfyd2og471-jpg.895744/
-
-Nudostar Forum Video
---domain: nudostar.com
---example url: https://nudostar.com/forum/data/video/1639/1639695-aa0598d17264f7e9002f653e9e446295.mp4
 
 Skygallery File Hosting Album
 --domain: skygallery.hns.siasky.net
@@ -120,7 +108,7 @@ Highload Video Hosting
 
 Erome.Com Album
 --domain: erome.com
---example url: https://www.erome.com/a/69MH41fn
+--example url: https://www.erome.com/a/srArB7Yt
 
 Socialmediagirls Forum Thread
 --domain: forums.socialmediagirls.com
@@ -128,7 +116,7 @@ Socialmediagirls Forum Thread
 
 Socialmediagirls Forum Image
 --domain: forums.socialmediagirls.com
---example url: https://forums.socialmediagirls.com/attachments/photo_2019-08-25_21-30-20-jpg.375004/
+--example url: https://forums.socialmediagirls.com/attachments/photo_2019-08-25_21-30-20-jpg.375004
 
 Socialmediagirls Forum Video
 --domain: forums.socialmediagirls.com
