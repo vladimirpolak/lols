@@ -11,7 +11,8 @@ from .pixl import PixlAlbumExtractor
 from .imgbox import IMGBoxImageExtractor
 from .imagetwist import ImageTwistImageExtractor
 from .planetsuzy import PlanetSuzyCrawler
-from .pixhost import PixHostTHExtractor
+from .pixhost import (PixHostTHExtractor,
+                      PixHostAlbumCrawler)
 from .imagebam import ImageBamExtractor
 from .forum_thotsbay import (ForumThotsbayCrawler,
                              ForumThotsbayImageExtractor)

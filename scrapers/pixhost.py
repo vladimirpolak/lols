@@ -1,4 +1,4 @@
-from ._scraper_base import ExtractorBase
+from ._scraper_base import ExtractorBase, CrawlerBase
 from downloader.types import determine_content_type, img_extensions
 from exceptions import ExtractionError
 from utils import split_filename_ext
@@ -8,8 +8,25 @@ import re
 IMAGE_DIRECT_URL = "https://img{server_num}.pixhost.to/images{url_path}"
 
 # Regex Patterns
+PATTERN_PIXHOST_GALLERY = re.compile(r"(?:https://)?pixhost\.to/gallery/\w+")
 PATTERN_PIXHOST_THUMBNAIL = rf"(https://t(\d+)\.pixhost\.to/thumbs(/\d+/[-\w]+(?:{'|'.join(img_extensions)})))"
-# Pixhost gallery https://pixhost.to/gallery/ujdZj
+
+
+class PixHostAlbumCrawler(CrawlerBase):
+    NEXT_PAGE = None
+    VALID_URL_RE = re.compile(PATTERN_PIXHOST_GALLERY)
+    PROTOCOL = "https"  # http/s
+    DOMAIN = "pixhost.to"
+    DESC = "Pixhost Image Gallery"
+    CONTENT_TYPE = "ALBUM"
+    SAMPLE_URLS = [
+        "https://pixhost.to/gallery/ujdZj"
+    ]
+
+    def _crawl_link(self, url):
+        res = self.request(url)
+        html = res.text
+        return {url: html}
 
 
 class PixHostTHExtractor(ExtractorBase):
