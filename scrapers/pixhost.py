@@ -20,7 +20,8 @@ class PixHostAlbumCrawler(CrawlerBase):
     DESC = "Pixhost Image Gallery"
     CONTENT_TYPE = "ALBUM"
     SAMPLE_URLS = [
-        "https://pixhost.to/gallery/ujdZj"
+        "https://pixhost.to/gallery/ujdZj",
+        "https://pixhost.to/gallery/8FEKM"
     ]
 
     def _crawl_link(self, url):
