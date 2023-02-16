@@ -1,4 +1,5 @@
 from ._all import *
+from _scraper_base import ScraperType
 
 
 def general_conditions_met(scraper_class) -> bool:
@@ -14,18 +15,6 @@ _ALL_SCRAPERS = [
         or name.endswith('Crawler'))
         and general_conditions_met(klass))
 ]
-_ALL_EXTRACTORS = [
-    klass
-    for name, klass in globals().items()
-    if (name.endswith('Extractor')
-        and general_conditions_met(klass))
-]
-_ALL_CRAWLERS = [
-    klass
-    for name, klass in globals().items()
-    if (name.endswith('Crawler')
-        and general_conditions_met(klass))
-]
 
 
 def get_scraper_classes():
@@ -36,8 +25,18 @@ def get_scraper_classes():
 
 
 def get_extractor_classes():
-    return _ALL_EXTRACTORS
+    return [
+        klass
+        for name, klass in globals().items()
+        if (name.endswith('Extractor')
+            and general_conditions_met(klass))
+    ]
 
 
 def get_crawler_classes():
-    return _ALL_CRAWLERS
+    return [
+        klass
+        for name, klass in globals().items()
+        if (name.endswith('Crawler')
+            and general_conditions_met(klass))
+    ]

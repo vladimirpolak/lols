@@ -6,6 +6,12 @@ from downloader.models import ContentType
 from abc import abstractmethod
 from exceptions import ExtractionError, ContentTypeError
 from typing import List, Union
+from enum import Enum, auto
+
+
+class ScraperType(Enum):
+    EXTRACTOR = auto()
+    CRAWLER = auto()
 
 
 class ScraperBase:
@@ -80,7 +86,7 @@ class ScraperBase:
 
 
 class ExtractorBase(ScraperBase):
-    SCRAPER_TYPE = "EXTRACTOR"
+    SCRAPER_TYPE = ScraperType.EXTRACTOR
 
     def __init__(self, downloader=None):
         self._downloader = downloader
@@ -115,7 +121,7 @@ class CrawlerBase(ScraperBase):
     from using 'extractor' classes.
     """
     NEXT_PAGE = None
-    SCRAPER_TYPE = "CRAWLER"
+    SCRAPER_TYPE = ScraperType.EXTRACTOR
     THREAD_NAME = ""
 
     def __init__(self, downloader=None, page_limit: int = 0):
