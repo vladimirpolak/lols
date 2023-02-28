@@ -1,5 +1,5 @@
 from unittest import TestCase
-from scrapers import get_scraper_classes, get_extractor_classes
+from scrapers import get_scraper_classes, ScraperType
 
 
 def compose_html(urls: list) -> str:
@@ -15,7 +15,7 @@ class UrlMatchingTest(TestCase):
         """
         Tests if each scraper matches input URLs it's supposed to match.
         """
-        for scraper in get_scraper_classes():
+        for scraper in get_scraper_classes(disabled_scrapers=[]):
             for url in scraper.SAMPLE_URLS:
                 with self.subTest(scraper=scraper, url=url):
                     self.assertTrue(
@@ -27,7 +27,9 @@ class UrlMatchingTest(TestCase):
         """
         Tests if each extractor class is able to extract its URLs from given html.
         """
-        for extractor in get_extractor_classes():
+        for extractor in get_scraper_classes(
+                disabled_scrapers=[],
+                type_specific=ScraperType.EXTRACTOR):
             mock_html = compose_html(extractor.SAMPLE_URLS)
             extracted = extractor.extract_from_html(url="test", html=mock_html)
 
