@@ -17,6 +17,7 @@ class CyberdropAlbumExtractor(ExtractorBase):
     DOMAIN = "cyberdrop.me"
     DESC = "Cyberdrop Album"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://cyberdrop.me/a/prrohXbK",
         "https://cyberdrop.me/a/1NS4e26j",
