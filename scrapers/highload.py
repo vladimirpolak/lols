@@ -5,6 +5,7 @@ from utils import split_filename_ext, decode_base64
 import re
 import js2py
 
+_CODENAME = "hload"
 
 URL_HIGHLOAD_MASTERJS = "https://highload.to/assets/js/master.js"
 
@@ -17,6 +18,7 @@ class HighloadVideoExtractor(ExtractorBase):
     DOMAIN = "highload.to"
     DESC = "Highload Video Hosting"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://highload.to/f/ofyrlwactvuc/Vader_Stops_the_2nd_Ship...-5xkBtu_WTrk.mp4",
         "https://highload.to/f/httzvdjv6p1v/F%40_%C2%A3_Society___Mr._Robot-4yKsIdr_PNU.mp4"

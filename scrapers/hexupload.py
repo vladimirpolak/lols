@@ -4,6 +4,7 @@ from exceptions import ExtractionError
 from utils import split_filename_ext
 import re
 
+_CODENAME = "hex"
 # Constant URLs
 
 # Regex Patterns
@@ -19,6 +20,7 @@ class HexuploadVideoExtractor(ExtractorBase):
     DOMAIN = "hexupload.net"
     DESC = "Hexupload Hosting"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://hexupload.net/761mnw2p5y9c",
         "https://hexupload.net/77k0me3rh1vx",

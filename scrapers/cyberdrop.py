@@ -3,6 +3,8 @@ from exceptions import ExtractionError
 from downloader.types import vid_extensions, img_extensions, determine_content_type
 import re
 
+_CODENAME = "cdrop"
+
 # Regex Patterns
 PATTERN_CYBERDROP_ALBUM = r"((?:https?://)?cyberdrop\.(?:to|me|cc)/a/\w+)"
 PATTERN_CYBERDROP_IMAGE = rf"((?:https?://)?fs-\d+?\.cyberdrop\.(?:to|me|cc)/(.+?)({'|'.join(img_extensions)}))"
@@ -71,6 +73,7 @@ class CyberdropImageExtractor(ExtractorBase):
     DOMAIN = "cyberdrop.com"
     DESC = "CyberDrop Image URL"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://fs-01.cyberdrop.cc/Ry2VcDEU-Ai4pQo-lMK3thIS.jpeg",
         "https://fs-05.cyberdrop.to/pmcYpiB-rivbeT-2KjuEbQ3.jpeg",

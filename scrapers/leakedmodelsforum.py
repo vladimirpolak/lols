@@ -6,6 +6,8 @@ from .leakedmodelsforum_auth import LeakedmodelsForumAuth
 from typing import Union
 import re
 
+_CODENAME = "forum_lm"
+
 # Regex Patterns
 PATTERN_LEAKEDMODELSFORUM_THREAD = r"(?:https://)?leakedmodels\.com/forum/threads/([-\w\.]+)/?"
 PATTERN_LEAKEDMODELSFORUM_THREAD_NEXTPAGE = r'<a\s+' \
@@ -30,6 +32,7 @@ class LeakedmodelsForumCrawler(CrawlerBase, LeakedmodelsForumAuth):
     DOMAIN = "leakedmodels.com"
     DESC = "Leakedmodels Forum Thread"
     CONTENT_TYPE = "THREAD"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://leakedmodels.com/forum/threads/jasmin-heaney-irish-girl.5590/",
         "https://leakedmodels.com/forum/threads/my-h-yden.12432/",
@@ -96,6 +99,7 @@ class LeakedmodelsForumImageExtractor(ExtractorBase, LeakedmodelsForumAuth):
     DOMAIN = "leakedmodels.com"
     DESC = "Leakedmodels Forum Image"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://leakedmodels.com/forum/attachments/1125x1437_6cf8f45d57355a1d832ce35be1dadd1f-jpg.108958/",
         "https://leakedmodels.com/forum/attachments/1125x2436_7d0569179cc3b4abd37bd7acd1c1abb7-jpg.108962/",
@@ -145,6 +149,7 @@ class LeakedmodelsForumVideoExtractor(ExtractorBase, LeakedmodelsForumAuth):
     DOMAIN = "leakedmodels.com"
     DESC = "Leakedmodels Forum Video"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://cdn.leakedmodels.com/forum/data/video/108/108726-9031a9571acf19116bef07707a841655.mp4",
         "https://cdn.leakedmodels.com/forum/data/video/108/108729-7a47d7fc8047f1c9f862434c234a865c.mp4",

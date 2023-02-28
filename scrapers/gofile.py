@@ -8,6 +8,8 @@ from hashlib import sha256
 import logging
 import re
 
+_CODENAME = "gofile"
+
 # Constant URLs
 URL_GOFILE_FOLDER = "https://gofile.io/d/"
 URL_GOFILE_CONTENT = "https://api.gofile.io/getContent"
@@ -56,6 +58,7 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
     DOMAIN = "gofile.io"
     DESC = "GoFile Hosting Directory"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://gofile.io/d/eG1URC",  # 1 video
         "https://gofile.io/d/RPoxUP",  # Multiple directories

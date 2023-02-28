@@ -6,6 +6,8 @@ import retry
 import logging
 import re
 
+_CODENAME = "mega"
+
 # Constant URLs
 MEGA_API_CHECK_STATUS_URL = 'https://g.api.mega.co.nz/cs'
 
@@ -19,6 +21,7 @@ class MegaNZExtractor(ExtractorBase):
     DOMAIN = "mega.nz"
     DESC = "Mega.nz File Hosting (download not supported)"
     CONTENT_TYPE = None
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://mega.nz/folder/ITkSVDbY#uF8L36gsmHi8ETyHRir4aw",
         "https://mega.nz/folder/bnhCFJyB#Y401NT75fMJjIOIRKRECmA",

@@ -4,6 +4,8 @@ from exceptions import ExtractionError
 from utils import split_filename_ext
 import re
 
+_CODENAME = "ibam"
+
 # Regex Patterns
 PATTERN_IMAGEBAM_INDIRECT_LINK = r"((?:https?://)?(?:www\.)?imagebam\.com/image/[a-z\d]+)"
 PATTERN_IMAGEBAM_DIRECT_LINK = rf"(https://images\d+\.imagebam\.com[a-z\d/]+(?:{'|'.join(img_extensions)}))"
@@ -15,6 +17,7 @@ class ImageBamExtractor(ExtractorBase):
     DOMAIN = "imagebam.com"
     DESC = "ImageBam Image Hosting (Indirect Link)"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://www.imagebam.com/image/c444481329385981",
         "https://www.imagebam.com/image/9f75e71329338706",

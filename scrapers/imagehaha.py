@@ -4,6 +4,8 @@ from exceptions import ExtractionError
 from utils import split_filename_ext
 import re
 
+_CODENAME = "imghaha"
+
 # Regex Patterns
 PATTERN_IMAGEHAHA_URL = r"(?:https://)?imagehaha\.com/\w+/[-\w]+\.\w+"
 PATTERN_IMAGEHAHA_DIRECTURL = r"((?:https://)?(?:img|i)\d+\.imagehaha\.com/i/\d+/\w+\.\w+/[-\w.]+)"
@@ -15,6 +17,7 @@ class ImagehahaExtractor(ExtractorBase):
     DOMAIN = "imagehaha.com"
     DESC = "Imagehaha Image hosting"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://imagehaha.com/p93zfz84jzij/3840x5761_21d8a2b87effccb7a2f0efff33fb8392.jpg",
         "https://imagehaha.com/07ruwzb5lhqd/3840x5761_dbbc4f9f708b063cc02f572dac60ffff.jpg",

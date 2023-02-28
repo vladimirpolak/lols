@@ -6,6 +6,8 @@ from utils import slugify
 import re
 
 
+_CODENAME = "forum_smg"
+
 PATTERN_SMGFORUM_THREAD = r"(?:https://)?forums\.socialmediagirls\.com/threads/(?P<album_id>[-\w\.]+)/?"
 PATTERN_SMGFORUM_THREADTITLE = '<meta property="og:title" content="(?:Request - )?(?P<thread_title>.*?)"\s+/>'
 PATTERN_SMGFORUM_THREAD_NEXTPAGE = r'<a\s+' \
@@ -41,6 +43,7 @@ class ForumSMGCrawler(ForumSMGAuth, CrawlerBase):
     DOMAIN = "forums.socialmediagirls.com"
     DESC = "SocialMediaGirls Forum Thread"
     CONTENT_TYPE = "THREAD"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://forums.socialmediagirls.com/threads/zlatasharv_-zlata-sharvarok-zlata_sh.27771/",
         "https://forums.socialmediagirls.com/threads/racharmstrong.209293/"
@@ -115,6 +118,7 @@ class ForumSMGimageExtractor(ExtractorBase):
     DOMAIN = "forums.socialmediagirls.com"
     DESC = "SocialMediaGirls Forum Image"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://forums.socialmediagirls.com/attachments/photo_2019-08-25_21-30-20-jpg.375004",
         "https://forums.socialmediagirls.com/attachments/960x1280_0a5e57b8e3616cae6108a08f7a7a1052-jpg.2454459",
@@ -167,6 +171,7 @@ class ForumSMGvideoExtractor(ExtractorBase):
     DOMAIN = "forums.socialmediagirls.com"
     DESC = "SocialMediaGirls Forum Video"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://symedia.sexy-youtubers.com/forum/2020/06/IMG_0508_391443.mp4",
         "https://symedia.sexy-youtubers.com/forum/2020/06/IMG_0058_391444.mp4",

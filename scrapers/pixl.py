@@ -2,6 +2,9 @@ from ._scraper_base import ExtractorBase
 from downloader.types import determine_content_type, img_extensions
 from utils import split_filename_ext
 import re
+import logging
+
+_CODENAME = "pixl"
 
 # Regex Patterns
 PATTERN_PIXL_ALBUM = r"((?:https?://)?pixl\.is/album/[-\w\.]+)"
@@ -17,6 +20,7 @@ class PixlAlbumExtractor(ExtractorBase):
     DOMAIN = "pixl.is"
     DESC = "Pixl Image Hosting Album"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://pixl.is/album/nature.UGAdC"
     ]

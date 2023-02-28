@@ -2,6 +2,8 @@ from ._scraper_base import CrawlerBase
 from typing import Union
 import re
 
+_CODENAME = "planets"
+
 # Regex Patterns
 PATTERN_PLANETSUZY_THREAD = r"((?:https?://)?(?:www\.)?planetsuzy\.org(/t\d+-[-\w]+(?:\.html)?))"
 PATTERN_PLANETSUZY_THREAD_NEXTPAGE = r'<a\s' \
@@ -19,6 +21,7 @@ class PlanetSuzyCrawler(CrawlerBase):
     DOMAIN = "planetsuzy.org"
     DESC = "PlanetSuzy Forum Thread"
     CONTENT_TYPE = "THREAD"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "http://planetsuzy.org/t967900-daisy-keech.html",
         "http://www.planetsuzy.org/t977950-niece-waidhofer.html",

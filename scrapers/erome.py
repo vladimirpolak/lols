@@ -3,6 +3,8 @@ from downloader.types import determine_content_type, img_extensions, vid_extensi
 from utils import split_filename_ext
 import re
 
+_CODENAME = "erome"
+
 PATTERN_EROME_ALBUM = r"(?:https://)?(?:www\.)?erome\.com/a/\w+"
 PATTERN_EROME_IMAGE = rf"(?:https://)?[a-z]\d+\.erome\.com/\d+/\w+/\w+(?:{'|'.join(img_extensions)})\?v=\d+"
 PATTERN_EROME_VIDEO = rf"(?:https://)?[a-z]\d+\.erome\.com/\d+/\w+/\w+(?:{'|'.join(vid_extensions)})"
@@ -14,6 +16,7 @@ class EromeAlbumExtractor(ExtractorBase):
     DOMAIN = "erome.com"
     DESC = "Erome.com Album"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://www.erome.com/a/srArB7Yt"
     ]

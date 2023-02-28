@@ -3,6 +3,8 @@ from downloader.types import determine_content_type
 from utils import split_filename_ext
 import re
 
+_CODENAME = "sky"
+
 SIASKY_DOMAIN = "https://siasky.net/"
 
 PATTERN_SKYGALLERY_ALBUM = r"(?:https://)?skygallery\.hns\.siasky\.net/a/[-\w]+"
@@ -14,6 +16,7 @@ class SkygalleryExtractor(ExtractorBase):
     DOMAIN = "skygallery.hns.siasky.net"
     DESC = "Skygallery File Hosting Album"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://skygallery.hns.siasky.net/a/AQBizutvay2Ll9_fEmrhkZBHPrmkVlGif4XC2hD2qcXiWg",
         "https://skygallery.hns.siasky.net/a/AQAaKj6xtDvz7BCBu47Ioval4NX7J2PQDxURBzopI6DnFw",

@@ -3,6 +3,8 @@ from scrapers._scraper_base import ExtractorBase
 from downloader.types import determine_content_type
 import re
 
+_CODENAME = "sendvid"
+
 # Regex Patterns
 PATTERN_SENDVIDEO_VIDEOPAGE = r"https://sendvid\.com/[a-z\d]+"
 
@@ -13,6 +15,7 @@ class SendvideoVideoExtractor(ExtractorBase):
     DOMAIN = "sendvideo.com"
     DESC = "SendVideo Video Hosting"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://sendvid.com/7ocshpp8",
         "https://sendvid.com/m2fufq8h",

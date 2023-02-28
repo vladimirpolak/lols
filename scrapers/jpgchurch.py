@@ -5,6 +5,8 @@ from utils import split_filename_ext
 import logging
 import re
 
+_CODENAME = "jpgchurch"
+
 # Regex Patterns
 PATTERN_JPEGCHURCH_ALBUM = r"(?:https?://)?jpg\.church/a/[-\w]+?\.[a-zA-Z]+"
 PATTERN_JPEGCHURCH_NEXT_PAGE_TAG = r'<a\sdata-pagination="next"\s' \
@@ -20,6 +22,7 @@ class JPGChurchExtractor(ExtractorBase):
     DOMAIN = "jpg.church"
     DESC = "JpegChurch Image Album"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://jpg.church/a/masquerade-ball.NXhmc",
         "https://jpg.church/a/crusing.NXuLI",
@@ -92,6 +95,7 @@ class JPGChurchImageExtractor(ExtractorBase):
     DOMAIN = "simp[0-9].jpeg.church"
     DESC = "JpegChurch Image Link"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://simp2.jpg.church/0400d6f89e848a5df88.md.jpg",
         "https://simp2.jpg.church/03704583200a3b3d50c.md.jpg",

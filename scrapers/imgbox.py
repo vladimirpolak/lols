@@ -3,6 +3,8 @@ from downloader.types import determine_content_type, img_extensions
 from utils import split_filename_ext
 import re
 
+_CODENAME = "imgbox"
+
 # Regex Patterns
 PATTERN_IMGBOX_IMAGE_TH = rf"((?:https?://)?thumbs\d+\.imgbox\.com/[a-z\d]+/[a-z\d]+/[\w]+_t(?:{'|'.join(img_extensions)}))"
 
@@ -13,6 +15,7 @@ class IMGBoxImageExtractor(ExtractorBase):
     DOMAIN = "imgbox.com"
     DESC = "ImgBox Extract From Thumbnail"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://thumbs2.imgbox.com/76/51/0MgDRXNo_t.png",
         "https://thumbs2.imgbox.com/72/95/VL9wS1tI_t.jpeg",

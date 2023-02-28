@@ -4,6 +4,8 @@ from exceptions import ExtractionError
 from utils import split_filename_ext, slugify
 import re
 
+_CODENAME = "streamtape"
+
 ID = str
 Expires = int
 IP = str
@@ -47,6 +49,7 @@ class StreamtapeVideoExtractor(ExtractorBase):
     DOMAIN = "streamtape.com"
     DESC = "Streamtape Video Hosting"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://streamtape.com/v/GWA1z0g3r2t1K7A/Vader_Stops_the_2nd_Ship...-5xkBtu_WTrk.mp4",
         "https://streamtape.com/v/wrjVxklwGDtJ82q/F%40_%C2%A3_Society___Mr._Robot-4yKsIdr_PNU.mp4"

@@ -5,6 +5,8 @@ from utils import split_filename_ext, decode_base64
 import re
 import json
 
+_CODENAME = "voe"
+
 # Constant URLs
 
 PATTERN_VOE = r"(?:https://)?voe\.sx/\w+"
@@ -16,6 +18,7 @@ class VOEVideoExtractor(ExtractorBase):
     DOMAIN = "voe.sx"
     DESC = "Voe Video Hosting"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://voe.sx/h1a8w3ymf7r1",
         "https://voe.sx/k2zr0wrd2lg1",

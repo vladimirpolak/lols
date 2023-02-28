@@ -6,6 +6,8 @@ import logging
 import re
 import json
 
+_CODENAME = "pxdrain"
+
 # Constant URLs
 API_LINK = "https://pixeldrain.com/api"
 API_FILE_LINK = "https://pixeldrain.com/api/file/"
@@ -21,6 +23,7 @@ class PixelDrainAlbumExtractor(ExtractorBase):
     DOMAIN = "pixeldrain.com"
     DESC = "Pixeldrain Image Hosting Album"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://pixeldrain.com/l/YqPurHqs",
         "https://pixeldrain.com/l/TMUr8i2C"

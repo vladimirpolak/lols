@@ -8,6 +8,8 @@ import logging
 import re
 import json
 
+_CODENAME = "ibb"
+
 # Constant URLs
 IBB_JSON_URL = "https://ibb.co/json"
 
@@ -50,6 +52,7 @@ class IBBExtractor(ExtractorBase):
     DOMAIN = "ibb.co"
     DESC = "IBB Album Extractor"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://ibb.co/album/j6FBxt",
         "https://ibb.co/album/67dBTK"

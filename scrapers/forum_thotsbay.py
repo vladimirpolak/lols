@@ -5,6 +5,8 @@ from .forum_thotsbay_auth import ForumThotsbayAuth
 from typing import Union
 import re
 
+_CODENAME = "forum_tbay"
+
 # Regex Patterns
 PATTERN_THOTSBAYFORUM_THREAD = r"(?:https://)?forum\.thotsbay\.com/threads/([-\w\d\.]+)/?"
 PATTERN_THOTSBAYFORUM_THREAD_NEXTPAGE = r'<a\s+' \
@@ -22,6 +24,7 @@ class ForumThotsbayCrawler(CrawlerBase, ForumThotsbayAuth):
     DOMAIN = "forum.thotsbay.com"
     DESC = "Thotsbay Forum Thread"
     CONTENT_TYPE = "THREAD"
+    CODENAME = _CODENAME
     SAMPLE_URLS = []
 
     @classmethod
@@ -91,6 +94,7 @@ class ForumThotsbayImageExtractor(ExtractorBase):
     DOMAIN = "forum.thotsbay.com"
     DESC = "Thotsbay Forum Image"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = []
 
     @classmethod

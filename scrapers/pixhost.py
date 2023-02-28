@@ -4,6 +4,8 @@ from exceptions import ExtractionError
 from utils import split_filename_ext
 import re
 
+_CODENAME = "pxhost"
+
 # Constant URLs
 IMAGE_DIRECT_URL = "https://img{server_num}.pixhost.to/images{url_path}"
 
@@ -19,6 +21,7 @@ class PixHostAlbumCrawler(CrawlerBase):
     DOMAIN = "pixhost.to"
     DESC = "Pixhost Image Gallery"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://pixhost.to/gallery/ujdZj",
         "https://pixhost.to/gallery/8FEKM"
@@ -36,6 +39,7 @@ class PixHostTHExtractor(ExtractorBase):
     DOMAIN = "pixhost.to"
     DESC = "PixHost Image Hosting (Extract from thumbnail)"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://t76.pixhost.to/thumbs/87/302735411_pexels-photo-1525041.jpg",
         "https://t76.pixhost.to/thumbs/87/302735434_pexels-photo-2662116.jpg"

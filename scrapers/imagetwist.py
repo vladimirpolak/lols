@@ -4,6 +4,8 @@ from exceptions import ExtractionError
 from utils import split_filename_ext
 import re
 
+_CODENAME = "imgtwist"
+
 # Regex Patterns
 PATTERN_IMAGETWIST_INDIRECT_LINK = r"((?:https://)?imagetwist\.com/" \
                      rf"[a-z\d]+/[-\w]+(?:{'|'.join(img_extensions)}))"
@@ -19,6 +21,7 @@ class ImageTwistImageExtractor(ExtractorBase):
     DOMAIN = "imagetwist.com"
     DESC = "ImageTwist Image Hosting (Indirect Link)"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://imagetwist.com/4oq69uqte9w5/3031x2583_23c06901eafb23628008996b51db8cc3.jpg",
     ]

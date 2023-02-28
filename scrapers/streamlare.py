@@ -6,6 +6,8 @@ from w3lib.html import replace_entities
 import re
 import json
 
+_CODENAME = "streamlare"
+
 # Constant URLs
 GET_CONTENT_URL = "https://slwatch.co/api/video/download/get"
 
@@ -22,6 +24,7 @@ class StreamlareVideoExtractor(ExtractorBase):
     DOMAIN = "streamlare.com"
     DESC = "Streamlare Video Hosting"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://streamlare.com/v/0rwmD7pdJG1zRaZ8",
         "https://streamlare.com/v/j57gDmvpadez26Xb",

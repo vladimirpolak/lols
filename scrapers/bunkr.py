@@ -8,6 +8,8 @@ from typing import List
 import logging
 import re
 
+_CODENAME = "bunkr"
+
 # Regex Patterns
 PATTERN_BUNKR_ALBUM = r"(?:https?://)?bunkr\.[a-z]+/a/\w+"
 PATTERN_BUNKR_ALBUM_CONTENT = rf"(?:https?://)?cdn\d*.bunkr\.[a-z]+/[-.\w]+"
@@ -32,6 +34,7 @@ class BunkrAlbumExtractor(ExtractorBase):
     DOMAIN = "bunkr.is"
     DESC = "Bunkr.is Album"
     CONTENT_TYPE = "ALBUM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://bunkr.is/a/rXQtFw5W",
         "https://bunkr.is/a/jBCopZia",
@@ -83,6 +86,7 @@ class BunkrVideoExtractor(ExtractorBase):
     DOMAIN = "stream.bunkr.is"
     DESC = "Bunkr.is Video Page"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://stream.bunkr.is/v/ea_vid_14-9a9Jq32V.mov",
         "https://stream.bunkr.is/v/ea_vid_12-rlwMZzT1.mov",

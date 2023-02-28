@@ -6,6 +6,8 @@ from .forum_nudostar_auth import ForumNudostarAuth
 from typing import Union
 import re
 
+_CODENAME = "forum_nstar"
+
 # Regex Patterns
 PATTERN_NUDOSTARFORUM_THREAD = r"(?:https://)?nudostar\.com/forum/threads/([-\w\.]+)/?"
 PATTERN_NUDOSTARFORUM_CONTENT = re.compile(
@@ -33,6 +35,7 @@ class ForumNudostarCrawler(CrawlerBase, ForumNudostarAuth):
     DOMAIN = "nudostar.com"
     DESC = "Nudostar Forum Thread"
     CONTENT_TYPE = "THREAD"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://nudostar.com/forum/threads/ck0rf.34621/",
         "https://nudostar.com/forum/threads/sierra-skye.55671/",
@@ -105,6 +108,7 @@ class ForumNudostarContentExtractor(ExtractorBase):
     DOMAIN = "nudostar.com"
     DESC = "Nudostar Forum Content"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://nudostar.com/forum/attachments/rn1yfyd2og471-jpg.895744/",
         "https://nudostar.com/forum/attachments/f6b2f53d-93ce-46e0-a4af-051f52552b92-jpeg.895754/",

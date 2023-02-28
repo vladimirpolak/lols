@@ -4,6 +4,8 @@ from utils import split_filename_ext
 from exceptions import ExtractionError
 import re
 
+_CODENAME = "anon"
+
 # Regex Patterns
 PATTERN_ANONFILES = r"(?:https?://)?anonfiles\.com/[-/\w]+"
 PATTERN_ANONFILES_DLTAG = r'"download-url"(?s).*?href="(.*?)">'
@@ -14,6 +16,7 @@ class AnonfilesExtractor(ExtractorBase):
     PROTOCOL = "https"
     DOMAIN = "anonfiles.com"
     DESC = "AnonFiles File Storage"
+    CODENAME = _CODENAME
     CONTENT_TYPE = "ITEM"
     SAMPLE_URLS = [
         "https://anonfiles.com/r7ldQ8r2wd/2021-12-17-15-34-25_NCARHYdP-1_mp4",

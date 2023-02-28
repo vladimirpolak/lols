@@ -3,6 +3,8 @@ from ._scraper_base import ExtractorBase
 from downloader.types import determine_content_type
 import re
 
+_CODENAME = "xvid"
+
 # Regex Patterns
 PATTERN_XVIDEOS_VIDEO = r"https?://(?:www\.)?xvideos\.com/video\d+/[\w\d]+"
 PATTERN_XVIDEOS_TITLE = r'<meta property="og:title" content="(?P<title>.*?)"\s?/>'
@@ -15,6 +17,7 @@ class XvideosVideoExtractor(ExtractorBase):
     DOMAIN = "xvideos.com"
     DESC = "Xvideos Video page"
     CONTENT_TYPE = "ITEM"
+    CODENAME = _CODENAME
     SAMPLE_URLS = [
         "https://www.xvideos.com/video47959115/sexy_bitch_koketochka555_masturbates_on_camera_and_shows_tits",
         "https://www.xvideos.com/video66403637/amateur_colombian_latina_teen_pov_blowjob_and_horny_sex_on_camera",
