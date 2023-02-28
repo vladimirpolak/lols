@@ -34,6 +34,7 @@ class PixlAlbumExtractor(ExtractorBase):
             all_html = all_html + html
 
         album_name = self._extract_album_name(all_html)
+        logging.debug(f"Pixl.is {url} album name: {album_name}")
         data = self._extract_images(all_html)
 
         for source in data:
@@ -65,11 +66,12 @@ class PixlAlbumExtractor(ExtractorBase):
 
         return html, next_page
 
-    def _extract_images(self, html):
-        urls = set(re.findall(PATTERN_PIXL_IMAGE, html, re.I))
-        return [url.replace(".md.", ".") for url in urls]
+    @staticmethod
+    def _extract_images(html):
+        return [url.replace(".md.", ".") for url in set(re.findall(PATTERN_PIXL_IMAGE, html, re.I))]
 
-    def _extract_album_name(self, html):
+    @staticmethod
+    def _extract_album_name(html):
         pattern = re.compile(PATTERN_PIXL_ALBUM_NAME)
         result = pattern.search(html)
         try:

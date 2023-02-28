@@ -13,7 +13,7 @@ PATTERN_NUDOSTARFORUM_THREAD = r"(?:https://)?nudostar\.com/forum/threads/([-\w\
 PATTERN_NUDOSTARFORUM_CONTENT = re.compile(
     r"((?:(?:https://)?nudostar\.com)?/forum/attachments/([-\w]+)-([a-zA-Z\d]+)\.\d+/?)"
 )
-# ---------------------- Depreicated
+# ---------------------- Deprecated
 # PATTERN_NUDOSTARFORUM_VIDEO = re.compile(
 #     rf"((?:(?:https://)?nudostar\.com)?/forum/data/video/\d+/[-\w]+(?:{'|'.join(vid_extensions)}))"
 # )
@@ -148,7 +148,7 @@ class ForumNudostarContentExtractor(ExtractorBase):
             results.extend([data[0] for data in set(re.findall(cls.VALID_URL_RE, html))])
         return results
 
-# --------------------- Depricated
+# --------------------- Deprecated
 # class ForumNudostarVideoExtractor(ExtractorBase):
 #     VALID_URL_RE = re.compile(PATTERN_NUDOSTARFORUM_VIDEO)
 #     PROTOCOL = "https"

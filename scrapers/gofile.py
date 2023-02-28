@@ -62,8 +62,6 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
     SAMPLE_URLS = [
         "https://gofile.io/d/eG1URC",  # 1 video
         "https://gofile.io/d/RPoxUP",  # Multiple directories
-        "https://gofile.io/d/rhjWaX",  # 1 archive
-        "https://gofile.io/d/rtHOqG",  # 1 video
     ]
 
     def initialize(self):
@@ -97,12 +95,12 @@ class GoFileFolderExtractor(ExtractorBase, GoFileAuth):
 
         # TODO I'm not really satisfied with this bit,
         #  status validation and album_data extraction should preferably
-        #  be two separate functions/methods. It is what it is, for now.
+        #  be two separate functions/methods.
         album_data = {}
         if album_status.success:
             album_data = json["data"]["contents"]
         elif album_status.file_not_found:
-            logging.debug(f"Gofile 404: {url}")
+            logging.debug(f"Gofile 404 response: {url}")
         elif album_status.password_required:
             logging.debug(f"GoFile Password-Required: {url}")
             self._extract_data(url=url, password=input(f"Enter password for '{url}': "))
