@@ -55,10 +55,6 @@ def get_scraper_classes(disabled_scrapers: list = None,
     ]
 
 
-def get_crawler_classes():
-    return [
-        klass
-        for name, klass in globals().items()
-        if (name.endswith('Crawler')
-            and general_conditions_met(klass))
-    ]
+def get_codenames() -> List[str]:
+    codenames = {klass.CODENAME for klass in get_scraper_classes(disabled_scrapers=[])}
+    return list(codenames)
