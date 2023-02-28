@@ -11,7 +11,7 @@ PATTERN_PIXL_ALBUM = r"((?:https?://)?pixl\.is/album/[-\w\.]+)"
 PATTERN_PIXL_ALBUM_NAME = r'<a[\s\S]+data-text="album-name"[\s\S]+href="https://pixl.is/album/[-\w\.]+">(.*?)</a>'
 PATTERN_PIXL_NEXT_PAGE = r'<a data-pagination="next"\s' \
                          r'href="(https://pixl\.is/album/{album_id}/\?page=\d+&seek=[\d-]+\+[\d(%3A)]+\.\w+)"'
-PATTERN_PIXL_IMAGE = rf'((?:https?://)?i\.pixl\.is/[-\w]+\.md(?:{"|".join(img_extensions)}))'
+PATTERN_PIXL_IMAGE = rf'((?:https?://)?i\.pixl\.[a-z]+/[-\w]+(?:\.md)?(?:{"|".join(img_extensions)}))'
 
 
 class PixlAlbumExtractor(ExtractorBase):
