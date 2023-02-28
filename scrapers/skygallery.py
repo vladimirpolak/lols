@@ -23,6 +23,10 @@ class SkygalleryExtractor(ExtractorBase):
         "https://skygallery.hns.siasky.net/a/AQCKmONQJ5RhVvR8NRWmelZXD2JsqHndwJyha4VOIPq6cw"
     ]
 
+    @classmethod
+    def is_active(cls):
+        return False
+
     def _extract_data(self, url):
         album_id = url.split("/")[-1]
 
