@@ -8,6 +8,9 @@ from exceptions import ExtractionError, ContentTypeError
 from typing import List, Union
 from enum import Enum, auto
 
+Url = str
+Html = str
+
 
 class ScraperType(Enum):
     EXTRACTOR = auto()
@@ -15,13 +18,14 @@ class ScraperType(Enum):
 
 
 class ScraperBase:
-    ALL_ITEMS: list = []  # List of scraped items
+    ALL_ITEMS: List[Item] = []  # List of scraped items
     VALID_URL_RE: Union[re.Pattern, List]  # Regex pattern for url validation
     PROTOCOL: str  # http/s
     DOMAIN: str  # domain.com
     DESC: str  # scraper description
-    SCRAPER_TYPE: str  # scraper type EXTRACTOR/CRAWLER
-    SAMPLE_URLS: list  # list of example urls
+    SCRAPER_TYPE: ScraperType  # scraper type EXTRACTOR/CRAWLER
+    CODENAME: str
+    SAMPLE_URLS: List[str]  # list of example urls
     _downloader: Downloader
 
     def initialize(self):
@@ -36,19 +40,19 @@ class ScraperBase:
         return True
 
     @classmethod
-    def is_suitable(cls, url):
+    def is_suitable(cls, url) -> bool:
         """
         Determines if the scraper is suitable for extracting input link.
         """
         if isinstance(cls.VALID_URL_RE, re.Pattern):
-            return cls.VALID_URL_RE.match(url)
+            return bool(cls.VALID_URL_RE.match(url))
         elif isinstance(cls.VALID_URL_RE, list):
             return any(pattern.match(url) for pattern in cls.VALID_URL_RE)
 
-    def set_downloader(self, downloader):
+    def set_http_api(self, downloader):
         self._downloader = downloader
 
-    def request(self, url: str, method: str = 'GET', **kwargs):
+    def request(self, url: str, method: str = 'GET', **kwargs) -> requests.Response:
         """Method for making Http requests."""
         return self._downloader.send_request(url, method, **kwargs)
 
@@ -88,8 +92,8 @@ class ScraperBase:
 class ExtractorBase(ScraperBase):
     SCRAPER_TYPE = ScraperType.EXTRACTOR
 
-    def __init__(self, downloader=None):
-        self._downloader = downloader
+    def __init__(self, session: requests.Session):
+        self._downloader = Downloader(session)
         self.initialize()
 
     def extract_data(self, url: str) -> List[Item]:
@@ -121,18 +125,18 @@ class CrawlerBase(ScraperBase):
     from using 'extractor' classes.
     """
     NEXT_PAGE = None
-    SCRAPER_TYPE = ScraperType.EXTRACTOR
+    SCRAPER_TYPE = ScraperType.CRAWLER
     THREAD_NAME = ""
 
-    def __init__(self, downloader=None, page_limit: int = 0):
-        self._downloader = downloader
+    def __init__(self, session: requests.Session, page_limit: int = 0):
+        self._downloader = Downloader(session)
         self.initialize()
         self.page_limit = page_limit
 
-    def extract_data(self, url: str) -> str:
+    def extract_data(self, url: str) -> Dict[Url, Html]:
         return self._crawl_link(url)
 
     @abstractmethod
-    def _crawl_link(self, url: str) -> str:
+    def _crawl_link(self, url: str) -> dict:
         """This method is implemented in the subclass"""
         pass
