@@ -1,6 +1,7 @@
 import logging
 import re
-import typing
+import requests
+from typing import Dict
 from downloader import Downloader, Item
 from downloader.models import ContentType
 from abc import abstractmethod
@@ -56,27 +57,6 @@ class ScraperBase:
         """Method for making Http requests."""
         return self._downloader.send_request(url, method, **kwargs)
 
-    def add_item(self,
-                 source: str,
-                 filename: str,
-                 extension: str,
-                 content_type: ContentType,
-                 album_title: str = None,
-                 headers: dict = None
-                 ):
-        """Used to add target item data to output list."""
-
-        new_item = Item(
-            source=source,
-            filename=filename,
-            extension=extension,
-            content_type=content_type,
-            album_title=album_title,
-            headers=headers
-        )
-        logging.debug(f"{self.__class__.__name__} ADDED {new_item}")
-        self.ALL_ITEMS.append(new_item)
-
     @property
     def base_url(self):
         return f"{self.PROTOCOL}://{self.DOMAIN}"
@@ -104,9 +84,30 @@ class ExtractorBase(ScraperBase):
         except (ExtractionError, ContentTypeError) as e:
             logging.error(e)
 
-        if len(self.ALL_ITEMS) > 1:
+        if len(self.ALL_ITEMS) >= 1:
             logging.debug(f"{self.__class__.__name__} EXTRACTED {len(self.ALL_ITEMS)} ITEMS")
         return self.ALL_ITEMS
+
+    def add_item(self,
+                 source: str,
+                 filename: str,
+                 extension: str,
+                 content_type: ContentType,
+                 album_title: str = None,
+                 headers: dict = None
+                 ):
+        """Used to add target item data to output list."""
+
+        new_item = Item(
+            source=source,
+            filename=filename,
+            extension=extension,
+            content_type=content_type,
+            album_title=album_title,
+            headers=headers
+        )
+        logging.debug(f"{self.__class__.__name__} ADDED {new_item}")
+        self.ALL_ITEMS.append(new_item)
 
     @abstractmethod
     def _extract_data(self, url: str):
@@ -114,7 +115,7 @@ class ExtractorBase(ScraperBase):
         pass
 
     @classmethod
-    def extract_from_html(cls, url: str, html: str):
+    def extract_from_html(cls, url: str, html: str) -> List[str]:
         return [data for data in set(re.findall(cls.VALID_URL_RE, html))]
 
 
