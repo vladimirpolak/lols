@@ -5,7 +5,7 @@ def read_version(fname="lols/version.py") -> str:
     return locals()["__version__"]
 
 setup(
-    name='lols',
+    name='lol-site-scraper',
     version=read_version(),
     author='Vladimír Polák',
     author_email='vladimirpolak2@gmail.com',

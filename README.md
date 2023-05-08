@@ -21,7 +21,7 @@ you can incorporate it into your own python scripts as an external library.
 1. Download and install latest [python](https://www.python.org/downloads/).
 2. In command line run:
    ```sh
-   pip install lols
+   pip install lol-site-scraper
    ```
 
 ## Usage
