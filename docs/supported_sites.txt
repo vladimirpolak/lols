@@ -1,135 +1,151 @@
-Bunkr.Is Album
---domain: bunkr.is
---example url: https://bunkr.is/a/rXQtFw5W
-
-Bunkr.Is Video Page
---domain: stream.bunkr.is
---example url: https://stream.bunkr.is/v/ea_vid_14-9a9Jq32V.mov
-
-Jpegchurch Image Album
---domain: jpg.church
---example url: https://jpg.church/a/masquerade-ball.NXhmc
-
-Jpegchurch Image Link
---domain: simp[0-9].jpeg.church
---example url: https://simp2.jpg.church/0400d6f89e848a5df88.md.jpg
-
-Pixeldrain Image Hosting Album
---domain: pixeldrain.com
---example url: https://pixeldrain.com/l/YqPurHqs
-
-Gofile Hosting Directory
---domain: gofile.io
---example url: https://gofile.io/d/eG1URC
-
 Anonfiles File Storage
+--codename: anon
 --domain: anonfiles.com
---example url: https://anonfiles.com/r7ldQ8r2wd/2021-12-17-15-34-25_NCARHYdP-1_mp4
 
-Pixl Image Hosting Album
---domain: pixl.is
---example url: https://pixl.is/album/nature.UGAdC
+Bunkr Album
+--codename: bunkr
+--domain: bunkr.is
 
-Imgbox Extract From Thumbnail
---domain: imgbox.com
---example url: https://thumbs2.imgbox.com/76/51/0MgDRXNo_t.png
+Bunkr Video Page
+--codename: bunkr
+--domain: stream.bunkr.is
 
-Imagetwist Image Hosting (Indirect Link)
---domain: imagetwist.com
---example url: https://imagetwist.com/4oq69uqte9w5/3031x2583_23c06901eafb23628008996b51db8cc3.jpg
+Cyberdrop Album
+--codename: cdrop
+--domain: cyberdrop.me
 
-Planetsuzy Forum Thread
---domain: planetsuzy.org
---example url: http://planetsuzy.org/t967900-daisy-keech.html
+Cyberdrop Image Url
+--codename: cdrop
+--domain: cyberdrop.com
 
-Pixhost Image Hosting (Extract From Thumbnail)
---domain: pixhost.to
---example url: https://t76.pixhost.to/thumbs/87/302735411_pexels-photo-1525041.jpg
-
-Pixhost Image Gallery
---domain: pixhost.to
---example url: https://pixhost.to/gallery/ujdZj
-
-Imagebam Image Hosting (Indirect Link)
---domain: imagebam.com
---example url: https://www.imagebam.com/image/c444481329385981
-
-Xvideos Video Page
---domain: xvideos.com
---example url: https://www.xvideos.com/video47959115/sexy_bitch_koketochka555_masturbates_on_camera_and_shows_tits
-
-Nudostar Forum Thread
---domain: nudostar.com
---example url: https://nudostar.com/forum/threads/ck0rf.34621/
+Erome Album
+--codename: erome
+--domain: erome.com
 
 Nudostar Forum Content
+--codename: forum_nstar
 --domain: nudostar.com
---example url: https://nudostar.com/forum/attachments/rn1yfyd2og471-jpg.895744/
 
-Skygallery File Hosting Album
---domain: skygallery.hns.siasky.net
---example url: https://skygallery.hns.siasky.net/a/AQBizutvay2Ll9_fEmrhkZBHPrmkVlGif4XC2hD2qcXiWg
-
-Leakedmodels Forum Thread
---domain: leakedmodels.com
---example url: https://leakedmodels.com/forum/threads/jasmin-heaney-irish-girl.5590/
-
-Leakedmodels Forum Image
---domain: leakedmodels.com
---example url: https://leakedmodels.com/forum/attachments/1125x1437_6cf8f45d57355a1d832ce35be1dadd1f-jpg.108958/
-
-Leakedmodels Forum Video
---domain: leakedmodels.com
---example url: https://cdn.leakedmodels.com/forum/data/video/108/108726-9031a9571acf19116bef07707a841655.mp4
-
-Imagehaha Image Hosting
---domain: imagehaha.com
---example url: https://imagehaha.com/p93zfz84jzij/3840x5761_21d8a2b87effccb7a2f0efff33fb8392.jpg
-
-Hexupload Hosting
---domain: hexupload.net
---example url: https://hexupload.net/761mnw2p5y9c
-
-Streamlare Video Hosting
---domain: streamlare.com
---example url: https://streamlare.com/v/0rwmD7pdJG1zRaZ8
-
-Voe Video Hosting
---domain: voe.sx
---example url: https://voe.sx/h1a8w3ymf7r1
-
-Streamtape Video Hosting
---domain: streamtape.com
---example url: https://streamtape.com/v/GWA1z0g3r2t1K7A/Vader_Stops_the_2nd_Ship...-5xkBtu_WTrk.mp4
-
-Highload Video Hosting
---domain: highload.to
---example url: https://highload.to/f/ofyrlwactvuc/Vader_Stops_the_2nd_Ship...-5xkBtu_WTrk.mp4
-
-Erome.Com Album
---domain: erome.com
---example url: https://www.erome.com/a/srArB7Yt
+Nudostar Forum Thread
+--codename: forum_nstar
+--domain: nudostar.com
 
 Socialmediagirls Forum Thread
+--codename: forum_smg
 --domain: forums.socialmediagirls.com
---example url: https://forums.socialmediagirls.com/threads/zlatasharv_-zlata-sharvarok-zlata_sh.27771/
 
 Socialmediagirls Forum Image
+--codename: forum_smg
 --domain: forums.socialmediagirls.com
---example url: https://forums.socialmediagirls.com/attachments/photo_2019-08-25_21-30-20-jpg.375004
 
 Socialmediagirls Forum Video
+--codename: forum_smg
 --domain: forums.socialmediagirls.com
---example url: https://symedia.sexy-youtubers.com/forum/2020/06/IMG_0508_391443.mp4
 
-Sendvideo Video Hosting
---domain: sendvideo.com
---example url: https://sendvid.com/7ocshpp8
+Gofile Hosting Directory
+--codename: gofile
+--domain: gofile.io
 
-Mega.Nz File Hosting (Download Not Supported)
---domain: mega.nz
---example url: https://mega.nz/folder/ITkSVDbY#uF8L36gsmHi8ETyHRir4aw
+Hexupload Hosting
+--codename: hex
+--domain: hexupload.net
+
+Highload Video Hosting
+--codename: hload
+--domain: highload.to
 
 Ibb Album Extractor
+--codename: ibb
 --domain: ibb.co
---example url: https://ibb.co/album/j6FBxt
+
+Imgbox Indirect Image Url
+--codename: imgbox
+--domain: imgbox.com
+
+Imgbox Extract From Thumbnail
+--codename: imgbox
+--domain: imgbox.com
+
+Imagebam Image Hosting (Indirect Link)
+--codename: ibam
+--domain: imagebam.com
+
+Imagetwist Image Hosting (Indirect Link)
+--codename: imgtwist
+--domain: imagetwist.com
+
+Imagehaha Image Hosting
+--codename: imghaha
+--domain: imagehaha.com
+
+Jpegchurch Image Album
+--codename: jpgchurch
+--domain: jpg.church
+
+Jpegchurch Image Link
+--codename: jpgchurch
+--domain: simp[0-9].jpeg.church
+
+Leakedmodels Forum Thread
+--codename: forum_lm
+--domain: leakedmodels.com
+
+Leakedmodels Forum Image
+--codename: forum_lm
+--domain: leakedmodels.com
+
+Leakedmodels Forum Video
+--codename: forum_lm
+--domain: leakedmodels.com
+
+Lovefap File Hosting
+--codename: lovefap
+--domain: lovefap.com
+
+Mega File Hosting (Download Not Supported)
+--codename: mega
+--domain: mega.nz
+
+Pixhost Image Gallery
+--codename: pxhost
+--domain: pixhost.to
+
+Pixhost Image Hosting (Extract From Thumbnail)
+--codename: pxhost
+--domain: pixhost.to
+
+Pixeldrain Image Hosting Album
+--codename: pxdrain
+--domain: pixeldrain.com
+
+Pixl Image Hosting Album
+--codename: pixl
+--domain: pixl.is
+
+Planetsuzy Forum Thread
+--codename: forum_ps
+--domain: planetsuzy.org
+
+Sendvideo Video Hosting
+--codename: sendvid
+--domain: sendvideo.com
+
+Simpcity Forums
+--codename: simpcity
+--domain: simpcity.su
+
+Streamlare Video Hosting
+--codename: streamlare
+--domain: streamlare.com
+
+Streamtape Video Hosting
+--codename: streamtape
+--domain: streamtape.com
+
+Voe Video Hosting
+--codename: voe
+--domain: voe.sx
+
+Xvideos Video Page
+--codename: xvids
+--domain: xvideos.com

@@ -1,9 +1,9 @@
 import unittest
-from scrapers import (get_scraper_classes,
-                      ScraperType,
-                      ExtractorBase,
-                      ScraperBase,
-                      CrawlerBase)
+from lols.scrapers import (get_scraper_classes,
+                           ScraperType,
+                           ExtractorBase,
+                           ScraperBase,
+                           CrawlerBase)
 
 
 class ScraperFetchingTest(unittest.TestCase):

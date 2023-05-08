@@ -1,5 +1,5 @@
 import unittest
-from scrapers.forum_nudostar import ForumNudostarContentExtractor
+from lols.scrapers.forum_nudostar import ForumNudostarContentExtractor
 
 
 class NudostarNameProcessingTest(unittest.TestCase):

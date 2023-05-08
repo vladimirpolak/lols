@@ -1,5 +1,5 @@
 from unittest import TestCase
-from scrapers import get_scraper_classes, ScraperType
+from lols.scrapers import get_scraper_classes, ScraperType
 
 
 def compose_html(urls: list) -> str:
