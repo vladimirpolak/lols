@@ -15,7 +15,7 @@ def dump_to_file(data: str, filepath: Path):
 if __name__ == '__main__':
     data = get_supported_sites(scraper_classes=get_scraper_classes())
 
-    docs = Path().cwd() / docs_folder
+    docs = Path().cwd().parent / docs_folder
     if not docs.exists():
         docs.mkdir()
 
