@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'lols/**'
 
 jobs:
   build-and-publish:
