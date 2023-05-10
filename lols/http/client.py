@@ -1,3 +1,5 @@
+import logging
+
 from .headers import HeadersMixin
 
 import time
@@ -30,7 +32,11 @@ class HttpClient(HeadersMixin):
             method=method,
             **kwargs
         )
-        response = self._send_request(prepped_req, **kwargs)
+        try:
+            response = self._send_request(prepped_req, **kwargs)
+        except requests.RequestException as e:
+            logging.error(f"Failed accessing url '{url}' {e}")
+            response = self.failed_response
         return response
 
     def _prepare_request(self, method: str, url: str, **kwargs) -> requests.PreparedRequest:
@@ -63,10 +69,22 @@ class HttpClient(HeadersMixin):
                 allow_redirects=kwargs.get("allow_redirects", True),
                 verify=False
             )
+
+        # Timeout in case of rate limiting
         if res.status_code == 429:
-            time.sleep(10)
-            raise requests.exceptions.RequestException()
+            retry_after = int(res.headers.get('Retry-After', 0))
+            if retry_after:
+                time.sleep(retry_after)
+                raise requests.exceptions.RequestException()
         return res
+
+    @property
+    def failed_response(self) -> requests.Response:
+        response = requests.Response()
+        response.status_code = 500
+        response.reason = "Internal Server Error"
+        response._content = b"An error occurred while making the request"
+        return response
 
     def update_cookies(self, cookies: dict, domain: str):
         for k, v in cookies.items():
